@@ -20,4 +20,45 @@ public class Batiment {
             this.tresor = 50; //aleatoire
         else 
             this.tresor = 0;
+
+    }
+
+    public int getAttaque() {
+        return attaque;
+    }
+    public int getDefense() {
+        return defense;
+    }
+    public TypeBatiment getEstBase() {
+        return estBase;
+    }
+    public int getPointDeVie() {
+        return pointDeVie;
+    }
+    public int getTresor() {
+        return tresor;
+    }
+    public int getVision() {
+        return vision;
+    }
+
+    public void setAttaque(int attaque) {
+        this.attaque = attaque;
+    }
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+    public void setEstBase(TypeBatiment estBase) {
+        this.estBase = estBase;
+    }
+    public void setPointDeVie(int pointDeVie) {
+        this.pointDeVie = pointDeVie;
+    }
+    public void setTresor(int tresor) {
+        this.tresor = tresor;
+    }
+    public void setVision(int vision) {
+        this.vision = vision;
+    }
+
 }
