@@ -1,20 +1,14 @@
+package vue;
+
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 
 import java.util.ArrayList;
-import java.io.IOException;
-import java.io.File;
 
-import javax.imageio.ImageIO;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 

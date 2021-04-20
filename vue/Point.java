@@ -1,3 +1,4 @@
+package vue;
 import java.util.ArrayList;
 
 public class Point {
@@ -22,7 +23,7 @@ public class Point {
     }
 
     public String toString() {
-        return "["+x+","+y+"]";
+        return "["+String.valueOf(x)+","+String.valueOf(y)+"]";
     }
 
 
