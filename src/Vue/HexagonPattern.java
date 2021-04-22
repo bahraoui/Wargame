@@ -1,4 +1,4 @@
-package vue;
+package Vue;
 
 import java.awt.*;
 import java.awt.event.*;

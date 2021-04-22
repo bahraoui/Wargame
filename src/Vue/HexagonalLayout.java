@@ -1,4 +1,4 @@
-package vue;
+package Vue;
 
 import java.awt.Component;
 import java.awt.Container;
