@@ -147,14 +147,12 @@ public class HexagonalLayout implements LayoutManager {
      */
     private int calculateRows(int componentCount) {
 
-	boolean smallRow = beginWithSmallRow;
-
 	int numberOfRows = 0;
 	int bgRow = cols;
 	int smRow = bgRow - 1;
 
 	int placedItems = 0;
-	if (smallRow) {
+	if (beginWithSmallRow) {
 	    while (true) {
 		if (placedItems >= componentCount) {
 		    break;

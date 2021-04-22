@@ -55,10 +55,10 @@ public class HexTest extends JFrame{
 	f.setVisible(true);
     f.setSize(1500,900);
     f.setLocation(50, 50);
-    f.setResizable(false);
+    f.setResizable(false);/*
     GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     int width = gd.getDisplayMode().getWidth();
     int height = gd.getDisplayMode().getHeight();
-    //System.out.println("Width = "+width+"\n Height = "+height);
+    System.out.println("Width = "+width+"\n Height = "+height);*/
     }
 }
