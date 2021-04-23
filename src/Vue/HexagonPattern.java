@@ -35,7 +35,7 @@ public class HexagonPattern extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         HexagonButton clickedButton = (HexagonButton) e.getSource();
                         System.out.println("Button clicked: [" + clickedButton.getRow() + "][" + clickedButton.getCol() + "]");
-                        Graphics g = clickedButton.getGraphics();
+                        //Graphics g = clickedButton.getGraphics();
                     }
                 });
                 add(hexButton[row][col]);
