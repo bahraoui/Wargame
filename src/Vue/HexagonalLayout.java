@@ -146,42 +146,41 @@ public class HexagonalLayout implements LayoutManager {
      * @return
      */
     private int calculateRows(int componentCount) {
+        int numberOfRows = 0;
+        int bgRow = cols;
+        int smRow = bgRow - 1;
 
-	int numberOfRows = 0;
-	int bgRow = cols;
-	int smRow = bgRow - 1;
+        int placedItems = 0;
+        if (beginWithSmallRow) {
+            while (true) {
+            if (placedItems >= componentCount) {
+                break;
+            }
+            placedItems += smRow;
+            numberOfRows += 1;
+            if (placedItems >= componentCount) {
+                break;
+            }
+            placedItems += bgRow;
+            numberOfRows += 1;
+            }
+        } else {
+            while (true) {
+            if (placedItems >= componentCount) {
+                break;
+            }
+            placedItems += bgRow;
+            numberOfRows += 1;
+            if (placedItems >= componentCount) {
+                break;
+            }
+            placedItems += smRow;
+            numberOfRows += 1;
+            }
 
-	int placedItems = 0;
-	if (beginWithSmallRow) {
-	    while (true) {
-		if (placedItems >= componentCount) {
-		    break;
-		}
-		placedItems += smRow;
-		numberOfRows += 1;
-		if (placedItems >= componentCount) {
-		    break;
-		}
-		placedItems += bgRow;
-		numberOfRows += 1;
-	    }
-	} else {
-	    while (true) {
-		if (placedItems >= componentCount) {
-		    break;
-		}
-		placedItems += bgRow;
-		numberOfRows += 1;
-		if (placedItems >= componentCount) {
-		    break;
-		}
-		placedItems += smRow;
-		numberOfRows += 1;
-	    }
-
-	}
-	//System.out.println(numberOfRows);
-	return numberOfRows;
+        }
+        //System.out.println(numberOfRows);
+        return numberOfRows;
     }
 
     /*
@@ -222,25 +221,21 @@ public class HexagonalLayout implements LayoutManager {
 
 	int x;
 	int y;
-	if(smallRow){
+	if(smallRow)
 	    x = (int)Math.round((boxWidth / 2.0));
-	}else{
+	else
 	    x = 0;
-	}
 	y = 0;
 
 	// Laying out each of the components in the container
 	for (Component c : parent.getComponents()) {
 	    if (x > parent.getWidth() - boxWidth) {
-		smallRow = !smallRow;
-		if (smallRow) {
-		    x = (int)Math.round(boxWidth / 2.0);
-		    y += Math.round(boxHeight * heightRatio);
-		} else {
-		    x = 0;
-		    y += Math.round(boxHeight * heightRatio);
-		}
-
+            smallRow = !smallRow;
+            y += Math.round(boxHeight * heightRatio);
+            if (smallRow)
+                x = (int)Math.round(boxWidth / 2.0);
+            else
+                x = 0;
 	    }
 	    c.setBounds(x + leftOffset, y + topOffset, cWidth, cHeight);
 	    x += boxWidth;
@@ -272,15 +267,6 @@ public class HexagonalLayout implements LayoutManager {
      */
     @Override
     public void removeLayoutComponent(Component comp) {
-	// NOT IMPLEMENTED
-
-    }
-    /*
-     * (non-Javadoc)
-     * @see java.awt.LayoutManager#addLayoutComponent(java.lang.String, java.awt.Component)
-     */
-    @Override
-    public void addLayoutComponent(String name, Component comp) {
 	// NOT IMPLEMENTED
 
     }
