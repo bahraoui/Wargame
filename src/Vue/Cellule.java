@@ -13,12 +13,12 @@ import javax.swing.JButton;
 /**
  * La classe HexagonalButton permet de créer un bouton avec une forme hexagonale
  */
-public class HexagonalButton extends JButton {
+public class Cellule extends JButton {
     private static final long serialVersionUID = -7142502695252118612L;
     Polygon hexagonalShape;
     Point coord;
 
-    public HexagonalButton() {
+    public Cellule() {
 	this.setOpaque(false);
 	hexagonalShape = getHexPolygon();
     }

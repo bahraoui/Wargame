@@ -25,12 +25,12 @@ public class HexTest extends JFrame{
 
 
 	f.setLayout(new HexagonalLayout(20, new Insets(1,1,1,1), false));
-	ArrayList<HexagonalButton> tab = new ArrayList<HexagonalButton>();
+	ArrayList<Cellule> tab = new ArrayList<Cellule>();
 
 	for (int i = 0; i < 254; i++) { // Change the number in the loop to get
 					// more/less buttons
 
-	    HexagonalButton b = new HexagonalButton();
+	    Cellule b = new Cellule();
 		Point p = new Point(i);
 		//b.setEmplacement(p);
 		tab.add(b);
@@ -42,7 +42,7 @@ public class HexTest extends JFrame{
 	    b.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		    JButton a = (JButton) e.getSource();
+		    Cellule a = (Cellule) e.getSource();
 		    a.setBackground(Color.RED);
 			a.setForeground(Color.BLUE);
             System.out.println(b.toString());
@@ -55,7 +55,7 @@ public class HexTest extends JFrame{
 	f.setVisible(true);
     f.setSize(1500,900);
     f.setLocation(50, 50);
-    f.setResizable(false);/*
+    f.setResizable(true);/*
     GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
     int width = gd.getDisplayMode().getWidth();
     int height = gd.getDisplayMode().getHeight();
