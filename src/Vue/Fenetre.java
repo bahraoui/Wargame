@@ -31,28 +31,29 @@ public class Fenetre  extends JFrame{
         //System.out.println(images.toString());
         combo = new JComboBox<>(images);
         JPanel jPan = new JPanel();
-        JPanel jPan2 = new JPanel();
-        jPan2.setLayout(new FlowLayout());
         ii = new JLabel("img");
-        jPan2.add(ii);
+        add(ii);
         jPan.setLayout(new FlowLayout());
         jPan.add(labelImage);
         jPan.add(combo);
         jPan.add(bouton);
         this.add(jPan,BorderLayout.NORTH);
-        this.add(jPan2,BorderLayout.SOUTH);
+        this.add(ii,BorderLayout.SOUTH);
         bouton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                jPan2.remove(ii);
+                remove(ii);
                 ImageIcon img = new ImageIcon("assets/images/"+combo.getSelectedItem().toString());
                 ii = new JLabel(img);
-                jPan2.add(ii);
+                //ii.setSize(150,150);
+                add(ii);
+                repaint();
                 //System.out.println(combo.getSelectedItem().toString());
             }
         });
         this.setBounds(10, 10, 800, 600);
         this.setLocation(50, 50);
         this.setVisible(true);
+        //this.setResizable(false);
     }
 
     public static void main(String [] args) {
