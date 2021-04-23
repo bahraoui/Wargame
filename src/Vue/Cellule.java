@@ -19,9 +19,18 @@ public class Cellule extends JButton {
     Point coord;
 
     public Cellule() {
-	this.setOpaque(false);
-	hexagonalShape = getHexPolygon();
+        this.setOpaque(false);
+        hexagonalShape = getHexPolygon();
+        coord = new Point(0,0);
     }
+
+
+    public Cellule(Point coord) {
+        this.setOpaque(false);
+	    hexagonalShape = getHexPolygon();
+        this.coord = coord;
+    }
+
 
     /**
      * Genere un bouton de forme hexagonale
@@ -52,8 +61,8 @@ public class Cellule extends JButton {
      * @see java.awt.Component#contains(java.awt.Point)
      */
     @Override
-    public boolean contains(Point p) {
-	return hexagonalShape.contains(p);
+    public boolean contains(Point point) {
+	return hexagonalShape.contains(point);
     }
 
     /*

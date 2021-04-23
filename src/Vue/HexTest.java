@@ -42,7 +42,10 @@ public class HexTest extends JFrame{
 				Cellule a = (Cellule) e.getSource();
 				a.setBackground(Color.RED);
 				a.setForeground(Color.BLUE);
-				System.out.println(b.toString());
+				//System.out.println(b.toString());
+				if (b.contains(new java.awt.Point(30,1))) {
+					System.out.println("it does !");
+				}
 			}
 
 			});
@@ -58,11 +61,12 @@ public class HexTest extends JFrame{
 		int height = gd.getDisplayMode().getHeight();
 		System.out.println("Width = "+width+"\n Height = "+height);*/
 		// V2 :
+		/*
 		Cellule[][] cells = new Cellule[ROWS][COLUMNS];
 		for(int row = 0; row < ROWS; row++) {
 			for(int col = 0; col < COLUMNS; col++){
 
 			}
-		}
+		}*/
     }
 }
