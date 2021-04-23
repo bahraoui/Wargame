@@ -1,8 +1,14 @@
 package Vue;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 // a suppr
 public class HexagonPattern extends JPanel {
@@ -19,8 +25,8 @@ public class HexagonPattern extends JPanel {
 
 
     public void initGUI() {
-        int offsetX = -10;
-        int offsetY = 0;
+        int offsetY = 42;
+        int offsetX = 20;
 
         for(int row = 0; row < ROWS; row++) {
             for(int col = 0; col < COLUMNS; col++){
@@ -29,18 +35,19 @@ public class HexagonPattern extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         HexagonButton clickedButton = (HexagonButton) e.getSource();
                         System.out.println("Button clicked: [" + clickedButton.getRow() + "][" + clickedButton.getCol() + "]");
+                        Graphics g = clickedButton.getGraphics();
                     }
                 });
                 add(hexButton[row][col]);
-                hexButton[row][col].setBounds(offsetY, offsetX, 105, 95);
-                offsetX += 87;
+                hexButton[row][col].setBounds(offsetX, offsetY, 105, 95);
+                offsetY += 87;
             }
             if(row%2 == 0) {
-                offsetX = -52;
+                offsetY = 0;
             } else {
-                offsetX = -10;
+                offsetY = 42;
             }
-            offsetY += 76;
+            offsetX += 76;
         }
     }
 

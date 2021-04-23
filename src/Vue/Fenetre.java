@@ -21,7 +21,7 @@ public class Fenetre  extends JFrame{
     private JLabel labelImage = new JLabel("Photos");
     private JComboBox<String> combo;
     private JButton bouton = new JButton("Clique");
-    private JLabel ii ;
+    private JLabel ii;
 
     public Fenetre() {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
