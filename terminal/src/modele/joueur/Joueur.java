@@ -11,10 +11,11 @@ public class Joueur {
     private ArrayList<Unite> armee;
     private int pieces;
     private int numeroJoueur;
+    private static int compteur = 0;
     private boolean estIa;
 
-    public Joueur(int parNumeroJoueur, boolean parEstIa){
-        numeroJoueur = parNumeroJoueur;
+    public Joueur(boolean parEstIa){
+        this.numeroJoueur = compteur++;
         this.pieces = 50;
         this.estIa = parEstIa;
         this.armee = new ArrayList<Unite>();
@@ -43,9 +44,6 @@ public class Joueur {
         return batiment;
     }
 
-    public void setNumeroJoueur(int numeroJoueur) {
-        this.numeroJoueur = numeroJoueur;
-    }
     public void setEstIa(boolean estIa) {
         this.estIa = estIa;
     }

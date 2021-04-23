@@ -28,6 +28,15 @@ public class Case {
         
     }
 
+    public String affichage(){
+        if (this.unite != null)
+            return "U";
+        else if (this.batiment != null)
+            return "B";
+        return "-";
+        
+    }
+
     public Object estOccupe(){
         if (this.unite != null)
             return this.unite;

@@ -4,7 +4,7 @@ public class Desert extends Terrain{
     
     public Desert() {
         super();
-        setBonusDefense(50);
+        setBonusDefense(0.8);
         setPtsDeplacement(50);
     }
 

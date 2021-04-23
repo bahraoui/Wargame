@@ -4,7 +4,7 @@ public class ToundraNeige extends Terrain{
 
     public ToundraNeige() {
         super();
-        setBonusDefense(50);
+        setBonusDefense(0.5);
         setPtsDeplacement(50);
     }
     

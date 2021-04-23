@@ -13,8 +13,11 @@ public class Unite {
     private int tauxDeRecuperation;
     private int enRepos;
     private int cout;
+    private int identifiant;
+    private static int compteur = 0;
     
     public Unite() {
+        this.identifiant = ++compteur;
     }
 
     public String toString(){
@@ -22,11 +25,12 @@ public class Unite {
     }
 
     
-
+    public int getIdentifiant() {
+        return identifiant;
+    }
     public int getAttaque() {
         return attaque;
     }
-
     public int getDefense() {
         return defense;
     }
@@ -74,5 +78,7 @@ public class Unite {
     public void setEnRepos(int enRepos) {
         this.enRepos = enRepos;
     }
-
+    public void setaBouge(boolean aBouge) {
+        this.aBouge = aBouge;
+    }
 }

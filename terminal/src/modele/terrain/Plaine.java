@@ -4,7 +4,7 @@ public class Plaine extends Terrain{
 
     public Plaine() {
         super();
-        setBonusDefense(500);
+        setBonusDefense(1.2);
         setPtsDeplacement(50);
     }
     

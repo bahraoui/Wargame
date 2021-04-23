@@ -32,9 +32,21 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
         String chaine = "";
         for (int i = 0; i <cote; i++) {
             for (int j = 0; j < cote ; j++) {
-                chaine += this.get(i).get(j).toString()+"\n";
+                chaine += i+" - "+j+" => "+this.get(i).get(j).toString()+"\n";
             }
             chaine+="\n";
+        }
+        return chaine;
+    }
+
+    public String affichage(){
+        String chaine = "";
+        for (int i = 0; i <cote; i++) {
+            chaine +="[";
+            for (int j = 0; j < cote ; j++) {
+                chaine += this.get(i).get(j).affichage()+" ";
+            }
+            chaine+="]\n";
         }
         return chaine;
     }

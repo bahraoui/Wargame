@@ -2,7 +2,7 @@ package modele.terrain;
 
 public class Terrain {
     private int ptsDeplacement;
-    private int bonusDefense;
+    private double bonusDefense;
 
     public Terrain() {
     }
@@ -11,14 +11,14 @@ public class Terrain {
         return "Point de placement " + this.ptsDeplacement+ " Point de defense  " + this.bonusDefense ;
     }
 
-    public int getBonusDefense() {
+    public double getBonusDefense() {
         return bonusDefense;
     }
     public int getPtsDeplacement() {
         return ptsDeplacement;
     }
 
-    public void setBonusDefense(int bonusDefense) {
+    public void setBonusDefense(double bonusDefense) {
         this.bonusDefense = bonusDefense;
     }
     public void setPtsDeplacement(int ptsDeplacement) {

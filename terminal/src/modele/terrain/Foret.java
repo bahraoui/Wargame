@@ -3,7 +3,7 @@ package modele.terrain;
 public class Foret extends Terrain{
     public Foret() {
         super();
-        setBonusDefense(50);
+        setBonusDefense(2.5);
         setPtsDeplacement(50);
     }
 
