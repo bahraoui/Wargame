@@ -7,6 +7,8 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
@@ -50,6 +52,10 @@ public class Cellule extends JButton {
         this.coord = p;
     }
     
+    @Override
+    public String toString() {
+        return "Cellule :"+"[x: "+String.valueOf(coord.x)+", y: "+String.valueOf(coord.y)+"]";
+    }
 
     /*
      * (non-Javadoc)

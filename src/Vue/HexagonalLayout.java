@@ -129,6 +129,16 @@ public class HexagonalLayout implements LayoutManager {
 	this.beginWithSmallRow = beginWithSmallRow;
     }
 
+    public HexagonalLayout(int cols, Insets i, boolean beginWithSmallRow, int nbComposants) {
+        checkColInput(cols);
+        insets = i;
+        minSize = new Dimension(800, 600); //Standard size. Can be changed with setter.
+        prefSize = new Dimension(800, 600); //Standard size. Can be changed with setter.
+        this.cols = cols;
+        this.beginWithSmallRow = beginWithSmallRow;
+        this.rows = calculateRows(nbComposants);
+    }
+
     /**
      * Checks that the column input is valid: Columns must be set to n > 0;
      * @param cols
