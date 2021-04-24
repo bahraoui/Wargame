@@ -3,7 +3,7 @@ package Vue;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
+import Vue.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -21,9 +21,8 @@ public class Cellule extends JButton {
     public Cellule() {
         this.setOpaque(false);
         hexagonalShape = getHexPolygon();
-        coord = new Point(0,0);
+        coord = new Point(-1,-1);
     }
-
 
     public Cellule(Point coord) {
         this.setOpaque(false);
@@ -61,7 +60,7 @@ public class Cellule extends JButton {
      * @see java.awt.Component#contains(java.awt.Point)
      */
     @Override
-    public boolean contains(Point point) {
+    public boolean contains(java.awt.Point point) {
 	return hexagonalShape.contains(point);
     }
 

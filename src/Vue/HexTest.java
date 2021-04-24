@@ -23,12 +23,11 @@ public class HexTest extends JFrame{
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLayout(new HexagonalLayout(20, new Insets(1,1,1,1), false));
 		ArrayList<Cellule> tab = new ArrayList<Cellule>();
+		int x=0,y=0;
 
-		for (int i = 0; i < 254; i++) { // Change the number in the loop to get
-						// more/less buttons
-
-			Cellule b = new Cellule();
-			Point p = new Point(i);
+		for (int i = 0; i < 254; i++) { // Change the number in the loop to get more/less buttons
+			Point p = new Point(x,y);
+			Cellule b = new Cellule(p);
 			//b.setEmplacement(p);
 			tab.add(b);
 			b.setBackground(Color.blue);
