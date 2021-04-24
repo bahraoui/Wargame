@@ -2,10 +2,9 @@ package modele.plateau;
 
 import java.util.Set;
 
-import modele.batiment.Batiment;
-import modele.batiment.TypeBatiment;
+import modele.entite.batiment.Batiment;
 import modele.terrain.Terrain;
-import modele.unite.Unite;
+import modele.entite.unite.Unite;
 
 
 

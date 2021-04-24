@@ -2,22 +2,24 @@ package modele.joueur;
 
 import java.util.ArrayList;
 
-import modele.batiment.Batiment;
-import modele.unite.Unite;
+import modele.entite.batiment.Batiment;
+import modele.entite.unite.Unite;
 
 
 public class Joueur {
-    private Batiment batiment;
+    private Batiment base;
     private ArrayList<Unite> armee;
     private int pieces;
     private int numeroJoueur;
     private static int compteur = 0;
     private boolean estIa;
+    private boolean enJeu;
 
     public Joueur(boolean parEstIa){
         this.numeroJoueur = compteur++;
         this.pieces = 50;
         this.estIa = parEstIa;
+        this.enJeu = true;
         this.armee = new ArrayList<Unite>();
     }
 
@@ -40,8 +42,11 @@ public class Joueur {
     public int getPieces() {
         return pieces;
     }
-    public Batiment getBatiment() {
-        return batiment;
+    public Batiment getBase() {
+        return base;
+    }
+    public boolean getEnJeu() {
+        return enJeu;
     }
 
     public void setEstIa(boolean estIa) {
@@ -53,7 +58,10 @@ public class Joueur {
     public void setPieces(int pieces) {
         this.pieces = pieces;
     }
-    public void setBatiment(Batiment batiment) {
-        this.batiment = batiment;
+    public void setBase(Batiment base) {
+        this.base = base;
+    }
+    public void setEnJeu(boolean enJeu) {
+        this.enJeu = enJeu;
     }
 }

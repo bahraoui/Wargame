@@ -1,12 +1,14 @@
 import modele.plateau.Plateau;
 import modele.terrain.Terrain;
-import modele.unite.Archer;
-import modele.unite.Infanterie;
-import modele.unite.InfanterieLourde;
-import modele.unite.Mage;
-import modele.unite.Unite;
-import modele.batiment.Batiment;
-import modele.batiment.TypeBatiment;
+import modele.entite.Entite;
+import modele.entite.unite.Archer;
+import modele.entite.unite.Infanterie;
+import modele.entite.unite.InfanterieLourde;
+import modele.entite.unite.Mage;
+import modele.entite.unite.Unite;
+import modele.entite.Entite;
+import modele.entite.batiment.Batiment;
+import modele.entite.batiment.TypeBatiment;
 import modele.joueur.Joueur;
 import modele.plateau.Case;
 
@@ -18,6 +20,7 @@ public class Jeu {
     private static Plateau plateau = new Plateau();
     private static ArrayList<ArrayList<Integer>> postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
     private static ArrayList<Joueur> listeJoueur = new ArrayList<Joueur>();
+    private static Joueur joueurActuel;
 
     public void Jeu() {
 
@@ -28,6 +31,7 @@ public class Jeu {
         Joueur j2 = new Joueur(false);
         listeJoueur.add(j1);
         listeJoueur.add(j2);
+        joueurActuel = j1;
 
 
         Infanterie inf = new Infanterie();
@@ -42,43 +46,96 @@ public class Jeu {
         placerBaseJoueur(j2,14,14);        
         placerUniteJoueur(j2,mage,14,12);
         placerUniteJoueur(j2,archer,13,15);
-        combat(coordToCase(1, 6), coordToCase(14, 12));
+        //mage.setPointDeVieActuel(30);
+        //regenerationUniteArmee(j2);
+        //combat(coordToCase(1, 6), coordToCase(14, 12));
+        //System.out.println(mage);
+        //System.out.println(archer);
+        //System.out.println(plateau.affichage());
+        //j2.getBase().setPointDeVieActuel(1);
+        //j2.getBase().setDefense(0);
+        //System.out.println(conditionVictoire());
+        //combat(coordToCase(1, 6), coordToCase(14, 14));
+        //j2.getArmee().remove(0);
+        //j2.getArmee().remove(0);
+        //j2.setPieces(5);
+        //System.out.println(conditionVictoire());
+        System.out.println(plateau.affichage());
     }
 
     public static void combat(Case attaquant, Case defenseur){
-        int defense = (int)(defenseur.getUnite().getDefense() * defenseur.getTerrain().getBonusDefense());
-        int degat = attaquant.getUnite().getAttaque() - defense + 80;
-        System.out.println(defense);
-        System.out.println(degat);
+        Entite def = new Entite();
+        Entite att = new Entite();
+        if (defenseur.getBatiment() != null) {
+            def = defenseur.getBatiment();
+        }
+        else if (defenseur.getUnite() != null) {
+            def = defenseur.getUnite();
+            defenseur.getUnite().setEnRepos(false);
+        }
+        if (attaquant.getBatiment() != null) {
+            att = attaquant.getBatiment();
+        }
+        else if (attaquant.getUnite() != null) {
+            att = attaquant.getUnite();
+            attaquant.getUnite().setEnRepos(false);
+        }
+        int defense = (int)(def.getDefense() * defenseur.getTerrain().getBonusDefense());
+        int degat = att.getAttaque() - defense;
+        //System.out.println(defense);
+        //System.out.println(degat);        
         if (degat >= defense){
-            defenseur.getUnite().setPointDeVie(defenseur.getUnite().getPointDeVie() - degat);
+            def.setPointDeVieActuel(def.getPointDeVieActuel() - degat);
         }
         else {
             Random random = new Random();
-            defenseur.getUnite().setPointDeVie(defenseur.getUnite().getPointDeVie() - random.nextInt(5));
+            def.setPointDeVieActuel(def.getPointDeVieActuel() - random.nextInt(5));
         }
 
-        if (defenseur.getUnite().getPointDeVie() <= 0){
-            mortUnite(defenseur);
-            System.out.println("Unite tue");
+        if (def.getPointDeVieActuel() <= 0){
+            mortEntite(defenseur);
         }
     }
 
-    public static void mortUnite(Case defenseur){
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++){
-                if (defenseur.getUnite().getIdentifiant() == listeJoueur.get(i).getArmee().get(j).getIdentifiant()){
-                    listeJoueur.get(i).getArmee().remove(j);
-                    defenseur.setUnite(null);
-                    return;
+
+    public static void mortEntite(Case defenseur){
+        if (defenseur.getUnite() != null) {
+            for (int i = 0; i < listeJoueur.size(); i++) {
+                for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++){
+                    if (defenseur.getUnite().getIdentifiant() == listeJoueur.get(i).getArmee().get(j).getIdentifiant()){
+                        listeJoueur.get(i).getArmee().remove(j); //armee
+                        defenseur.setUnite(null); //plateau
+                        System.out.println("Unite tue");
+                        return;
+                    }
                 }
             }
-        } 
+        }
+        else if (defenseur.getBatiment() != null) {
+            if (defenseur.getBatiment().getEstBase() == TypeBatiment.BASE) {
+                for (int i = 0; i < listeJoueur.size(); i++) {
+                    if (listeJoueur.get(i).getBase().getIdentifiant() == defenseur.getBatiment().getIdentifiant()) {
+                        listeJoueur.get(i).setEnJeu(false);
+                        ArrayList<Integer> coordBase = postionBaseJoueur.get(listeJoueur.get(i).getNumeroJoueur());
+                        plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
+                        plateau.get(coordBase.get(0)).get(coordBase.get(1)-1).setBatiment(null);
+                        plateau.get(coordBase.get(0)).get(coordBase.get(1)+1).setBatiment(null);
+                        plateau.get(coordBase.get(0)+1).get(coordBase.get(1)).setBatiment(null);
+                        System.out.println("Base detruite");
+                    }
+                }
+            }
+            else {
+                joueurActuel.setPieces(joueurActuel.getPieces() + defenseur.getBatiment().getTresor());
+                defenseur.setBatiment(null); //plateau
+                System.out.println("Batiment detruit");
+            }
+        }
     }
 
     public static void placerBaseJoueur(Joueur joueur, int coordY, int coordX){
         Batiment base = new Batiment(100, 100, 100, 5, TypeBatiment.BASE);
-        joueur.setBatiment(base);
+        joueur.setBase(base);
         plateau.get(coordY).get(coordX).setBatiment(base);
         plateau.get(coordY).get(coordX-1).setBatiment(base);
         plateau.get(coordY).get(coordX+1).setBatiment(base);
@@ -99,7 +156,7 @@ public class Jeu {
         int coordXBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(1);
         int calculVisionY = coordY - coordYBase;
         int calculVisionX = coordX - coordXBase;
-        if (caseUnite.getBatiment() == null && caseUnite.getUnite() == null && Math.abs(calculVisionY) <= joueur.getBatiment().getVision() && Math.abs(calculVisionX) <= joueur.getBatiment().getVision() && achatUniteArmee(joueur,unite)) {
+        if (caseUnite.getBatiment() == null && caseUnite.getUnite() == null && Math.abs(calculVisionY) <= joueur.getBase().getVision() && Math.abs(calculVisionX) <= joueur.getBase().getVision() && achatUniteArmee(joueur,unite)) {
             joueur.getArmee().add(unite);
             System.out.println("Unite ajoute a l'armee");
             plateau.get(coordY).get(coordX).setUnite(unite);
@@ -126,18 +183,14 @@ public class Jeu {
         return plateau.get(coordY).get(coordX);
     }
 
-    /*
-    public static int CasetoCoord(Case parCase){
-        return 0;
-    }
-    */
 
     public static void deplacementUnite(Unite unite, Case caseInitial, Case caseFinal){
         int deplacementTerrain = caseInitial.getTerrain().getPtsDeplacement();
-        if (caseInitial.getBatiment() == null && caseInitial.getUnite() != null && caseFinal.getBatiment() == null && caseFinal.getUnite() == null && unite.getDeplacement() > 0 && unite.getDeplacement() >= deplacementTerrain){
-            unite.setDeplacement(unite.getDeplacement() - deplacementTerrain);
+        if (caseInitial.getBatiment() == null && caseInitial.getUnite() != null && caseFinal.getBatiment() == null && caseFinal.getUnite() == null && unite.getDeplacementActuel() > 0 && unite.getDeplacementActuel() >= deplacementTerrain){
+            unite.setDeplacementActuel(unite.getDeplacementActuel() - deplacementTerrain);
             caseFinal.setUnite(unite);
             caseInitial.setUnite(null);
+            caseFinal.getUnite().setEnRepos(false);
             System.out.println("Unite deplace");
         }
         else {
@@ -145,9 +198,58 @@ public class Jeu {
         }
     }
 
+    //DebutTour
+    public static void regenerationUniteArmee(Joueur joueur) {
+        for(int i = 0; i<joueur.getArmee().size();i++) {
+            if (joueur.getArmee().get(i).getEnRepos() == true) {
+                int pointDeVieGagne = joueur.getArmee().get(i).getPointDeVieActuel() + (int)(joueur.getArmee().get(i).getPointDeVieMax() * 0.1);
+                if (pointDeVieGagne > joueur.getArmee().get(i).getPointDeVieMax()) {
+                    joueur.getArmee().get(i).setPointDeVieActuel(joueur.getArmee().get(i).getPointDeVieMax());
+                }
+                else {
+                    joueur.getArmee().get(i).setPointDeVieActuel(pointDeVieGagne);
+                }
+            }
+            else {
+                joueur.getArmee().get(i).setEnRepos(true);
+            }
+        }
+    }
+
+    public static boolean conditionVictoire(){
+        if (conditionBase() || conditionPiece()) {
+            return true;
+        }
+        return false;
+
+        
+    }
+
+    public static boolean conditionBase(){
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
+                return false;
+            }
+        }
+        //System.out.println("BASE CONDITION");
+        return true;
+    }
+
+    public static boolean conditionPiece(){
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && (listeJoueur.get(i).getArmee().size() > 0 || listeJoueur.get(i).getPieces() > 10)){
+                return false;
+            }
+        }
+        //System.out.println("PIECE CONDITION");
+        return true;
+    }
+
 
     /*
     Fonction 
+
+
 
     Joueur
         * placer la base 
@@ -157,13 +259,19 @@ public class Jeu {
     Tour de jeu
         * deplacement des unite
         * combat
-        calcul regeneration unite
-        tour ia #analyse
-        condition de victoire
-            - destruction de l'armee
-            - nombre de tours
-            - destruction de base
+        * attaque batiment
+        * calcul regeneration unite => Debut de tour
+            - si tu ne te deplace pas
+            - si tu n'attaque pas
+            - si tu n'a pas defendu
+         condition de victoire
+            - * destruction de l'armee
+            - nombre de tours //while
+            - * destruction de base
+        
+        
         sauvegarde les resultats
+        tour ia #analyse
     
     Outil
         * Coord to Case
@@ -193,5 +301,7 @@ public class Jeu {
         Menu
         Tour de joueur 
     */
+
+    
 }
 
