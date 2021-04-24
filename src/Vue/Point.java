@@ -1,4 +1,5 @@
 package Vue;
+
 import java.util.ArrayList;
 
 public class Point {

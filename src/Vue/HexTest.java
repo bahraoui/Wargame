@@ -15,19 +15,18 @@ import javax.swing.JFrame;
 
 public class HexTest extends JFrame{
 
-    private static final int ROWS = 7;
-    private static final int COLUMNS = 7;
+    private static final int COLUMNS = 20;
     public static void main(String[] args) {
 		JFrame f = new JFrame();
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setLayout(new HexagonalLayout(20, new Insets(1,1,1,1), false));
+		f.setLayout(new HexagonalLayout(COLUMNS, new Insets(1,1,1,1), false));
 		ArrayList<Cellule> tab = new ArrayList<Cellule>();
 		int x=0,y=0;
 
 		for (int i = 0; i < 254; i++) { // Change the number in the loop to get more/less buttons
-			Point p = new Point(x,y);
-			Cellule b = new Cellule(p);
+			Point p = new Point(i%COLUMNS,y);
+			Cellule b = new Cellule(p, Sol.PLAINE);
 			//b.setEmplacement(p);
 			tab.add(b);
 			b.setBackground(Color.blue);
@@ -54,7 +53,7 @@ public class HexTest extends JFrame{
 		f.setVisible(true);
 		f.setSize(1500,900);
 		f.setLocation(50, 50);
-		f.setResizable(true);/*
+		f.setResizable(false);/*
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int width = gd.getDisplayMode().getWidth();
 		int height = gd.getDisplayMode().getHeight();

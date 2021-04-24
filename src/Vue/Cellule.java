@@ -3,7 +3,6 @@ package Vue;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import Vue.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -15,19 +14,15 @@ import javax.swing.JButton;
  */
 public class Cellule extends JButton {
     private static final long serialVersionUID = -7142502695252118612L;
+    Sol terrain;
     Polygon hexagonalShape;
     Point coord;
 
-    public Cellule() {
-        this.setOpaque(false);
-        hexagonalShape = getHexPolygon();
-        coord = new Point(-1,-1);
-    }
-
-    public Cellule(Point coord) {
+    public Cellule(Point coord, Sol ter) {
         this.setOpaque(false);
 	    hexagonalShape = getHexPolygon();
         this.coord = coord;
+        this.terrain = ter;
     }
 
 
@@ -54,6 +49,7 @@ public class Cellule extends JButton {
     public void setEmplacement(Point p){
         this.coord = p;
     }
+    
 
     /*
      * (non-Javadoc)

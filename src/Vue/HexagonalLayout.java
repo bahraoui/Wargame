@@ -315,4 +315,10 @@ public class HexagonalLayout implements LayoutManager {
         return rows;
     }
 
+    @Override
+    public void addLayoutComponent(String arg0, Component arg1) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
