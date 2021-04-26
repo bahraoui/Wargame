@@ -1,12 +1,10 @@
 import modele.plateau.Plateau;
-import modele.terrain.Terrain;
 import modele.entite.Entite;
 import modele.entite.unite.Archer;
 import modele.entite.unite.Infanterie;
 import modele.entite.unite.InfanterieLourde;
 import modele.entite.unite.Mage;
 import modele.entite.unite.Unite;
-import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
 import modele.joueur.Joueur;
@@ -14,6 +12,7 @@ import modele.plateau.Case;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 
 public class Jeu {
@@ -21,46 +20,56 @@ public class Jeu {
     private static ArrayList<ArrayList<Integer>> postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
     private static ArrayList<Joueur> listeJoueur = new ArrayList<Joueur>();
     private static Joueur joueurActuel;
+    private static int tour;
 
-    public void Jeu() {
+    /*public void Jeu() {
 
-    }
+    }*/
     
     public static void main(String[] args) {
+        
+        /// Initialisation plateau joueur
+
         Joueur j1 = new Joueur(false);
         Joueur j2 = new Joueur(false);
         listeJoueur.add(j1);
         listeJoueur.add(j2);
         joueurActuel = j1;
 
+        tour = 0;
 
-        Infanterie inf = new Infanterie();
-        InfanterieLourde infLourde = new InfanterieLourde();
-        Archer archer = new Archer();
-        Mage mage = new Mage();
+        boolean finpartie = false;
 
-        placerBaseJoueur(j1,0,1);        
-        placerUniteJoueur(j1,inf,1,6);
-        placerUniteJoueur(j1,infLourde,1,5);
+        /// Placement base
 
-        placerBaseJoueur(j2,14,14);        
-        placerUniteJoueur(j2,mage,14,12);
-        placerUniteJoueur(j2,archer,13,15);
-        //mage.setPointDeVieActuel(30);
-        //regenerationUniteArmee(j2);
-        //combat(coordToCase(1, 6), coordToCase(14, 12));
-        //System.out.println(mage);
-        //System.out.println(archer);
-        //System.out.println(plateau.affichage());
-        //j2.getBase().setPointDeVieActuel(1);
-        //j2.getBase().setDefense(0);
-        //System.out.println(conditionVictoire());
-        //combat(coordToCase(1, 6), coordToCase(14, 14));
-        //j2.getArmee().remove(0);
-        //j2.getArmee().remove(0);
-        //j2.setPieces(5);
-        //System.out.println(conditionVictoire());
-        System.out.println(plateau.affichage());
+        /*
+        int x,y = 0;
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            do {
+                System.out.println("Placer votre base");
+                Scanner sc = new Scanner(System.in);
+                y = sc.nextInt();
+                x = sc.nextInt();
+                System.out.println("y : "+y+"x : "+x);
+            } while (!testCoordBase(y, x));
+            placerBaseJoueur(listeJoueur.get(i),y,x);
+            System.out.println(plateau.affichage());
+        }
+        */
+
+        /// Deroulement Tour
+
+        ///do {
+            
+            regenerationUniteArmee(joueurActuel);
+            gainTourJoueur(joueurActuel);
+
+
+
+
+
+        ///} while (!finpartie || !conditionVictoire());
+
     }
 
     public static void combat(Case attaquant, Case defenseur){
@@ -79,6 +88,7 @@ public class Jeu {
         else if (attaquant.getUnite() != null) {
             att = attaquant.getUnite();
             attaquant.getUnite().setEnRepos(false);
+            attaquant.getUnite().setAAttaque(true);
         }
         int defense = (int)(def.getDefense() * defenseur.getTerrain().getBonusDefense());
         int degat = att.getAttaque() - defense;
@@ -106,6 +116,10 @@ public class Jeu {
                         listeJoueur.get(i).getArmee().remove(j); //armee
                         defenseur.setUnite(null); //plateau
                         System.out.println("Unite tue");
+                        if (listeJoueur.get(i).getArmee().size() > 0 || listeJoueur.get(i).getPieces() > 10){
+                            listeJoueur.get(i).setEnJeu(false);
+                            System.out.println("Armee aneanti joueur eliminé");
+                        }
                         return;
                     }
                 }
@@ -144,10 +158,13 @@ public class Jeu {
         baseJ1.add(0,coordY);
         baseJ1.add(1,coordX);
         postionBaseJoueur.add(baseJ1);
-        /*
-        1<x<15
-        y<15
-        */
+    }
+
+    public static boolean testCoordBase(int coordY, int coordX){
+        if (coordX >= 1 && coordX <= 14 && coordY <=14 && plateau.get(coordY).get(coordX).getBatiment() == null && plateau.get(coordY).get(coordX-1).getBatiment() == null && plateau.get(coordY).get(coordX+1).getBatiment() == null && plateau.get(coordY+1).get(coordX).getBatiment() == null){
+            return true;
+        }
+        return false;
     }
 
     public static void placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
@@ -213,19 +230,29 @@ public class Jeu {
             else {
                 joueur.getArmee().get(i).setEnRepos(true);
             }
+            joueur.getArmee().get(i).setAAttaque(false);
         }
+    }
+
+    public static void gainTourJoueur(Joueur joueur) {
+        int pieceGain = (int) (tour * 0.2 + 4);
+        joueur.setPieces(joueur.getPieces()+pieceGain);
     }
 
     public static boolean conditionVictoire(){
-        if (conditionBase() || conditionPiece()) {
+        /*if (conditionBase() || conditionPiece()) {
             return true;
         }
-        return false;
-
-        
+        return false;*/
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public static boolean conditionBase(){
+    /*public static boolean conditionBase(){
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
                 return false;
@@ -245,8 +272,50 @@ public class Jeu {
         return true;
     }
 
+*/
+/*
+            Debut Jeu
 
-    /*
+                Plateau
+                Joueur (2 ou 4)
+
+                A- Debut Jeu
+
+                    1- Choix base joueur
+                        Pour chaque joueur place la base
+                    
+                B- Deroulement Tour - Boucle partie : (tant que fin partie ou conditionVictoire())
+
+                Si joueur.getEnJeu() == true
+
+                    1- Regeneration Unite Armee + gain banque joueur
+
+                    2- Achat unité
+
+                        2.a- Boucle de choix : (tant que fin d'achat)
+                                Choix unité
+                        
+                    3- Deplacement / Combat
+
+                        3.a- Boucle d'action : (tant que fin de tour)
+                                Selection 2 case : 
+
+                                    Test choix case initial
+                                    Test choix case final
+
+                                        Selon choix : 
+                                                - Deplacement (1er : case par case ; 2eme : algo plus cours chemin entre 2 case + verifie si libre)
+                                                    Si la case initial est une unité
+                                                    Si la case final est vide
+
+                                                - Combat (+ fin combat verifier conditionVictoire() -> finpartie)
+                                                    Si la case initial est une unité ou la base
+                                                    Si la case final est une unité ou un batiment           
+
+                                        Retour debut boucle 3.a
+                    
+                Retour debut boucle B (avec changement joueur)
+
     Fonction 
 
 
@@ -302,6 +371,5 @@ public class Jeu {
         Tour de joueur 
     */
 
-    
 }
 

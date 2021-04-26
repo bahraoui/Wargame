@@ -10,18 +10,19 @@ public class Unite extends Entite{
     private int deplacementMax;
     private int deplacementActuel;
     private boolean enRepos;
+    private boolean aAttaque;
     private int cout;
     
     public Unite(int parPointDeVieActuel, int parAttaque, int parDefense, int parVision) {
         super(parPointDeVieActuel,parAttaque,parDefense,parVision);
         this.enRepos = true;
+        this.aAttaque = false;
     }
 
     public String toString(){
         return "L'unite a pv : "+super.getPointDeVieActuel()+", pa: "+super.getAttaque()+", pdef: "+super.getDefense()+", pdeplacementMax: "+this.deplacementMax+", vision: "+super.getVision()+", cout: "+this.cout;
     }
-
-    
+   
     public int getDeplacementActuel() {
         return deplacementActuel;
     }
@@ -37,7 +38,9 @@ public class Unite extends Entite{
     public boolean getEnRepos() {
         return enRepos;
     }
-
+    public boolean getAAttaque() {
+        return aAttaque;
+    }
 
     public void setDeplacementMax(int deplacementMax) {
         this.deplacementMax = deplacementMax;
@@ -53,5 +56,8 @@ public class Unite extends Entite{
     }
     public void setEnRepos(boolean enRepos) {
         this.enRepos = enRepos;
+    }
+    public void setAAttaque(boolean aAttaque) {
+        this.aAttaque = aAttaque;
     }
 }

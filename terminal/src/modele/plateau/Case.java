@@ -1,6 +1,6 @@
 package modele.plateau;
 
-import java.util.Set;
+//import java.util.Set;
 
 import modele.entite.batiment.Batiment;
 import modele.terrain.Terrain;

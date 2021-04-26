@@ -16,13 +16,16 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
                     Plaine caseTerrainP = new Plaine();
                     Case cellule = new Case(caseTerrainP);
                     ligne.add(cellule);
+                    cellule.setBatiment(null);
+                    cellule.setUnite(null);
                 }
                 else {
                     Desert caseTerrainD = new Desert();
                     Case cellule = new Case(caseTerrainD);
                     ligne.add(cellule);
+                    cellule.setBatiment(null);
+                    cellule.setUnite(null);
                 }
-                
             }
             this.add(ligne);
         }
