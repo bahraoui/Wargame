@@ -23,6 +23,7 @@ public class Jeu {
     private static ArrayList<Joueur> listeJoueur = new ArrayList<Joueur>();
     private static Joueur joueurActuel;
     private static int tour;
+    private static boolean finpartie = false;
 
     /*public void Jeu() {
 
@@ -34,14 +35,18 @@ public class Jeu {
 
         Joueur j1 = new Joueur(false);
         Joueur j2 = new Joueur(false);
+        Joueur j3 = new Joueur(false);
+        Joueur j4 = new Joueur(false);
         listeJoueur.add(j1);
         listeJoueur.add(j2);
+        listeJoueur.add(j3);
+        listeJoueur.add(j4);
         joueurActuel = j1;
-        chrono();
+        chronometre();
 
         tour = 0;
 
-        boolean finpartie = false;
+        
 
         /// Placement base
 
@@ -256,18 +261,26 @@ public class Jeu {
     }
 
 
-    public static void chrono() {
+    public static void chronometre() {
     	Timer chrono =  new Timer();
     	chrono.schedule(new TimerTask(){
-            int indexe = 0;
+            int indexe = 0,  i = 0;
 			@Override
 			public void run() {
-                if(indexe == listeJoueur.size())
-                    indexe = 0; 
-                System.out.println(joueurActuel);
-                joueurActuel = listeJoueur.get(indexe+1);
-                System.out.println(joueurActuel);
-                indexe += 1;  
+                while(finpartie == false){
+                    i++;
+                    if(i == listeJoueur.size()){
+                        i = 0;
+                    }else if(indexe == listeJoueur.size()-1){
+                        indexe = 0;
+                    }else if(indexe < listeJoueur.size() && i < listeJoueur.size()){   
+                        System.out.println(joueurActuel);
+                        joueurActuel = listeJoueur.get(indexe+1);
+                        System.out.println(joueurActuel);
+                        indexe += 1; 
+                    }       
+                } 
+
 			}
     	}, 120000 , 120000);
     }
