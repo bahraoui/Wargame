@@ -13,6 +13,8 @@ import modele.plateau.Case;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Jeu {
@@ -21,6 +23,7 @@ public class Jeu {
     private static ArrayList<Joueur> listeJoueur = new ArrayList<Joueur>();
     private static Joueur joueurActuel;
     private static int tour;
+    private static boolean finpartie = false;
 
     /*public void Jeu() {
 
@@ -32,13 +35,18 @@ public class Jeu {
 
         Joueur j1 = new Joueur(false);
         Joueur j2 = new Joueur(false);
+        Joueur j3 = new Joueur(false);
+        Joueur j4 = new Joueur(false);
         listeJoueur.add(j1);
         listeJoueur.add(j2);
+        listeJoueur.add(j3);
+        listeJoueur.add(j4);
         joueurActuel = j1;
+        chronometre();
 
         tour = 0;
 
-        boolean finpartie = false;
+        
 
         /// Placement base
 
@@ -251,6 +259,60 @@ public class Jeu {
         }
         return true;
     }
+
+
+    public static void chronometre() {
+    	Timer chrono =  new Timer();
+    	chrono.schedule(new TimerTask(){
+            int indexe = 0,  i = 0;
+			@Override
+			public void run() {
+                while(finpartie == false){
+                    i++;
+                    if(i == listeJoueur.size()){
+                        i = 0;
+                    }else if(indexe == listeJoueur.size()-1){
+                        indexe = 0;
+                    }else if(indexe < listeJoueur.size() && i < listeJoueur.size()){   
+                        System.out.println(joueurActuel);
+                        joueurActuel = listeJoueur.get(indexe+1);
+                        System.out.println(joueurActuel);
+                        indexe += 1; 
+                    }       
+                } 
+
+			}
+    	}, 120000 , 120000);
+    }
+
+
+    public static void actionDopportunite(Joueur joueur, int coordYFinalJoueur, int coordXFinalJoueur, int coordYOpportunite, int coordXOpportunite, Case caseAttaque) {
+    	Case positionFinalJoueur = plateau.get(coordYFinalJoueur).get(coordXFinalJoueur); 
+    	Case postionOpportunite = plateau.get(coordYOpportunite).get(coordXOpportunite); 
+    	int calculVisionOppX = Math.abs(coordXFinalJoueur - coordXOpportunite);
+    	int calculVisionOppY = Math.abs(coordYFinalJoueur - coordYOpportunite);
+    	for(int i = 0; i<joueur.getArmee().size();i++) {
+    		Entite att = new Entite(); 
+	        if (postionOpportunite.getBatiment() != null) {
+	            att = postionOpportunite.getBatiment();
+	            if(calculVisionOppX <= att.getVision() && calculVisionOppY <= att.getVision()){
+            		combat(postionOpportunite, positionFinalJoueur);
+            	}  
+	        }
+	        else if (postionOpportunite.getUnite() != null && listeJoueur.get(i).getArmee().get(i).getEnRepos() == true) {
+	            att = postionOpportunite.getUnite();
+	            if(positionFinalJoueur.getUnite() != att && (calculVisionOppX <= att.getVision() && calculVisionOppY <= att.getVision())){
+	            	deplacementUnite(postionOpportunite.getUnite(), postionOpportunite, caseAttaque);
+	            	combat(postionOpportunite, positionFinalJoueur);
+            	}
+	        }
+        }
+    }
+    
+
+
+
+
 
     /*public static boolean conditionBase(){
         for (int i = 0; i < listeJoueur.size(); i++) {
