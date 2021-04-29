@@ -3,11 +3,11 @@ package modele.entite.unite;
 public class Mage extends Unite{
 
     public Mage() {
-        super(50,50,50,50);
-        setPointDeVieMax(50);
-        setDeplacementMax(50);
-        setDeplacementActuel(50);
-        setCout(1);
+        super(35,65,30,3);
+        setPointDeVieMax(super.getPointDeVieActuel());
+        setDeplacementMax(3);
+        setDeplacementActuel(3);
+        setCout(20);
     }
     
 }

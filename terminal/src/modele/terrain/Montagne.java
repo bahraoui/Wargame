@@ -4,8 +4,8 @@ public class Montagne extends Terrain{
 
     public Montagne() {
         super();
-        setBonusDefense(3.0);
-        setPtsDeplacement(50);
+        setBonusDefense(2);
+        setPtsDeplacement(3);
     }
     
     public String toString(){

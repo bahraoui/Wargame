@@ -3,8 +3,8 @@ package modele.terrain;
 public class Foret extends Terrain{
     public Foret() {
         super();
-        setBonusDefense(2.5);
-        setPtsDeplacement(50);
+        setBonusDefense(1.5);
+        setPtsDeplacement(2);
     }
 
     public String toString(){

@@ -7,7 +7,11 @@ public class Batiment extends Entite{
     private int tresor;
     private TypeBatiment estBase;
     
-    public Batiment(int parPointDeVieActuel,  int parAttaque,  int parDefense,  int parVision, TypeBatiment parEstBase) {
+    /// Base : 500 , 20 , 40 , 4 , Base
+
+    /// Monument : 150 , 0 , 20 , 0 , Monument
+
+    public Batiment(int parPointDeVieActuel,  int parAttaque,  int parDefense,  int parVision, TypeBatiment parEstBase) { 
         super(parPointDeVieActuel,parAttaque,parDefense,parVision);
         this.estBase = parEstBase;
 

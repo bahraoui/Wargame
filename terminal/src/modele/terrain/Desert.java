@@ -4,8 +4,8 @@ public class Desert extends Terrain{
     
     public Desert() {
         super();
-        setBonusDefense(0.8);
-        setPtsDeplacement(50);
+        setBonusDefense(0.95);
+        setPtsDeplacement(2);
     }
 
     public String toString(){

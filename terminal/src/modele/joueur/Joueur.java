@@ -17,7 +17,7 @@ public class Joueur {
 
     public Joueur(boolean parEstIa){
         this.numeroJoueur = compteur++;
-        this.pieces = 50;
+        this.pieces = 40;
         this.estIa = parEstIa;
         this.enJeu = true;
         this.armee = new ArrayList<Unite>();

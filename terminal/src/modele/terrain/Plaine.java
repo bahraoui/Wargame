@@ -5,7 +5,7 @@ public class Plaine extends Terrain{
     public Plaine() {
         super();
         setBonusDefense(1.2);
-        setPtsDeplacement(50);
+        setPtsDeplacement(1);
     }
     
     public String toString(){

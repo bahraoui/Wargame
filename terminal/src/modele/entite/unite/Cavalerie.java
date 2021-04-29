@@ -3,11 +3,11 @@ package modele.entite.unite;
 public class Cavalerie extends Unite{
 
     public Cavalerie() {
-        super(50,50,50,50);
+        super(25,50,20,2);
         setPointDeVieMax(50);
-        setDeplacementMax(50);
-        setDeplacementActuel(50);
-        setCout(1);
+        setDeplacementMax(6);
+        setDeplacementActuel(6);
+        setCout(12);
     }
     
 }
