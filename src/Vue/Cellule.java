@@ -7,8 +7,6 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
@@ -16,9 +14,9 @@ import javax.swing.JButton;
  */
 public class Cellule extends JButton {
     private static final long serialVersionUID = -7142502695252118612L;
-    Sol terrain;
-    Polygon hexagonalShape;
-    Point coord;
+    private Sol terrain;
+    private Polygon hexagonalShape;
+    private Point coord;
 
     public Cellule(Point coord, Sol ter) {
         this.setOpaque(false);
@@ -56,6 +54,35 @@ public class Cellule extends JButton {
     public String toString() {
         return "Cellule :"+"[x: "+String.valueOf(coord.x)+", y: "+String.valueOf(coord.y)+"]";
     }
+
+
+    // Getters and setters : 
+
+    public Sol getTerrain() {
+        return this.terrain;
+    }
+
+    public void setTerrain(Sol terrain) {
+        this.terrain = terrain;
+    }
+
+    public Polygon getHexagonalShape() {
+        return this.hexagonalShape;
+    }
+
+    public void setHexagonalShape(Polygon hexagonalShape) {
+        this.hexagonalShape = hexagonalShape;
+    }
+
+    public Point getCoord() {
+        return this.coord;
+    }
+
+    public void setCoord(Point coord) {
+        this.coord = coord;
+    }
+
+    // END Getters and setters
 
     /*
      * (non-Javadoc)

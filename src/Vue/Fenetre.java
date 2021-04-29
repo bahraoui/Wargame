@@ -42,7 +42,7 @@ public class Fenetre  extends JFrame{
                 ii = new JLabel(img);
                 //ii.setSize(150,150);
                 add(ii);
-                repaint();
+                jPan.updateUI();
                 //System.out.println(combo.getSelectedItem().toString());
             }
         });
