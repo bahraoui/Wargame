@@ -10,7 +10,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -18,22 +23,26 @@ import javax.swing.JPanel;
 */
 public class MyMouseListener extends MouseAdapter {
    private JPanel jp;
-   private Cellule cell;
    
-   public MyMouseListener(JPanel jp, Cellule cell) {
+   public MyMouseListener(JPanel jp) {
       super();
       this.jp = jp;
-      this.cell = cell;
    }
    
    @Override
    public void mouseClicked(MouseEvent e) {
-      Cellule l = (Cellule) e.getSource();
+      Cellule cell = (Cellule) e.getSource();
       
-      if(l.getName().equals("name01"))
-      System.out.println("oui");
-      else if(l.getName().equals("name02"))
-      System.out.println("non");
+      BufferedImage bi = null;
+      try {
+         bi = ImageIO.read(new File("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg"));
+         System.out.println("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg");
+      } catch (IOException e1) {
+         e1.printStackTrace();
+      }
+      BufferedImage img = getTexturedImage(bi, cell.getHexagonalShape(), 0, 0);
+      jp.add(new JLabel(new ImageIcon(img)));
+      jp.updateUI();
    }
    
    public static BufferedImage getTexturedImage(BufferedImage src, Shape shp, int x, int y) {

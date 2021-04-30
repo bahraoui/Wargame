@@ -208,10 +208,10 @@ public class Cellule extends JLabel {
     */
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(new Color(0.0f, 0.0f, 0.0f, 0.0f));
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.setColor(getBackground());
-        g.drawPolygon(hexagonalShape);
+        //g.setColor(new Color(0.0f, 0.0f, 0.0f, 0.0f));
+        //g.fillRect(0, 0, getWidth(), getHeight());
+        //g.setColor(getBackground());
+        //g.drawPolygon(hexagonalShape);
         g.setClip(hexagonalShape);
         // draw the image
         try {
