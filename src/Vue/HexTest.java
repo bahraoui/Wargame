@@ -25,43 +25,42 @@ import javax.swing.JPanel;
 
 
 public class HexTest extends JFrame{
-
+	
 	public static BufferedImage getTexturedImage(BufferedImage src, Shape shp, int x, int y) {
-        Rectangle r = shp.getBounds();
-        // create a transparent image with 1 px padding.
-        BufferedImage tmp = new BufferedImage(r.width+2,r.height+2,BufferedImage.TYPE_INT_ARGB);
-        // get the graphics object
-        java.awt.Graphics g = tmp.createGraphics();
-        // set some nice rendering hints
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-        // create a transform to center the shape in the image
-        AffineTransform centerTransform = AffineTransform.getTranslateInstance(-r.x+1, -r.y+1);
-        // set the transform to the graphics object
-        g.setTransform(centerTransform);
-        // set the shape as the clip
-        g.setClip(shp);
-        // draw the image
-        g.drawImage(src, x, y, null);
-        // clear the clip
-        g.setClip(null);
-        // draw the shape as an outline
-        g.setColor(Color.RED);
-        g.setStroke(new BasicStroke(1f));
-        g.draw(shp);
-        // dispose of any graphics object we explicitly create
-        g.dispose();
-
-        return tmp;
-    }
-
-    private static final int COLUMNS = 20;
-    public static void main(String[] args) throws IOException {
+		Rectangle r = shp.getBounds();
+		// create a transparent image with 1 px padding.
+		BufferedImage tmp = new BufferedImage(r.width+2,r.height+2,BufferedImage.TYPE_INT_ARGB);
+		// get the graphics object
+		Graphics2D g = tmp.createGraphics();
+		// set some nice rendering hints
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+		// create a transform to center the shape in the image
+		AffineTransform centerTransform = AffineTransform.getTranslateInstance(-r.x+1, -r.y+1);
+		// set the transform to the graphics object
+		g.setTransform(centerTransform);
+		// set the shape as the clip
+		g.setClip(shp);
+		// draw the image
+		g.drawImage(src, x, y, null);
+		// clear the clip
+		g.setClip(null);
+		// draw the shape as an outline
+		g.setColor(Color.RED);
+		g.setStroke(new BasicStroke(1f));
+		g.draw(shp);
+		// dispose of any graphics object we explicitly create
+		g.dispose();
+		
+		return tmp;
+	}
+	
+	private static final int COLUMNS = 20;
+	public static void main(String[] args) throws IOException {
 		JFrame f = new JFrame(); // fenetre principale
-		Point p;
 		int ligne=0,col=0,totalCells=254;
 		boolean petiteLigne = false;
-
+		
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		HexagonalLayout hex = new HexagonalLayout(COLUMNS, new Insets(1,1,1,1), petiteLigne, totalCells);
@@ -72,32 +71,33 @@ public class HexTest extends JFrame{
 		f.setLayout(bdl);
 		f.add(jpan,BorderLayout.CENTER);
 		f.add(jpan2,BorderLayout.SOUTH);
-
+		
 		Cellule[][] cells = new Cellule[COLUMNS][hex.getRows()+1];
 		System.out.println("nombre de lignes : "+String.valueOf(hex.getRows()));
 		for(int nbCells = 0; nbCells < totalCells; nbCells++) {
-				p = new Point(ligne,col);
-				ligne++;
-				if (ligne%20==0 && !petiteLigne) {
-					ligne=0;
-					col++;
-					petiteLigne = !petiteLigne;
-				} else if (ligne%19==0 && petiteLigne) {
-					ligne=0;
-					col++;
-					petiteLigne = !petiteLigne;
-				}
-				Cellule cell = new Cellule(p, Sol.PLAINE);
-				//System.out.println(String.valueOf(tmpSommeCellules)+","+String.valueOf(col));
-				cells[ligne][col] = cell;
-				cell.setBackground(Color.blue);
-				cell.setForeground(Color.RED);
-
-
-
-				jpan.add(new JLabel(cell.getImg()));
+			Point p = new Point(ligne,col);
+			ligne++;
+			if (ligne%20==0 && !petiteLigne) {
+				ligne=0;
+				col++;
+				petiteLigne = !petiteLigne;
+			} else if (ligne%19==0 && petiteLigne) {
+				ligne=0;
+				col++;
+				petiteLigne = !petiteLigne;
+			}
+			Cellule cell = new Cellule(p, Sol.PLAINE);
+			//System.out.println(String.valueOf(tmpSommeCellules)+","+String.valueOf(col));
+			cells[ligne][col] = cell;
+			cell.setBackground(Color.blue);
+			cell.setForeground(Color.RED);
+			
+			MyMouseListener mListener = new MyMouseListener(jpan, cell);
+			
+			
+			jpan.add(cell);
 		}
-
+		
 		f.setVisible(true);
 		f.setSize(1500,900);
 		f.setLocation(50, 50);
@@ -108,5 +108,5 @@ public class HexTest extends JFrame{
 		int height = gd.getDisplayMode().getHeight();
 		System.out.println("Width = "+width+"\n Height = "+height);
 		*/
-    }
+	}
 }
