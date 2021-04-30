@@ -64,7 +64,9 @@ public class HexTest extends JFrame{
 		BorderLayout bdl = new BorderLayout();
 		JPanel jpan = new JPanel(hex);
 		JPanel jpan2 = new JPanel();
-		jpan.add(new JLabel(new ImageIcon(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"MER.png")))));
+		System.out.println("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"oui.png");
+		jpan.add(new JLabel(new ImageIcon(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"oui.png")))));
+		System.out.println("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"oui.png");
 		f.getContentPane().setBackground(Color.cyan);
 		f.setLayout(bdl);
 		f.add(jpan,BorderLayout.CENTER);
