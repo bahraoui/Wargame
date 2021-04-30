@@ -11,6 +11,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -30,7 +31,7 @@ public class HexTest extends JFrame{
         // create a transparent image with 1 px padding.
         BufferedImage tmp = new BufferedImage(r.width+2,r.height+2,BufferedImage.TYPE_INT_ARGB);
         // get the graphics object
-        Graphics2D g = tmp.createGraphics();
+        java.awt.Graphics g = tmp.createGraphics();
         // set some nice rendering hints
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
@@ -55,10 +56,10 @@ public class HexTest extends JFrame{
     }
 
     private static final int COLUMNS = 20;
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 		JFrame f = new JFrame(); // fenetre principale
 		Point p;
-		int tmpSommeCellules=0,col=0,totalCells=254;
+		int ligne=0,col=0,totalCells=254;
 		boolean petiteLigne = false;
 
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -75,49 +76,26 @@ public class HexTest extends JFrame{
 		Cellule[][] cells = new Cellule[COLUMNS][hex.getRows()+1];
 		System.out.println("nombre de lignes : "+String.valueOf(hex.getRows()));
 		for(int nbCells = 0; nbCells < totalCells; nbCells++) {
-				p = new Point(tmpSommeCellules,col);
-				tmpSommeCellules++;
-				if (tmpSommeCellules%20==0 && !petiteLigne) {
-					tmpSommeCellules=0;
+				p = new Point(ligne,col);
+				ligne++;
+				if (ligne%20==0 && !petiteLigne) {
+					ligne=0;
 					col++;
 					petiteLigne = !petiteLigne;
-				} else if (tmpSommeCellules%19==0 && petiteLigne) {
-					tmpSommeCellules=0;
+				} else if (ligne%19==0 && petiteLigne) {
+					ligne=0;
 					col++;
 					petiteLigne = !petiteLigne;
 				}
 				Cellule cell = new Cellule(p, Sol.PLAINE);
 				//System.out.println(String.valueOf(tmpSommeCellules)+","+String.valueOf(col));
-				cells[tmpSommeCellules][col] = cell;
+				cells[ligne][col] = cell;
 				cell.setBackground(Color.blue);
 				cell.setForeground(Color.RED);
 
 
-				//"Random" color actionlistener, just for fun.
-				cell.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Cellule a = (Cellule) e.getSource();
-						a.setBackground(Color.RED);
-						a.setForeground(Color.BLUE);
-						System.out.println(cell.toString());
-						BufferedImage bi = null;
-						//URL url = null;
-						try {
-							//url = new URL("http://i.stack.imgur.com/7bI1Y.jpg");
-							bi = ImageIO.read(new File("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg"));
-							System.out.println("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg");
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						BufferedImage img = getTexturedImage(bi, a.getHexagonalShape(), -100, -100);
-						System.out.println(img.toString());
-						jpan2.add(new JLabel(new ImageIcon(img)));
-						//f.getContentPane().repaint();
-						jpan.updateUI();
-					}
-				});
-				jpan.add(cell);
+
+				jpan.add(new JLabel(cell.getImg()));
 		}
 
 		f.setVisible(true);
