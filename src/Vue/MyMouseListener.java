@@ -35,7 +35,7 @@ public class MyMouseListener extends MouseAdapter {
       
       BufferedImage bi = null;
       try {
-         bi = ImageIO.read(new File("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg"));
+         bi = ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+cell.getTerrain().toString()+".jpg"));
          System.out.println("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg");
       } catch (IOException e1) {
          e1.printStackTrace();

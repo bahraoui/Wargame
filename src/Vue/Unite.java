@@ -1,0 +1,5 @@
+package Vue;
+
+public enum Unite {
+    ARCHER,CAVALERIE,INFANTERIE,INFANTERIELOURDE,MAGE
+}

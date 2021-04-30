@@ -11,9 +11,13 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -60,6 +64,7 @@ public class HexTest extends JFrame{
 		BorderLayout bdl = new BorderLayout();
 		JPanel jpan = new JPanel(hex);
 		JPanel jpan2 = new JPanel();
+		jpan.add(new JLabel(new ImageIcon(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"MER.png")))));
 		f.getContentPane().setBackground(Color.cyan);
 		f.setLayout(bdl);
 		f.add(jpan,BorderLayout.CENTER);
@@ -79,7 +84,12 @@ public class HexTest extends JFrame{
 				col++;
 				petiteLigne = !petiteLigne;
 			}
-			Cellule cell = new Cellule(p, Sol.PLAINE);
+			Cellule cell;
+			if (petiteLigne) {
+				cell = new Cellule(p, Sol.PLAINE, Unite.ARCHER);
+			} else {
+				cell = new Cellule(p, Sol.PLAINE);
+			}
 			//System.out.println(String.valueOf(tmpSommeCellules)+","+String.valueOf(col));
 			cells[ligne][col] = cell;
 			cell.setBackground(Color.blue);
