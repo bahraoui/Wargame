@@ -31,18 +31,7 @@ public class MyMouseListener extends MouseAdapter {
    
    @Override
    public void mouseClicked(MouseEvent e) {
-      Cellule cell = (Cellule) e.getSource();
-      
-      BufferedImage bi = null;
-      try {
-         bi = ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+cell.getTerrain().toString()+".jpg"));
-         System.out.println("assets"+File.separator+"images"+File.separator+cell.getTerrain().toString()+".jpg");
-      } catch (IOException e1) {
-         e1.printStackTrace();
-      }
-      BufferedImage img = getTexturedImage(bi, cell.getHexagonalShape(), 0, 0);
-      jp.add(new JLabel(new ImageIcon(img)));
-      jp.updateUI();
+      System.out.println((Cellule) e.getSource());
    }
    
    public static BufferedImage getTexturedImage(BufferedImage src, Shape shp, int x, int y) {

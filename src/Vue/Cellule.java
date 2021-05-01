@@ -64,13 +64,9 @@ public class Cellule extends JLabel {
         return hex;
     }
     
-    public void setEmplacement(Point p){
-        this.coord = p;
-    }
-    
     @Override
     public String toString() {
-        return "Cellule :"+"[x: "+String.valueOf(coord.x)+", y: "+String.valueOf(coord.y)+"]";
+        return "Cellule : [x: "+String.valueOf(coord.x)+", y: "+String.valueOf(coord.y)+"]";
     }
     
     // Getters and setters : 
