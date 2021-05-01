@@ -236,7 +236,7 @@ public class HexagonalLayout implements LayoutManager {
     public int getRows() {
         return rows;
     }
-
+    
     public int getNbComposants() {
         return this.nbComposants;
     }
@@ -246,7 +246,7 @@ public class HexagonalLayout implements LayoutManager {
         // TODO Auto-generated method stub
         
     }
-
-
+    
+    
     
 }
