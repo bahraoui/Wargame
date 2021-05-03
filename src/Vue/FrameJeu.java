@@ -26,7 +26,7 @@ public class FrameJeu extends JFrame{
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		HexagonalLayout hex = new HexagonalLayout(COLUMNS, new Insets(0,0,0,0), petiteLigne, totalCells);
+		HexagonalLayout hex = new HexagonalLayout(COLUMNS, new Insets(1,1,1,1), petiteLigne, totalCells);
 		Cellule[][] cells = new Cellule[COLUMNS][hex.getRows()+1];
 		pj = new PanelJeu(hex,cells);
 		this.getContentPane().setBackground(Color.cyan);
