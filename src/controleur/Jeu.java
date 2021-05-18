@@ -1,21 +1,20 @@
 package controleur;
-import modele.plateau.Plateau;
-import modele.entite.Entite;
-import modele.entite.unite.Archer;
-import modele.entite.unite.Infanterie;
-import modele.entite.unite.InfanterieLourde;
-import modele.entite.unite.Mage;
-import modele.entite.unite.Unite;
-import modele.entite.batiment.Batiment;
-import modele.entite.batiment.TypeBatiment;
-import modele.joueur.Joueur;
-import modele.plateau.Case;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import Vue.Hexagone;
+import Vue.FrameJeu;
+import Vue.PanelJeu;
+import modele.entite.Entite;
+import modele.entite.batiment.Batiment;
+import modele.entite.batiment.TypeBatiment;
+import modele.entite.unite.Unite;
+import modele.joueur.Joueur;
+import modele.plateau.Case;
+import modele.plateau.Plateau;
 
 
 public class Jeu {
@@ -30,56 +29,7 @@ public class Jeu {
 
     }*/
     
-    public static void main(String[] args) {
-        
-        /// Initialisation plateau joueur
-
-        Joueur j1 = new Joueur(false);
-        Joueur j2 = new Joueur(false);
-        Joueur j3 = new Joueur(false);
-        Joueur j4 = new Joueur(false);
-        listeJoueur.add(j1);
-        listeJoueur.add(j2);
-        listeJoueur.add(j3);
-        listeJoueur.add(j4);
-        joueurActuel = j1;
-        chronometre();
-
-        tour = 0;
-
-        
-
-        /// Placement base
-
-        /*
-        int x,y = 0;
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            do {
-                System.out.println("Placer votre base");
-                Scanner sc = new Scanner(System.in);
-                y = sc.nextInt();
-                x = sc.nextInt();
-                System.out.println("y : "+y+"x : "+x);
-            } while (!testCoordBase(y, x));
-            placerBaseJoueur(listeJoueur.get(i),y,x);
-            System.out.println(plateau.affichage());
-        }
-        */
-
-        /// Deroulement Tour
-
-        ///do {
-            
-            regenerationUniteArmee(joueurActuel);
-            gainTourJoueur(joueurActuel);
-
-
-
-
-
-        ///} while (!finpartie || !conditionVictoire());
-
-    }
+   
 
     public static void combat(Case attaquant, Case defenseur){
         Entite def = new Entite();
@@ -265,20 +215,20 @@ public class Jeu {
     public static void chronometre() {
     	Timer chrono =  new Timer();
     	chrono.schedule(new TimerTask(){
-            int indexe = 0,  i = 0;
+            int index = 0,  i = 0;
 			@Override
 			public void run() {
                 while(finpartie == false){
                     i++;
                     if(i == listeJoueur.size()){
                         i = 0;
-                    }else if(indexe == listeJoueur.size()-1){
-                        indexe = 0;
-                    }else if(indexe < listeJoueur.size() && i < listeJoueur.size()){   
+                    }else if(index == listeJoueur.size()-1){
+                        index = 0;
+                    }else if(index < listeJoueur.size() && i < listeJoueur.size()){   
                         System.out.println(joueurActuel);
-                        joueurActuel = listeJoueur.get(indexe+1);
+                        joueurActuel = listeJoueur.get(index+1);
                         System.out.println(joueurActuel);
-                        indexe += 1; 
+                        index += 1; 
                     }       
                 } 
 
@@ -336,6 +286,55 @@ public class Jeu {
     }
 
 */
+    public static void main(String[] args) throws IOException, InterruptedException {
+            
+        /// Initialisation plateau joueur
+
+        Joueur j1 = new Joueur(false);
+        Joueur j2 = new Joueur(false);
+        Joueur j3 = new Joueur(false);
+        Joueur j4 = new Joueur(false);
+        listeJoueur.add(j1);
+        listeJoueur.add(j2);
+        listeJoueur.add(j3);
+        listeJoueur.add(j4);
+        joueurActuel = j1;
+
+        PanelJeu pj = new PanelJeu();
+        Hexagone cells[][] = pj.getCells();
+        new FrameJeu(pj);
+
+        tour = 0;
+
+        
+
+        /// Placement base
+
+        /*
+        int x,y = 0;
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            do {
+                System.out.println("Placer votre base");
+                Scanner sc = new Scanner(System.in);
+                y = sc.nextInt();
+                x = sc.nextInt();
+                System.out.println("y : "+y+"x : "+x);
+            } while (!testCoordBase(y, x));
+            placerBaseJoueur(listeJoueur.get(i),y,x);
+            System.out.println(plateau.affichage());
+        }
+        */
+
+        /// Deroulement Tour
+
+        ///do {
+            
+            regenerationUniteArmee(joueurActuel);
+            gainTourJoueur(joueurActuel);
+
+        ///} while (!finpartie || !conditionVictoire());
+
+    }
 /*
             Debut Jeu
 

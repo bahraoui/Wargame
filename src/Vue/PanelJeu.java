@@ -3,32 +3,31 @@ package Vue;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.awt.Color;
+import java.awt.Insets;
 
 import javax.swing.JPanel;
 
 
 public class PanelJeu extends JPanel{
 	private BorderLayout bdl;
+	private static Hexagone[][] cells;
 	private JPanel panelCentre;
-	private HexagonalLayout hex;
 	
-	public PanelJeu(HexagonalLayout parHex, Cellule[][] cells) throws IOException {
+	public PanelJeu() throws IOException {
 		super();
 		this.bdl = new BorderLayout();
 		setLayout(bdl);
 		this.panelCentre = new JPanel();
-		this.hex = parHex;
-		boolean petiteLigne = this.hex.isBeginWithSmallRow();
-		int totalCells = this.hex.getNbComposants();
+		boolean petiteLigne = false;
+		HexagonalLayout hex = new HexagonalLayout(20, new Insets(1,1,1,1), petiteLigne, 254);
+		System.out.println(hex.getRows());
+		cells = new Hexagone[20][14]; // 20 colonnes 13 lignes
+		int totalCells = hex.getNbComposants();
 		this.panelCentre.setLayout(hex);
 		int ligne=0,col=0;
 		MyMouseListener mListener = new MyMouseListener(this.panelCentre);
 		for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
-			Cellule cell;
-			if (petiteLigne)
-			cell = new Cellule(new Point(ligne,col), Sol.PLAINE, Unite.ARCHER);
-			else
-			cell = new Cellule(new Point(ligne,col), Sol.PLAINE);
+			Hexagone cell = new Hexagone();
 			ligne++;
 			if (ligne%20==0 && !petiteLigne) {
 				ligne=0;
@@ -43,12 +42,21 @@ public class PanelJeu extends JPanel{
 			cells[ligne][col] = cell;
 			cell.setBackground(Color.blue);
 			cell.setForeground(Color.RED);
-			
 			cell.addMouseListener(mListener);
-			
-			this.panelCentre.add(cell);
+			this.panelCentre.add(cells[ligne][col]);
 		}
 		this.add(panelCentre,BorderLayout.CENTER);
 	}
+
+
+
+	public Hexagone[][] getCells() {
+		return cells;
+	}
+
+	public void setCells(Hexagone[][] parCells) {
+		cells = parCells;
+	}
+
 	
 }

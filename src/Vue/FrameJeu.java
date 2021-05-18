@@ -14,33 +14,27 @@ public class FrameJeu extends JFrame{
 	
 	
 	private static final int COLUMNS = 20;
-	private PanelJeu pj;
-	
-	public FrameJeu() throws IOException {
-		super("Wargame");
-		int totalCells=254;
-		
-		BorderLayout bdl = new BorderLayout();
-		boolean petiteLigne = false;
-		
+	private static PanelJeu pj;
+
+	public FrameJeu(PanelJeu parPj) throws IOException, InterruptedException {
+		super("Wargame");		
+		BorderLayout bdl = new BorderLayout();		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		HexagonalLayout hex = new HexagonalLayout(COLUMNS, new Insets(1,1,1,1), petiteLigne, totalCells);
-		Cellule[][] cells = new Cellule[COLUMNS][hex.getRows()+1];
-		pj = new PanelJeu(hex,cells);
+
+		pj = parPj;
 		this.getContentPane().setBackground(Color.cyan);
 		this.setLayout(bdl);
 		this.add(pj,BorderLayout.CENTER);
-		this.add(new JLabel("Nord"),BorderLayout.NORTH);
-		this.add(new JLabel("Sud"),BorderLayout.SOUTH);
-		this.add(new JLabel("Est"),BorderLayout.EAST);
-		this.add(new JLabel("Ouest"),BorderLayout.WEST);
+		this.add(new JLabel("fleche Nord"),BorderLayout.NORTH);
+		this.add(new JLabel("fleche Sud"),BorderLayout.SOUTH);
+		this.add(new JLabel("fleche Est"),BorderLayout.EAST);
+		this.add(new JLabel("fleche Ouest"),BorderLayout.WEST);
 		this.setVisible(true);	this.setSize(1500,900);
 		this.setLocation(50, 50);	this.setResizable(true);
 	}
-	public static void main(String[] args) throws IOException {
-		new FrameJeu();
+	public static void main(String[] args) throws IOException, InterruptedException {
+		new FrameJeu(new PanelJeu());
 	}
 	
 	// public initGUI() {}
