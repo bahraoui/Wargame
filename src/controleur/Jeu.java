@@ -1,9 +1,14 @@
 package controleur;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import Vue.Hexagone;
 import Vue.FrameJeu;
@@ -17,19 +22,27 @@ import modele.plateau.Case;
 import modele.plateau.Plateau;
 
 
-public class Jeu {
-    private static Plateau plateau = new Plateau();
-    private static ArrayList<ArrayList<Integer>> postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
-    private static ArrayList<Joueur> listeJoueur = new ArrayList<Joueur>();
+public class Jeu implements ActionListener {
+    private static Plateau plateau;
+    private static ArrayList<ArrayList<Integer>> postionBaseJoueur;
+    private static ArrayList<Joueur> listeJoueur;
     private static Joueur joueurActuel;
     private static int tour;
-    private static boolean finpartie = false;
+    private static boolean finpartie;
+    private static FrameJeu FenetreJeu;
 
     /*public void Jeu() {
 
     }*/
     
     public static void main(String[] args) throws IOException, InterruptedException {
+
+        Jeu controleur = new Jeu();
+
+        finpartie = false;
+        listeJoueur = new ArrayList<Joueur>();
+        postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
+        plateau = new Plateau();
             
         /// Initialisation plateau joueur
 
@@ -45,7 +58,8 @@ public class Jeu {
 
         PanelJeu pj = new PanelJeu();
         Hexagone cells[][] = pj.getCells();
-        FrameJeu fj = new FrameJeu(pj);
+        FenetreJeu = new FrameJeu(pj);
+        FenetreJeu.enregistreEcouteur(controleur);
 
         tour = 0;
 
@@ -305,6 +319,26 @@ public class Jeu {
 	            	combat(postionOpportunite, positionFinalJoueur);
             	}
 	        }
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        if (evt.getSource() instanceof JButton) {
+            if (evt.getActionCommand().equals("quit")) {
+                int reponse = JOptionPane.showConfirmDialog(FenetreJeu, "Voulez-vous allez quitter l'application", "Etes-vous sur ?",0, 0);
+                if (reponse == 0) {
+                    FenetreJeu.dispose();
+                    System.exit(0);
+                }
+            } else if (evt.getActionCommand().equals("nouvellePartie")) {
+                System.out.println("Nouvelle partie !");
+            } else if (evt.getActionCommand().equals("afficherRegles")) {
+                System.out.println("Voici les regles : Il n'y a pas de regles !");
+            }
         }
     }
     
