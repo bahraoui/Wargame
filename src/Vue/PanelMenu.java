@@ -32,6 +32,7 @@ public class PanelMenu extends JPanel{
         this.add(btnRegles,contrainte);
         contrainte.gridy++;
         this.add(btnQuitter,contrainte);
+
     }
 
     public void enregistreEcouteur(Jeu controleur) {

@@ -8,9 +8,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import Vue.Hexagone;
+import Vue.PanelActuel;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
 import modele.entite.Entite;
@@ -30,6 +33,8 @@ public class Jeu implements ActionListener {
     private static int tour;
     private static boolean finpartie;
     private static FrameJeu FenetreJeu;
+    private static Integer nbJoueursH;
+    private static Integer nbJoueursIA;
 
     /*public void Jeu() {
 
@@ -40,6 +45,7 @@ public class Jeu implements ActionListener {
         Jeu controleur = new Jeu();
 
         finpartie = false;
+        nbJoueursH = nbJoueursIA = 0;
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
@@ -327,17 +333,54 @@ public class Jeu implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent evt) {
+        /**
+         * Clic sur un bouton
+         */
         if (evt.getSource() instanceof JButton) {
+            /**
+             * Bouton "Quitter"
+             */
             if (evt.getActionCommand().equals("quit")) {
-                int reponse = JOptionPane.showConfirmDialog(FenetreJeu, "Voulez-vous allez quitter l'application", "Etes-vous sur ?",0, 0);
+                int reponse = JOptionPane.showConfirmDialog(FenetreJeu, "Voulez-vous quitter l'application ?", "Êtes-vous sur ?",0, 0);
                 if (reponse == 0) {
                     FenetreJeu.dispose();
                     System.exit(0);
                 }
-            } else if (evt.getActionCommand().equals("nouvellePartie")) {
+            }
+            /**
+             * Bouton "Nouvelle Partie"
+             */
+            else if (evt.getActionCommand().equals("nouvellePartie")) {
                 System.out.println("Nouvelle partie !");
-            } else if (evt.getActionCommand().equals("afficherRegles")) {
+                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+            } 
+            /**
+             * Bouton "Règles"
+             */
+            else if (evt.getActionCommand().equals("afficherRegles")) {
                 System.out.println("Voici les regles : Il n'y a pas de regles !");
+                FenetreJeu.changePanel(PanelActuel.REGLES);
+            }
+            /**
+             * Bouton "Continuer" -- Fenetre nouvelle partie
+             */
+            else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
+                // TEST combo box nbjoueursH et nbJoueursIA =>
+                //System.out.println("nb joueurs humain : " + String.valueOf(nbJoueursH) + "\n###\nb joueurs IA : " + String.valueOf(nbJoueursIA));
+                FenetreJeu.changePanel(PanelActuel.JEU);
+            }
+        }
+        /**
+         * Clic sur une liste
+         */
+        else if (evt.getSource() instanceof JComboBox) {
+            if (evt.getActionCommand().equals("nbJoueursH")) {
+                JComboBox<Integer> nbH = (JComboBox<Integer>) evt.getSource();
+                nbJoueursH = (Integer) nbH.getSelectedItem();
+            } 
+            else if (evt.getActionCommand().equals("nbJoueursIA")) {
+                JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
+                nbJoueursIA = (Integer) nbIA.getSelectedItem();
             }
         }
     }

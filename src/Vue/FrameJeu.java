@@ -3,6 +3,7 @@ package Vue;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.io.IOException;
 
@@ -31,8 +32,10 @@ public class FrameJeu extends JFrame{
 
 		panelJeu = parPj;
 		panelMenu = new PanelMenu();
+		panelNouvellePartie = new PanelNouvellePartie();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
+		this.setMinimumSize(new Dimension(1500,900));
 		this.setVisible(true);	this.setSize(1500,900);
 		this.setLocation(50, 50);	this.setResizable(true);
 	}
@@ -88,10 +91,13 @@ public class FrameJeu extends JFrame{
 			default:
 				break;
 		}
+		panelActuel = panelVoulu;
+		this.pack();		
 	}
 
 	public void enregistreEcouteur(Jeu controleur) {
 		panelMenu.enregistreEcouteur(controleur);
+		panelNouvellePartie.enregistreEcouteur(controleur);
 	}
 	
 	// public initGUI() {}
