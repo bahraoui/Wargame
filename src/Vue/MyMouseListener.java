@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import controleur.Jeu;
+
 /**
 * MyMouseListener
 */
@@ -24,6 +26,16 @@ public class MyMouseListener extends MouseAdapter {
       this.jp = jp;
    }
    
+   public MyMouseListener(Jeu controleur) {
+      super();
+      // recuperer informations CASE/celulle/hexagone
+      // solutions :
+         // Hexagone doit garder POINT
+         //
+         //
+      // fin Solutions
+   }
+
    @Override
    public void mouseClicked(MouseEvent e) {
       System.out.println((Hexagone) e.getSource());
