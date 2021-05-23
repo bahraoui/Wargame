@@ -33,6 +33,8 @@ public class FrameJeu extends JFrame{
 		panelJeu = parPj;
 		panelMenu = new PanelMenu();
 		panelNouvellePartie = new PanelNouvellePartie();
+		panelChargerPartie = new PanelChargerPartie();
+		panelRegles = new PanelRegles();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
 		this.setMinimumSize(new Dimension(1500,900));
