@@ -353,6 +353,13 @@ public class Jeu implements ActionListener {
             else if (evt.getActionCommand().equals("nouvellePartie")) {
                 System.out.println("Nouvelle partie !");
                 FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+            }
+            /**
+             * Bouton "Charger Partie"
+             */
+            else if (evt.getActionCommand().equals("chargerPartie")) {
+                System.out.println("Charger partie !");
+                FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
             } 
             /**
              * Bouton "Règles"
