@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import controleur.Jeu;
 
@@ -30,6 +31,7 @@ public class FrameJeu extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panelActuel = PanelActuel.MENU;
 
+		
 		panelJeu = parPj;
 		panelMenu = new PanelMenu();
 		panelNouvellePartie = new PanelNouvellePartie();
@@ -37,12 +39,12 @@ public class FrameJeu extends JFrame{
 		panelRegles = new PanelRegles();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
-		this.setMinimumSize(new Dimension(1500,900));
+		this.setPreferredSize(new Dimension(1500,900));
 		this.setVisible(true);	this.setSize(1500,900);
 		this.setLocation(50, 50);	this.setResizable(true);
 	}
 
-	public void enleverPanel(PanelActuel panelVoulu) {
+	public void enleverPanel(PanelActuel panelVoulu) {		
 		switch (panelVoulu) {
 			case MENU:
 				this.remove(panelMenu);
@@ -69,6 +71,8 @@ public class FrameJeu extends JFrame{
 	}
 
 	public void changePanel(PanelActuel panelVoulu) {
+		System.out.println(panelVoulu.toString());
+		System.out.println(panelActuel.toString());
 		enleverPanel(panelActuel);
 		switch (panelVoulu) {
 			case MENU:
@@ -94,13 +98,19 @@ public class FrameJeu extends JFrame{
 				break;
 		}
 		panelActuel = panelVoulu;
-		this.pack();		
+		this.pack();
+		this.repaint();
+		
 	}
 
 	public void enregistreEcouteur(Jeu controleur) {
 		panelMenu.enregistreEcouteur(controleur);
 		panelNouvellePartie.enregistreEcouteur(controleur);
+		panelChargerPartie.enregistreEcouteur(controleur);
+		panelRegles.enregistreEcouteur(controleur);
 	}
 	
-	// public initGUI() {}
+	public JPanel getPanelChargerPartie(){
+        return panelChargerPartie;
+    }
 }

@@ -1,6 +1,7 @@
 package controleur;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,10 +11,14 @@ import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import Vue.Hexagone;
 import Vue.PanelActuel;
+import Vue.PanelChargerPartie;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
 import modele.entite.Entite;
@@ -35,6 +40,7 @@ public class Jeu implements ActionListener {
     private static FrameJeu FenetreJeu;
     private static Integer nbJoueursH;
     private static Integer nbJoueursIA;
+    private static File sauvegardeChoisis;
 
     /*public void Jeu() {
 
@@ -360,6 +366,42 @@ public class Jeu implements ActionListener {
             else if (evt.getActionCommand().equals("chargerPartie")) {
                 System.out.println("Charger partie !");
                 FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
+            }
+            /**
+             * Bouton "Charger une partie sauvegardée"
+             */
+            else if (evt.getActionCommand().equals("chercherSauvegarde")) {
+                System.out.println("Récupere le fichier de sauvegarde !");
+                JFileChooser choose = new JFileChooser(
+                    FileSystemView
+                    .getFileSystemView()
+                    .getHomeDirectory()
+                );
+                choose.setDialogTitle("Selectionnez une fichier de sauvegarde");
+                choose.setAcceptAllFileFilterUsed(false);
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Documents de type TXT", "txt");
+                choose.addChoosableFileFilter(filter);
+                // Ouvrez le fichier
+                int res = choose.showOpenDialog(null);
+                // Enregistrez le fichier
+                if (res == JFileChooser.APPROVE_OPTION) {
+                  sauvegardeChoisis = choose.getSelectedFile();
+                  ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText(((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().getText() + sauvegardeChoisis.getName());
+                  System.out.println(sauvegardeChoisis.getAbsolutePath());
+                }
+            }
+            /**
+             * Bouton "Lancer la partie sauvegardée"
+             */
+            else if (evt.getActionCommand().equals("lancerPartieChargee")) {
+                if (sauvegardeChoisis != null) {
+                    System.out.println("Lancer une partie chargee!");
+                    FenetreJeu.changePanel(PanelActuel.JEU);
+                }
+                else {
+                    JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");
+                }
+                
             } 
             /**
              * Bouton "Règles"
@@ -367,6 +409,7 @@ public class Jeu implements ActionListener {
             else if (evt.getActionCommand().equals("afficherRegles")) {
                 System.out.println("Voici les regles : Il n'y a pas de regles !");
                 FenetreJeu.changePanel(PanelActuel.REGLES);
+                
             }
             /**
              * Bouton "Continuer" -- Fenetre nouvelle partie
@@ -374,7 +417,17 @@ public class Jeu implements ActionListener {
             else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
                 // TEST combo box nbjoueursH et nbJoueursIA =>
                 //System.out.println("nb joueurs humain : " + String.valueOf(nbJoueursH) + "\n###\nb joueurs IA : " + String.valueOf(nbJoueursIA));
-                FenetreJeu.changePanel(PanelActuel.JEU);
+                if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
+                    JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
+                else 
+                    FenetreJeu.changePanel(PanelActuel.JEU);
+            }
+            /**
+             * Bouton "Retour"
+             */
+            else if (evt.getActionCommand().equals("retourMenu")) {
+                System.out.println("Retour Menu!");
+                FenetreJeu.changePanel(PanelActuel.MENU);
             }
         }
         /**
