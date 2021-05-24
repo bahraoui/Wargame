@@ -40,6 +40,7 @@ public class FrameJeu extends JFrame{
 		this.setMinimumSize(new Dimension(1500,900));
 		this.setVisible(true);	this.setSize(1500,900);
 		this.setLocation(50, 50);	this.setResizable(true);
+		
 	}
 
 	public void enleverPanel(PanelActuel panelVoulu) {

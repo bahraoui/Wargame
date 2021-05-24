@@ -63,7 +63,7 @@ public class Jeu implements ActionListener {
         joueurActuel = j1;
 
         PanelJeu pj = new PanelJeu();
-        Hexagone cells[][] = pj.getCells();
+        //Hexagone cells[][] = pj.getCells();
         FenetreJeu = new FrameJeu(pj);
         FenetreJeu.enregistreEcouteur(controleur);
 
