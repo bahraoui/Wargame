@@ -8,6 +8,6 @@ public class Foret extends Terrain{
     }
 
     public String toString(){
-        return "Terrain de type Foret : " +super.toString();
+        return "Foret : " +super.toString();
     }
 }

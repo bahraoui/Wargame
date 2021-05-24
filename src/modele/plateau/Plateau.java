@@ -3,6 +3,10 @@ package modele.plateau;
 import java.util.ArrayList;
 
 import modele.terrain.Plaine;
+import modele.entite.batiment.Batiment;
+import modele.entite.batiment.TypeBatiment;
+import modele.entite.unite.Archer;
+import modele.entite.unite.Unite;
 import modele.terrain.Desert;
 
 public class Plateau extends ArrayList<ArrayList<Case>> {
@@ -16,13 +20,19 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
                     Plaine caseTerrainP = new Plaine();
                     Case cellule = new Case(caseTerrainP);
                     ligne.add(cellule);
+                    //Batiment batiment = new Batiment(TypeBatiment.MONUMENT);
+                    //cellule.setBatiment(batiment);
                     cellule.setBatiment(null);
+                    //Archer unite = new Archer();
+                    //cellule.setUnite(unite);
                     cellule.setUnite(null);
                 }
                 else {
                     Desert caseTerrainD = new Desert();
                     Case cellule = new Case(caseTerrainD);
                     ligne.add(cellule);
+                    //Batiment batiment = new Batiment(TypeBatiment.BASE);
+                    //cellule.setBatiment(batiment);
                     cellule.setBatiment(null);
                     cellule.setUnite(null);
                 }

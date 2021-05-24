@@ -9,6 +9,6 @@ public class Mer extends Terrain{
     }
     
     public String toString(){
-        return "Terrain de type Mer : " +super.toString();
+        return "Mer : " +super.toString();
     }
 }

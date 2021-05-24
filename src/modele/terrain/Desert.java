@@ -9,6 +9,6 @@ public class Desert extends Terrain{
     }
 
     public String toString(){
-        return "Terrain de type Desert : " +super.toString();
+        return "Desert : " +super.toString();
     }
 }
