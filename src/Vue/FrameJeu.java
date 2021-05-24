@@ -104,6 +104,10 @@ public class FrameJeu extends JFrame{
 		panelNouvellePartie.enregistreEcouteur(controleur);
 		panelChargerScenario.enregistreEcouteur(controleur);
 	}
+
+	public void setChoixTerrainTxt(String txt) {
+        panelChargerScenario.setChoixTerrainTxt(txt);
+    }
 	
 	// public initGUI() {}
 }

@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 
 /**
@@ -87,6 +86,7 @@ public class Hexagone extends JLabel {
             default:
                 break;
         }
+        this.sol = sol;
         this.paintChildren(g);
     }
 
