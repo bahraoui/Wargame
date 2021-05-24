@@ -386,7 +386,7 @@ public class Jeu implements ActionListener {
                 // Enregistrez le fichier
                 if (res == JFileChooser.APPROVE_OPTION) {
                   sauvegardeChoisis = choose.getSelectedFile();
-                  ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText(((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().getText() + sauvegardeChoisis.getName());
+                  ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
                   System.out.println(sauvegardeChoisis.getAbsolutePath());
                 }
             }
