@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -21,6 +22,7 @@ import Vue.PanelActuel;
 import Vue.PanelChargerPartie;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
+import Vue.Sol;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
@@ -29,8 +31,11 @@ import modele.joueur.Joueur;
 import modele.plateau.Case;
 import modele.plateau.Plateau;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class Jeu implements ActionListener {
+
+public class Jeu extends MouseAdapter implements ActionListener {
     private static Plateau plateau;
     private static ArrayList<ArrayList<Integer>> postionBaseJoueur;
     private static ArrayList<Joueur> listeJoueur;
@@ -71,6 +76,7 @@ public class Jeu implements ActionListener {
         PanelJeu pj = new PanelJeu();
         //Hexagone cells[][] = pj.getCells();
         FenetreJeu = new FrameJeu(pj);
+        TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
 
         tour = 0;
@@ -443,6 +449,23 @@ public class Jeu implements ActionListener {
                 nbJoueursIA = (Integer) nbIA.getSelectedItem();
             }
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println((Hexagone) e.getSource());
+        Hexagone clic = (Hexagone) e.getSource();
+        try {
+            clic.setTerrain(Sol.NEIGE);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        // recuperer informations CASE/celulle/hexagone
+        // solutions :
+            // Hexagone doit garder POINT
+            //
+            //
+        // fin Solutions
     }
     
 

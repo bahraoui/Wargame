@@ -17,12 +17,20 @@ import javax.swing.JLabel;
 public class Hexagone extends JLabel {
     private static final long serialVersionUID = -7142502695252118612L;
     private Polygon hexagonalShape;
+    private Sol sol;
     
     public Hexagone() throws IOException {
         super();
         hexagonalShape = getHexPolygon();
     }
-    
+
+
+    public Hexagone(Sol sol) throws IOException {
+        super();
+        hexagonalShape = getHexPolygon();
+        this.sol = sol;
+    }
+
     /**
     * Genere un bouton de forme hexagonale
     * @return Polygon avec les formes d'un bouton hexagonale
@@ -51,7 +59,41 @@ public class Hexagone extends JLabel {
     }
     
     // END Getters and setters
-    
+
+    public void setTerrain(Sol sol) throws IOException{
+        // , , MER, , , ;
+        Graphics g = getGraphics();
+        g.setClip(hexagonalShape);
+        switch (sol) {
+            case MER:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
+                break;
+            case DESERT:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
+                break;
+            case FORET:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
+                break;
+            case MONTAGNE:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
+                break;
+            case PLAINE:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+                break;
+            case NEIGE:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
+                break;
+            default:
+                break;
+        }
+        this.sol = sol;
+        this.paintChildren(g);
+    }
+
+    public void setTerrain(Graphics g) {
+        this.paintChildren(g);
+    }
+
     /*
     * (non-Javadoc)
     * @see java.awt.Component#contains(java.awt.Point)
@@ -133,16 +175,45 @@ public class Hexagone extends JLabel {
         //g.drawPolygon(hexagonalShape);
         g.setClip(hexagonalShape);
         // draw the image
-        try {
-            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (sol != null) {
+            try {
+                switch (sol) {
+                    case MER:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
+                        break;
+                    case DESERT:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
+                        break;
+                    case FORET:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
+                        break;
+                    case MONTAGNE:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
+                        break;
+                    case PLAINE:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+                        break;
+                    case NEIGE:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
+                        break;
+                
+                    default:
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }        
+        } else {
+            try {
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-    
-        
         //g.fillPolygon(hexagonalShape);
     }
     
+
     /*
     * (non-Javadoc)
     * @see javax.swing.AbstractButton#paintBorder(java.awt.Graphics)

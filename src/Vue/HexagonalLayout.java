@@ -122,7 +122,7 @@ public class HexagonalLayout implements LayoutManager {
         boolean smallRow = beginWithSmallRow;
         
         // Calculating the number of rows needed
-        rows = calculateRows(componentCount);
+        //rows = calculateRows(componentCount);
         
         // insets
         int leftOffset = insets.left;
@@ -235,6 +235,10 @@ public class HexagonalLayout implements LayoutManager {
     
     public int getRows() {
         return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
     }
     
     public int getNbComposants() {
