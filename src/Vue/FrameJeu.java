@@ -108,11 +108,16 @@ public class FrameJeu extends JFrame{
 		panelMenu.enregistreEcouteur(controleur);
 		panelNouvellePartie.enregistreEcouteur(controleur);
 		panelChargerPartie.enregistreEcouteur(controleur);
+		panelChargerScenario.enregistreEcouteur(controleur);
 		panelRegles.enregistreEcouteur(controleur);
 	}
 
 	public void setChoixTerrainTxt(String txt) {
         panelChargerScenario.setChoixTerrainTxt(txt);
+    }
+
+	public void setChoixMonumentTxt(String txt) {
+        panelChargerScenario.setChoixMonumentTxt(txt);
     }
 	
 	public JPanel getPanelChargerPartie(){

@@ -367,11 +367,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
             }
             /**
+             * Bouton "Choix Monument"
+             */
+            else if (evt.getActionCommand().equals("choixMonument")) {
+                FenetreJeu.setChoixMonumentTxt("Monument selctionne");;
+            }
+            /**
              * Bouton "Charger Partie"
              */
             else if (evt.getActionCommand().equals("chargerPartie")) {
                 System.out.println("Charger partie !");
-                FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
+                FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);
             }
             /**
              * Bouton "Charger une partie sauvegardée"
@@ -415,7 +421,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("afficherRegles")) {
                 System.out.println("Voici les regles : Il n'y a pas de regles !");
                 FenetreJeu.changePanel(PanelActuel.REGLES);
-                
             }
             /**
              * Bouton "Continuer" -- Fenetre nouvelle partie
@@ -439,7 +444,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         /**
          * Clic sur une liste
          */
-        else if (evt.getSource() instanceof JComboBox) {
+        else if (evt.getSource() instanceof JComboBox<?>) {
             if (evt.getActionCommand().equals("nbJoueursH")) {
                 JComboBox<Integer> nbH = (JComboBox<Integer>) evt.getSource();
                 nbJoueursH = (Integer) nbH.getSelectedItem();
@@ -447,6 +452,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("nbJoueursIA")) {
                 JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
                 nbJoueursIA = (Integer) nbIA.getSelectedItem();
+            }
+            else if (evt.getActionCommand().equals("listeTerrains")) {
+                JComboBox<String> choixTerrain = (JComboBox<String>) evt.getSource();
+                FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem());
             }
         }
     }
