@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class PanelJeu extends JPanel{
 	private BorderLayout bdl;
-	private static Hexagone[][] cells;
+	private Hexagone[][] cells;
 	private JPanel panelCentre;
 	
 	public PanelJeu() throws IOException {

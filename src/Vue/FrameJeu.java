@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ public class FrameJeu extends JFrame{
 		panelMenu = new PanelMenu();
 		panelNouvellePartie = new PanelNouvellePartie();
 		panelChargerPartie = new PanelChargerPartie();
+		panelChargerScenario = new PanelChargerScenario();
 		panelRegles = new PanelRegles();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
@@ -100,6 +102,7 @@ public class FrameJeu extends JFrame{
 	public void enregistreEcouteur(Jeu controleur) {
 		panelMenu.enregistreEcouteur(controleur);
 		panelNouvellePartie.enregistreEcouteur(controleur);
+		panelChargerScenario.enregistreEcouteur(controleur);
 	}
 	
 	// public initGUI() {}
