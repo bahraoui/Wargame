@@ -71,8 +71,6 @@ public class FrameJeu extends JFrame{
 	}
 
 	public void changePanel(PanelActuel panelVoulu) {
-		System.out.println(panelVoulu.toString());
-		System.out.println(panelActuel.toString());
 		enleverPanel(panelActuel);
 		switch (panelVoulu) {
 			case MENU:
