@@ -518,8 +518,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Nouvelle Partie"
              */
             else if (evt.getActionCommand().equals("nouvellePartie")) {
-                System.out.println("Nouvelle partie !");
-                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                //System.out.println("Nouvelle partie !");
+                FenetreJeu.changePanel(PanelActuel.JEU);
             }
             /**
              * Bouton "Choix Monument"
