@@ -35,13 +35,13 @@ public class Hexagone extends JLabel {
         hexagonalShape = getHexPolygon();
         this.sol = sol;
     }
-
     public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment) throws IOException {
         super();
         hexagonalShape = getHexPolygon();
         this.sol = sol;
         this.unite = unite;
         this.batiment = batiment;
+        this.coord = coord;
     }
 
     /**
@@ -69,6 +69,13 @@ public class Hexagone extends JLabel {
     
     public Polygon getHexagonalShape() {
         return this.hexagonalShape;
+    }
+    public void setCoord(Point coord){
+        this.coord = coord;
+    }
+
+    public Point getCoord(){
+        return this.coord;
     }
     
     // END Getters and setters
