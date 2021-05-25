@@ -9,6 +9,6 @@ public class Montagne extends Terrain{
     }
     
     public String toString(){
-        return "Terrain de type Montagne : " +super.toString();
+        return "Montagne : " +super.toString();
     }
 }

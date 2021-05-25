@@ -9,6 +9,6 @@ public class Plaine extends Terrain{
     }
     
     public String toString(){
-        return "Terrain de type Plaine : " +super.toString();
+        return "Plaine : " +super.toString();
     }
 }

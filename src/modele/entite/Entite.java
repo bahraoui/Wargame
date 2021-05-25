@@ -49,4 +49,7 @@ public class Entite {
     public void setVision(int vision) {
         this.vision = vision;
     }
+    public void setIndentifiant(int identifiant) {
+        this.identifiant = identifiant;
+    }
 }
