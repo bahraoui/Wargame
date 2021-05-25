@@ -19,7 +19,7 @@ public class PanelNouvellePartie extends JPanel{
     public PanelNouvellePartie() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
-        String[] nomMap = {"Map desertique","Map artique"};
+        String[] nomMap = {"","Map desertique","Map artique"};
         Integer[] nbJoueursH = {1,2,3,4};
         Integer[] nbJoueursIAInteger= {0,1,2,3,4};
         choixMap = new JComboBox<String>(nomMap);

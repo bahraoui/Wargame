@@ -24,7 +24,13 @@ import Vue.PanelJeu;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
+import modele.entite.unite.Archer;
+import modele.entite.unite.Cavalerie;
+import modele.entite.unite.Infanterie;
+import modele.entite.unite.InfanterieLourde;
+import modele.entite.unite.Mage;
 import modele.entite.unite.Unite;
+import modele.joueur.IA;
 import modele.joueur.Joueur;
 import modele.plateau.Case;
 import modele.plateau.Plateau;
@@ -40,6 +46,7 @@ public class Jeu implements ActionListener {
     private static FrameJeu FenetreJeu;
     private static Integer nbJoueursH;
     private static Integer nbJoueursIA;
+    private static String carteChoisis;
     private static File sauvegardeChoisis;
 
     /*public void Jeu() {
@@ -49,6 +56,8 @@ public class Jeu implements ActionListener {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Jeu controleur = new Jeu();
+
+        carteChoisis = "";
 
         finpartie = false;
         nbJoueursH = nbJoueursIA = 0;
@@ -334,6 +343,66 @@ public class Jeu implements ActionListener {
         }
     }
 
+
+    public void joueurAAttaquerIA() {
+        //verfie si encore in game
+        //sinon
+        //random
+        //assigner
+    }
+
+    public void espacePlacementUnite() {
+        //regarder autour de la base de l'IA
+
+        return ;
+    }
+
+    public void achatTroupesIA(IA ia){
+        int depense = new Random().nextInt(ia.getJoueurIA().getPieces()/2);
+        System.out.println(depense);
+        while (depense >= new Archer().getCout()) {
+            if (depense >= new InfanterieLourde().getCout()) {
+                InfanterieLourde infanterieLourde = new InfanterieLourde();
+                achatUniteArmee(ia.getJoueurIA(), infanterieLourde);
+                //placerUniteJoueur(ia.getJoueurIA(), infanterieLourde, coordY, coordX);
+            }
+            else if (depense >= new Mage().getCout()) {
+                Mage mage = new Mage();
+                achatUniteArmee(ia.getJoueurIA(), mage);
+                //placerUniteJoueur(ia.getJoueurIA(), mage, coordY, coordX);
+            }
+            else if (depense >= new Cavalerie().getCout()) {
+                Cavalerie cavalerie = new Cavalerie();
+                achatUniteArmee(ia.getJoueurIA(), cavalerie);
+                //placerUniteJoueur(ia.getJoueurIA(), cavalerie, coordY, coordX);
+            }
+            else if (depense >= new Infanterie().getCout()) {
+                Infanterie infanterie = new Infanterie();
+                achatUniteArmee(ia.getJoueurIA(), infanterie);
+                //placerUniteJoueur(ia.getJoueurIA(), infanterie, coordY, coordX);
+            }
+            else if (depense >= new Archer().getCout()) {
+                Archer archer = new Archer();
+                achatUniteArmee(ia.getJoueurIA(), archer);
+                //placerUniteJoueur(ia.getJoueurIA(), archer, coordY, coordX);
+            }
+        }
+    }
+
+    public void deplacementUniteIA() {
+        // rechercher plus court chemin entre troupe et base
+        // 
+    }
+
+    public void tourIA(){
+        //achat
+        //joueurAAttaquer
+        //pour chaque unite attaque
+            //trouver deplacement jusqua base
+    }
+
+
+
     /**
      * 
      */
@@ -417,10 +486,16 @@ public class Jeu implements ActionListener {
             else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
                 // TEST combo box nbjoueursH et nbJoueursIA =>
                 //System.out.println("nb joueurs humain : " + String.valueOf(nbJoueursH) + "\n###\nb joueurs IA : " + String.valueOf(nbJoueursIA));
-                if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
+                if (carteChoisis.equals("")){
+                    JOptionPane.showMessageDialog(FenetreJeu, "Veuillez choisir une carte ! ");
+                }
+                else if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
-                else 
-                    FenetreJeu.changePanel(PanelActuel.JEU);
+                
+                else {
+                    //charger
+                    FenetreJeu.changePanel(PanelActuel.JEU);  
+                }
             }
             /**
              * Bouton "Retour"
@@ -442,7 +517,12 @@ public class Jeu implements ActionListener {
                 JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
                 nbJoueursIA = (Integer) nbIA.getSelectedItem();
             }
+            else if (evt.getActionCommand().equals("choixMap")) {
+                JComboBox<String> nomCarte = (JComboBox<String>) evt.getSource();
+                carteChoisis = (String) nomCarte.getSelectedItem();
+            }
         }
+        
     }
     
 
