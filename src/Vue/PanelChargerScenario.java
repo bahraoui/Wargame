@@ -21,16 +21,16 @@ public class PanelChargerScenario extends JPanel{
     private PanelMap panelMap;
     private JPanel panelGauche;
     private JComboBox<TypeTerrain> listeTerrains;
-    private JLabel terrainChoisi;
-    private JButton btnChoixMonument;
-    private JLabel monumentChoisi;
-    private JButton btnLancerPartie;
-    private JButton btnQuitter;
+    private JLabel terrainChoisi, monumentChoisi, nbMonumentLabel;
+    private JButton btnChoixMonument, btnLancerPartie, btnQuitter;
+    private Integer nbMonumentsRestants;
 	
 	public PanelChargerScenario(Hexagone[][] parHexs) throws IOException {
         super(new BorderLayout());
         panelMap = new PanelMap(parHexs);
         panelGauche = new JPanel();
+        nbMonumentsRestants = 6;
+        nbMonumentLabel = new JLabel(nbMonumentsRestants+" monuments restants");
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
         JPanel panelActions = new JPanel();
@@ -38,7 +38,6 @@ public class PanelChargerScenario extends JPanel{
         btnLancerPartie = new JButton("Lancer la partie");
         btnQuitter = new JButton("Quitter");
 
-        //String[] listeTerrainsNoms = {"Neige","Désert","Forêt","Montagne","Plaine","Mer"};
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
         listeTerrains.setActionCommand("listeTerrains");
@@ -55,6 +54,7 @@ public class PanelChargerScenario extends JPanel{
         monumentChoisi = new JLabel("");
         panelMonuments.add(btnChoixMonument);
         panelMonuments.add(monumentChoisi);
+        panelMonuments.add(nbMonumentLabel);
         panelMonuments.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0,0,0)));
         border = panelMonuments.getBorder();
         margin = new EmptyBorder(3,3,3,3);
@@ -97,5 +97,14 @@ public class PanelChargerScenario extends JPanel{
     public void setChoixMonumentTxt(String txt) {
         this.monumentChoisi.setText(txt);
         this.terrainChoisi.setText("");
+    }
+
+    public void setMonumentNb() {
+        this.nbMonumentsRestants--;
+        this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
+    }
+
+    public Integer getNbMonumentsRestants(){
+        return this.nbMonumentsRestants;
     }
 }
