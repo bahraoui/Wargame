@@ -33,6 +33,7 @@ import Vue.PanelChargerScenario;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
 import Vue.PanelNouvellePartie;
+import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
 import Vue.TypeUnite;
@@ -175,13 +176,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     unite = TypeUnite.MAGE;
                 
 
-                Cellule cell = new Cellule(new Hexagone(sol, unite, batiment), plateau.get(i).get(j));
+                Cellule cell = new Cellule(new Hexagone(sol, unite, batiment,new Point(i, j)), plateau.get(i).get(j));
                 cellulesCarte[i][j] = cell;
             }
         }
     }
 
-    public static Hexagone[][] celluleToHexagone() throws IOException {
+    public static Hexagone[][] cellulesToHexagones() throws IOException {
         Hexagone[][] hexs = new Hexagone[16][16];
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
@@ -542,6 +543,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Choix Monument"
              */
             else if (evt.getActionCommand().equals("choixMonument")) {
+                terrainChoisi = null;
                 FenetreJeu.setChoixMonumentTxt("Monument selctionne");;
             }
             /**
@@ -585,7 +587,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         System.out.println("File bien chargee");
                         System.out.println(plateau.affichage());
                         setCellulesMap();
-                        pj = new PanelJeu(celluleToHexagone());
+                        pj = new PanelJeu(cellulesToHexagones());
                         FenetreJeu.setPanelJeu(pj);
                         pj.enregistreEcouteur(this);
                         FenetreJeu.changePanel(PanelActuel.JEU);  
@@ -618,8 +620,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Continuer" -- Fenetre nouvelle partie
              */
             else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
-                // TEST combo box nbjoueursH et nbJoueursIA =>
-                //System.out.println("nb joueurs humain : " + String.valueOf(nbJoueursH) + "\n###\nb joueurs IA : " + String.valueOf(nbJoueursIA));
                 if (carteChoisis.equals("")){
                     JOptionPane.showMessageDialog(FenetreJeu, "Veuillez choisir une carte ! ");
                 }
@@ -635,9 +635,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             else 
                                 listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
                         }
-                        panelChargerScenario = new PanelChargerScenario(celluleToHexagone());
+                        panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
                         FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                         panelChargerScenario.enregistreEcouteur(this);
+                        terrainChoisi = TypeTerrain.NEIGE;
                         FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -650,7 +651,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("lancerPartieApresScenario")) {
                 try {
                     //charger
-                    pj = new PanelJeu(celluleToHexagone());
+                    pj = new PanelJeu(cellulesToHexagones());
                     FenetreJeu.setPanelJeu(pj);
                     pj.enregistreEcouteur(this);
                     FenetreJeu.changePanel(PanelActuel.JEU);  
@@ -720,26 +721,80 @@ public class Jeu extends MouseAdapter implements ActionListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() instanceof Hexagone) {
-            System.out.println((Hexagone) e.getSource());
             Hexagone clic = (Hexagone) e.getSource();
-            int i = 0, j =0;
-            if (FenetreJeu.getPAnelActuel().equals(PanelActuel.CHANGERSCENARIO)) {
-                try {
-                    clic.setTerrain(Jeu.terrainChoisi);
-                    //setPlateau
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+            switch (FenetreJeu.getPanelActuel()) {
+                case CHANGERSCENARIO:
+                    if (terrainChoisi != null) {
+                        try {
+                            clic.setTerrain(terrainChoisi);
+                            cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                    break;
+                case JEU:
+                    System.out.println(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase());
+            
+                default:
+                    break;
             }
         }
-        // recuperer informations CASE/celulle/hexagone
-        // solutions :
-            // Hexagone doit garder POINT
-            //
-            //
-        // fin Solutions
+    }
+
+    public Terrain terrainVueToModele(TypeTerrain ter) {
+        Terrain terrain = null;
+        switch (ter) {
+            case MER:
+                terrain = new Mer();
+                break;
+            case DESERT:
+                terrain = new Desert();
+                break;
+            case FORET:
+                terrain = new Foret();
+                break;
+            case MONTAGNE:
+                terrain = new Montagne();
+                break;
+            case PLAINE:
+                terrain = new Plaine();
+                break;
+            case NEIGE:
+                terrain = new ToundraNeige();
+                break;
+            default:
+                System.err.println("Erreur : la conversion de terrains s'est mal passe, "+ter+" indefini.");
+                break;
+        }
+        return terrain;
     }
     
+    public Unite unteVueToModele(TypeUnite typeUnite){
+        Unite unite = null;
+        switch (typeUnite) {
+            case ARCHER:
+                unite = new Archer();
+                break;
+            case CAVALERIE:
+                unite = new Cavalerie();
+                break;
+            case INFANTERIE:
+                unite = new Infanterie();
+                break;
+            case INFANTERIELOURDE:
+                unite = new InfanterieLourde();
+                break;
+            case MAGE:
+                unite = new Mage();
+                break;
+        
+            default:
+                break;
+        }
+        return unite;
+    }
+
     /*public static boolean conditionBase(){
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
