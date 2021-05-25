@@ -231,10 +231,10 @@ public class Hexagone extends JLabel {
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
                         break;
                     case BASE_GAUCHE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 0, 0, null);
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 32, 0, null);
                         break;
                     case BASE_DROITE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 0, 0, null);
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 11, 33, null);
                         break;
                     case MONUMENT:
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 0, 0, null);
@@ -249,7 +249,7 @@ public class Hexagone extends JLabel {
         }
         else {
             try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"VIDE.png")), 12, 0, null);
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"VIDE.png")), 0, 0, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
