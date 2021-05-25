@@ -26,18 +26,17 @@ public class FrameJeu extends JFrame{
 	private static PanelActuel panelActuel;
 	//REGLES,CHARGERPARTIE,CHANGERSCENARIO
 
-	public FrameJeu(PanelJeu parPj) throws IOException, InterruptedException {
+	public FrameJeu(/*PanelJeu parPj*/) throws IOException, InterruptedException {
 		super("Wargame");		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panelActuel = PanelActuel.MENU;
 
 		
-		panelJeu = parPj;
 		panelMenu = new PanelMenu();
 		panelNouvellePartie = new PanelNouvellePartie();
 		panelChargerPartie = new PanelChargerPartie();
-		panelChargerScenario = new PanelChargerScenario();
+		//panelChargerScenario = new PanelChargerScenario();
 		panelRegles = new PanelRegles();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
@@ -108,7 +107,7 @@ public class FrameJeu extends JFrame{
 		panelMenu.enregistreEcouteur(controleur);
 		panelNouvellePartie.enregistreEcouteur(controleur);
 		panelChargerPartie.enregistreEcouteur(controleur);
-		panelChargerScenario.enregistreEcouteur(controleur);
+		//panelChargerScenario.enregistreEcouteur(controleur);
 		panelRegles.enregistreEcouteur(controleur);
 	}
 
@@ -122,5 +121,9 @@ public class FrameJeu extends JFrame{
 	
 	public JPanel getPanelChargerPartie(){
         return panelChargerPartie;
+    }
+
+    public void setPanelJeu(PanelJeu pj) {
+		FrameJeu.panelJeu = pj;
     }
 }

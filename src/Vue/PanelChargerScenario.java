@@ -30,7 +30,7 @@ public class PanelChargerScenario extends JPanel{
 	
 	public PanelChargerScenario() throws IOException {
         super(new BorderLayout());
-        panelMap = new PanelMap();
+        //panelMap = new PanelMap();
         panelGauche = new JPanel();
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();

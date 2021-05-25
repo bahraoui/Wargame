@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -54,6 +55,19 @@ import modele.terrain.ToundraNeige;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/*
+
+
+
+
+
+DEFINE TAILLE COLLONE 
+
+
+
+
+*/
+
 
 public class Jeu extends MouseAdapter implements ActionListener {
     private static Plateau plateau;
@@ -67,87 +81,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Integer nbJoueursIA;
     private static String carteChoisis;
     private static File sauvegardeChoisis;
+    private static Cellule[][] cellulesCarte;
+    private static PanelJeu pj;
 
-    /*public void Jeu() {
-
-    }*/
-
-    /*public static void main(String[] args) throws IOException, InterruptedException {
-        
-        plateau = new Plateau();
-        
-       // System.out.println(plateau.affichage());
-        /// Initialisation plateau joueur
-
-        Joueur j1 = new Joueur("joueur1",false);
-        Joueur j2 = new Joueur("joueur2",false);
-        //Joueur j3 = new Joueur(false);
-        //Joueur j4 = new Joueur(false);
-        listeJoueur.add(j1);
-        listeJoueur.add(j2);
-        //listeJoueur.add(j3);
-        //listeJoueur.add(j4);
-        joueurActuel = j1;
-
-        tour = 0;
-
-        String [] spl1 = new String[100];
-        String [] spl2 = new String[50];
-        String chaineTerrain = "Plaine::";
-        spl1 = chaineTerrain.split(":");
-        System.out.println(spl1.length);*/
-
-
-        //System.out.println(plateau.affichage());
-
-        /*FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");
-        chargePartie(file);
-        System.out.println(plateau.affichage());
-        /// Placement base
-
-        int x,y = 0;
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            do {
-                System.out.println("Placer votre base");
-                Scanner sc = new Scanner(System.in);
-                y = sc.nextInt();
-                x = sc.nextInt();
-                System.out.println("y : "+y+"x : "+x);
-            } while (!testCoordBase(y, x));
-            placerBaseJoueur(listeJoueur.get(i),y,x);
-            System.out.println(plateau.affichage());
-        }
-
-        for (int j = 0; j < plateau.size(); j++) {
-            Archer unite = new Archer();
-            plateau.get(0).get(j).setUnite(unite);
-            j1.getArmee().add(unite);
-        }
-
-        for (int j = 0; j < plateau.size(); j++) {
-            Archer unite = new Archer();
-            plateau.get(15).get(j).setUnite(unite);
-            //.getArmee().add(unite);
-        }
-
-        sauvegardePartie();
-        
-                    
-        FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");  
-        chargePartie(file);
-
-        System.out.println(plateau.affichage());
-
-        /// Deroulement Tour
-
-        ///do {
-            
-        //    regenerationUniteArmee(joueurActuel);
-        //    gainTourJoueur(joueurActuel);
-
-        ///} while (!finpartie || !conditionVictoire());
-
-    }*/
 
     
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -157,15 +93,20 @@ public class Jeu extends MouseAdapter implements ActionListener {
         carteChoisis = "";
 
         finpartie = false;
+        cellulesCarte = new Cellule[16][16];
         nbJoueursH = nbJoueursIA = 0;
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
-            
+        Joueur j1 = new Joueur("j1",false);
+        listeJoueur.add(j1);
+        placerBaseJoueur(j1, 5, 5);
+        System.out.println(plateau.affichage());
+        setCellulesMap();
         /// Initialisation plateau joueur
 
-        Joueur j1 = new Joueur("j1",false);
-        Joueur j2 = new Joueur("j2",false);
+        Joueur j2 = new Joueur("j2",true);
+        IA j2IA = new IA(j2);
         Joueur j3 = new Joueur("j3",false);
         Joueur j4 = new Joueur("j4",false);
         listeJoueur.add(j1);
@@ -174,43 +115,57 @@ public class Jeu extends MouseAdapter implements ActionListener {
         listeJoueur.add(j4);
         joueurActuel = j1;
 
-        PanelJeu pj = new PanelJeu();
+        
+        
         //Hexagone cells[][] = pj.getCells();
-        FenetreJeu = new FrameJeu(pj);
+        FenetreJeu = new FrameJeu(/*pj*/);
         TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
 
         tour = 0;
 
-        
-
-        /// Placement base
-
         /*
-        int x,y = 0;
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            do {
-                System.out.println("Placer votre base");
-                Scanner sc = new Scanner(System.in);
-                y = sc.nextInt();
-                x = sc.nextInt();
-                System.out.println("y : "+y+"x : "+x);
-            } while (!testCoordBase(y, x));
-            placerBaseJoueur(listeJoueur.get(i),y,x);
-            System.out.println(plateau.affichage());
-        }
-        */
+        placerBaseJoueur(j1, 5, 5);
+        placerBaseJoueur(j2IA.getJoueurIA(), 10, 10);
 
-        /// Deroulement Tour
+        achatTroupesIA(j2IA);
 
-        ///do {
-            
-            regenerationUniteArmee(joueurActuel);
-            gainTourJoueur(joueurActuel);
-
-        ///} while (!finpartie || !conditionVictoire());
+        System.out.println(plateau.affichage());*/
 
     }
+
+
+    public static void setCellulesMap() throws IOException {
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                Sol sol = null;
+                if (plateau.get(i).get(j).getTerrain() instanceof Desert)
+                    sol = Sol.DESERT;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
+                    sol = Sol.FORET;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Mer)
+                    sol = Sol.MER;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Montagne)
+                    sol = Sol.MONTAGNE;
+                else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
+                    sol = Sol.NEIGE;
+                System.out.println("i : "+i+" j : "+j);
+                Cellule cell = new Cellule(new Hexagone(sol), plateau.get(i).get(j));
+                cellulesCarte[i][j] = cell;
+            }
+        }
+    }
+
+    public static Hexagone[][] celluleToHexagone() throws IOException {
+        Hexagone[][] hexs = new Hexagone[16][16];
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                hexs[i][j] = cellulesCarte[i][j].getHex();
+            }
+        }
+        return hexs;
+    }
+
 
     public static void combat(Case attaquant, Case defenseur){
         Entite def = new Entite();
@@ -309,7 +264,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return false;
     }
 
-    public static void placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
+    public static boolean placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
         Case caseUnite = plateau.get(coordY).get(coordX);
         int coordYBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(0);
         int coordXBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(1);
@@ -320,11 +275,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             System.out.println("Unite ajoute a l'armee");
             plateau.get(coordY).get(coordX).setUnite(unite);
             System.out.println("Unite ajoute au plateau");
+            return true;
         }
-        else {
-            System.out.println("Unite trop loin ou sur une case occupe ");
-        }
-
+        System.out.println("Unite trop loin ou sur une case occupe ");
+        return false;
     }
 
     public static boolean achatUniteArmee(Joueur joueur, Unite unite){
@@ -443,64 +397,95 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
+    /*
+    
+    PARTIE IA
+    
+    */
 
-    public void joueurAAttaquerIA() {
+    public static void joueurAAttaquerIA() {
+        
         //verfie si encore in game
         //sinon
         //random
         //assigner
     }
 
-    public void espacePlacementUnite() {
-        //regarder autour de la base de l'IA
-
-        return ;
-    }
-
-    public void achatTroupesIA(IA ia){
-        int depense = new Random().nextInt(ia.getJoueurIA().getPieces()/2);
-        System.out.println(depense);
-        while (depense >= new Archer().getCout()) {
-            if (depense >= new InfanterieLourde().getCout()) {
-                InfanterieLourde infanterieLourde = new InfanterieLourde();
-                achatUniteArmee(ia.getJoueurIA(), infanterieLourde);
-                //placerUniteJoueur(ia.getJoueurIA(), infanterieLourde, coordY, coordX);
-            }
-            else if (depense >= new Mage().getCout()) {
-                Mage mage = new Mage();
-                achatUniteArmee(ia.getJoueurIA(), mage);
-                //placerUniteJoueur(ia.getJoueurIA(), mage, coordY, coordX);
-            }
-            else if (depense >= new Cavalerie().getCout()) {
-                Cavalerie cavalerie = new Cavalerie();
-                achatUniteArmee(ia.getJoueurIA(), cavalerie);
-                //placerUniteJoueur(ia.getJoueurIA(), cavalerie, coordY, coordX);
-            }
-            else if (depense >= new Infanterie().getCout()) {
-                Infanterie infanterie = new Infanterie();
-                achatUniteArmee(ia.getJoueurIA(), infanterie);
-                //placerUniteJoueur(ia.getJoueurIA(), infanterie, coordY, coordX);
-            }
-            else if (depense >= new Archer().getCout()) {
-                Archer archer = new Archer();
-                achatUniteArmee(ia.getJoueurIA(), archer);
-                //placerUniteJoueur(ia.getJoueurIA(), archer, coordY, coordX);
+    public static void placementUnite(IA ia, Unite unite) {
+        int coordX = postionBaseJoueur.get(ia.getJoueurIA().getNumeroJoueur()).get(0);
+        int coordY = postionBaseJoueur.get(ia.getJoueurIA().getNumeroJoueur()).get(1);
+        for (int i = coordX - 1 ; i < coordX + 3; i++) {
+            for (int j = coordY - 2; j < coordY + 3; j++) {
+                //Hors quatre coins
+                if (placerUniteJoueur(ia.getJoueurIA(), unite, i,j)){
+                    return;
+                }
             }
         }
     }
 
-    public void deplacementUniteIA() {
+    public static void achatTroupesIA(IA ia) throws InterruptedException{
+        int depense = new Random().nextInt(ia.getJoueurIA().getPieces()/2);
+        System.out.println("Initial : "+depense);
+        while (depense >= new Archer().getCout()) {
+            System.out.println("Nouvelle : "+depense);
+            if (depense >= new InfanterieLourde().getCout()) {
+                InfanterieLourde infanterieLourde = new InfanterieLourde();
+                placementUnite(ia,infanterieLourde);
+                depense -= infanterieLourde.getCout();
+                System.out.println("IF ACHETE");
+                //placerUniteJoueur(ia.getJoueurIA(), infanterieLourde, coordY, coordX);
+            }
+            else if (depense >= new Mage().getCout()) {
+                Mage mage = new Mage();
+                placementUnite(ia,mage);
+                System.out.println("Mage ACHETE");
+                depense -= mage.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), mage, coordY, coordX);
+            }
+            else if (depense >= new Cavalerie().getCout()) {
+                Cavalerie cavalerie = new Cavalerie();
+                placementUnite(ia,cavalerie);
+                System.out.println("Cavalerie ACHETE");
+                depense -= cavalerie.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), cavalerie, coordY, coordX);
+            }
+            else if (depense >= new Infanterie().getCout()) {
+                Infanterie infanterie = new Infanterie();
+                placementUnite(ia,infanterie);
+                System.out.println("Infanterie ACHETE");
+                depense -= infanterie.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), infanterie, coordY, coordX);
+            }
+            else if (depense >= new Archer().getCout()) {
+                Archer archer = new Archer();
+                placementUnite(ia,archer);
+                System.out.println("Archer ACHETE");
+                depense -= archer.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), archer, coordY, coordX);
+            }
+            //Thread.sleep(2000);
+        }
+        System.out.println("Fin de depense");        
+    }
+
+    public static void deplacementUniteIA() {
         // rechercher plus court chemin entre troupe et base
         // 
     }
 
-    public void tourIA(){
+    public static void tourIA(){
         //achat
         //joueurAAttaquer
         //pour chaque unite attaque
             //trouver deplacement jusqua base
     }
 
+    /*
+    
+    FIN PARTIE IA
+    
+    */
 
 
     /**
@@ -599,7 +584,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 
                 else {
                     //charger
-                    FenetreJeu.changePanel(PanelActuel.JEU);  
+                    try {
+                        pj = new PanelJeu(celluleToHexagone());
+                        FenetreJeu.setPanelJeu(pj);
+                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }  
                 }
             }
             /**

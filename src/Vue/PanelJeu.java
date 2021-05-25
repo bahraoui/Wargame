@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controleur.Cellule;
 import controleur.Jeu;
 
 /**
@@ -37,8 +38,9 @@ public class PanelJeu extends JPanel {
 	private JLabel labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage;
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
 	private JButton boutonFinDeTour, boutonAbandonner;
+	
 
-	public PanelJeu() throws IOException {
+	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
 		this.bdl = new BorderLayout();
 		this.setLayout(bdl);
@@ -197,7 +199,7 @@ public class PanelJeu extends JPanel {
 		this.add(panelGaucheInfos,BorderLayout.WEST);
 
 		/* PANEL CENTRE : plateau de jeu */
-		this.PanelCentrePlateau = new PanelMap();
+		this.PanelCentrePlateau = new PanelMap(parHexs);
 		this.add(PanelCentrePlateau,BorderLayout.CENTER);
 
 		/* PANEL BAS : boutons */
