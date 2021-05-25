@@ -1,8 +1,8 @@
 package Vue;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -43,6 +43,10 @@ public class Hexagone extends JLabel {
         this.unite = unite;
         this.batiment = batiment;
         this.coord = coord;
+    }
+
+    public TypeBatimentVue getTypeBatimentVue(){
+        return this.batiment;
     }
 
     /**
@@ -108,6 +112,44 @@ public class Hexagone extends JLabel {
                 break;
         }
         this.sol = sol;
+        this.paintChildren(g);
+    }
+
+    
+    public void setMonument() throws IOException{
+        Graphics g = getGraphics();
+        g.setClip(hexagonalShape);
+        setTerrain(sol);
+        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
+        this.batiment = TypeBatimentVue.MONUMENT;
+        this.paintChildren(g);
+    }
+
+    
+    public void setBatiment(TypeBatimentVue typeBatimentVue) throws IOException {
+        Graphics g = getGraphics();
+        g.setClip(hexagonalShape);
+        switch (batiment) {
+            case BASE_HAUT:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_HAUT.png")), 0, 0, null);
+                break;
+            case BASE_BAS:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
+                break;
+            case BASE_GAUCHE:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 0, 0, null);
+                break;
+            case BASE_DROITE:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 0, 0, null);
+                break;
+            case MONUMENT:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
+                break;
+        
+            default:
+                break;
+        }
+        this.batiment = typeBatimentVue;
         this.paintChildren(g);
     }
 
@@ -211,6 +253,7 @@ public class Hexagone extends JLabel {
                         break;
                     case PLAINE:
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+                        this.setBackground(new Color(255,0,0));
                         break;
                     case NEIGE:
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
@@ -245,7 +288,7 @@ public class Hexagone extends JLabel {
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 0, 0, null);
                         break;
                     case MONUMENT:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 0, 0, null);
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
                         break;
                 
                     default:
@@ -308,6 +351,10 @@ public class Hexagone extends JLabel {
     protected void paintBorder(Graphics g) {
         // Does not print border
     }
+
+
+
+
     
     //public 
 }

@@ -544,7 +544,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
              */
             else if (evt.getActionCommand().equals("choixMonument")) {
                 terrainChoisi = null;
-                FenetreJeu.setChoixMonumentTxt("Monument selctionne");;
+                FenetreJeu.setChoixMonumentTxt("Monument selctionne");
             }
             /**
              * Bouton "Charger Partie"
@@ -727,7 +727,25 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     if (terrainChoisi != null) {
                         try {
                             clic.setTerrain(terrainChoisi);
+                            if (clic.getTypeBatimentVue() != null) {
+                                clic.setBatiment(clic.getTypeBatimentVue());
+                            }
                             cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            if(panelChargerScenario.getNbMonumentsRestants() == 0){
+                                JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
+                            } else if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getHex().getTypeBatimentVue() != null) {
+                                JOptionPane.showMessageDialog(FenetreJeu, "Un batiment est déjà placé ici.");
+                            }
+                            else {
+                                panelChargerScenario.setMonumentNb();
+                                clic.setMonument();
+                                cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
+                            }
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
