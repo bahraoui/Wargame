@@ -127,7 +127,7 @@ public class FrameJeu extends JFrame{
     public void setPanelJeu(PanelJeu pj) {
 		FrameJeu.panelJeu = pj;
     }
-	public PanelActuel getPAnelActuel(){
+	public PanelActuel getPanelActuel(){
 		return FrameJeu.panelActuel;
 	}
 
