@@ -22,6 +22,7 @@ public class Hexagone extends JLabel {
     private TypeTerrain sol;
     private TypeUnite unite;
     private TypeBatimentVue batiment;
+    private Point coord;
 
     
     public Hexagone() throws IOException {
@@ -35,7 +36,7 @@ public class Hexagone extends JLabel {
         hexagonalShape = getHexPolygon();
         this.sol = sol;
     }
-    public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment) throws IOException {
+    public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord) throws IOException {
         super();
         hexagonalShape = getHexPolygon();
         this.sol = sol;
