@@ -10,4 +10,7 @@ public class Infanterie extends Unite{
         setCout(6);
     }
     
+    public String toString(){
+        return "Infanterie";
+    }
 }

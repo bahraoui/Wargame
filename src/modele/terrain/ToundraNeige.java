@@ -9,6 +9,6 @@ public class ToundraNeige extends Terrain{
     }
     
     public String toString(){
-        return "Terrain de type ToundraNeige : " +super.toString();
+        return "ToundraNeige : " +super.toString();
     }
 }

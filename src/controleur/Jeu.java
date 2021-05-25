@@ -5,8 +5,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
@@ -26,10 +33,22 @@ import Vue.Sol;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
+import modele.entite.unite.Archer;
+import modele.entite.unite.Cavalerie;
+import modele.entite.unite.Infanterie;
+import modele.entite.unite.InfanterieLourde;
+import modele.entite.unite.Mage;
 import modele.entite.unite.Unite;
 import modele.joueur.Joueur;
 import modele.plateau.Case;
 import modele.plateau.Plateau;
+import modele.terrain.Desert;
+import modele.terrain.Foret;
+import modele.terrain.Mer;
+import modele.terrain.Montagne;
+import modele.terrain.Plaine;
+import modele.terrain.Terrain;
+import modele.terrain.ToundraNeige;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -50,6 +69,84 @@ public class Jeu extends MouseAdapter implements ActionListener {
     /*public void Jeu() {
 
     }*/
+
+    /*public static void main(String[] args) throws IOException, InterruptedException {
+        
+        plateau = new Plateau();
+        
+       // System.out.println(plateau.affichage());
+        /// Initialisation plateau joueur
+
+        Joueur j1 = new Joueur("joueur1",false);
+        Joueur j2 = new Joueur("joueur2",false);
+        //Joueur j3 = new Joueur(false);
+        //Joueur j4 = new Joueur(false);
+        listeJoueur.add(j1);
+        listeJoueur.add(j2);
+        //listeJoueur.add(j3);
+        //listeJoueur.add(j4);
+        joueurActuel = j1;
+
+        tour = 0;
+
+        String [] spl1 = new String[100];
+        String [] spl2 = new String[50];
+        String chaineTerrain = "Plaine::";
+        spl1 = chaineTerrain.split(":");
+        System.out.println(spl1.length);*/
+
+
+        //System.out.println(plateau.affichage());
+
+        /*FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");
+        chargePartie(file);
+        System.out.println(plateau.affichage());
+        /// Placement base
+
+        int x,y = 0;
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            do {
+                System.out.println("Placer votre base");
+                Scanner sc = new Scanner(System.in);
+                y = sc.nextInt();
+                x = sc.nextInt();
+                System.out.println("y : "+y+"x : "+x);
+            } while (!testCoordBase(y, x));
+            placerBaseJoueur(listeJoueur.get(i),y,x);
+            System.out.println(plateau.affichage());
+        }
+
+        for (int j = 0; j < plateau.size(); j++) {
+            Archer unite = new Archer();
+            plateau.get(0).get(j).setUnite(unite);
+            j1.getArmee().add(unite);
+        }
+
+        for (int j = 0; j < plateau.size(); j++) {
+            Archer unite = new Archer();
+            plateau.get(15).get(j).setUnite(unite);
+            //.getArmee().add(unite);
+        }
+
+        sauvegardePartie();
+        
+                    
+        FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");  
+        chargePartie(file);
+
+        System.out.println(plateau.affichage());
+
+        /// Deroulement Tour
+
+        ///do {
+            
+        //    regenerationUniteArmee(joueurActuel);
+        //    gainTourJoueur(joueurActuel);
+
+        ///} while (!finpartie || !conditionVictoire());
+
+    }*/
+
     
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -63,10 +160,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             
         /// Initialisation plateau joueur
 
-        Joueur j1 = new Joueur(false);
-        Joueur j2 = new Joueur(false);
-        Joueur j3 = new Joueur(false);
-        Joueur j4 = new Joueur(false);
+        Joueur j1 = new Joueur("j1",false);
+        Joueur j2 = new Joueur("j2",false);
+        Joueur j3 = new Joueur("j3",false);
+        Joueur j4 = new Joueur("j4",false);
         listeJoueur.add(j1);
         listeJoueur.add(j2);
         listeJoueur.add(j3);
@@ -187,7 +284,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void placerBaseJoueur(Joueur joueur, int coordY, int coordX){
-        Batiment base = new Batiment(100, 100, 100, 5, TypeBatiment.BASE);
+        Batiment base = new Batiment(TypeBatiment.BASE);
         joueur.setBase(base);
         plateau.get(coordY).get(coordX).setBatiment(base);
         plateau.get(coordY).get(coordX-1).setBatiment(base);
@@ -201,8 +298,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static boolean testCoordBase(int coordY, int coordX){
         if (coordX >= 1 && coordX <= 14 && coordY <=14 && plateau.get(coordY).get(coordX).getBatiment() == null && plateau.get(coordY).get(coordX-1).getBatiment() == null && plateau.get(coordY).get(coordX+1).getBatiment() == null && plateau.get(coordY+1).get(coordX).getBatiment() == null){
+            System.out.println("Bon placement");
             return true;
         }
+        System.out.println("Mauvais placement");
         return false;
     }
 
@@ -503,7 +602,275 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
 */
+    
+    public static Batiment analyseSplBatiment(String spl) {
 
+        String [] spl1 = new String[25];
+        spl1 = spl.split(",");
+        if (spl1.length == 3) {
+            Batiment bat = new Batiment(TypeBatiment.MONUMENT);
+            bat.setIndentifiant(Integer.parseInt(spl1[1]));
+            bat.setPointDeVieActuel(Integer.parseInt(spl1[2]));
+        return bat;
+        }
+        return null;
+    }
+
+    public static Unite analyseSplUnite(String spl, int [][] listeUnite) {
+        String [] spl1 = new String[25];
+        if (spl.length()>2) {
+            spl1 = spl.split(",");
+            Unite unite = new Unite(0,0,0,0);
+            switch (spl1[0]) {
+                case "Archer":
+                    unite = new Archer();
+                    break;
+
+                case "Cavalerie":
+                    unite = new Cavalerie();
+                    break;
+                    
+                case "Infanterie":
+                    unite = new Infanterie();
+                    break;
+                    
+                case "InfanterirLourde":
+                    unite = new InfanterieLourde();
+                    break;
+                    
+                case "Mage":
+                    unite = new Mage();
+                    break;
+            
+                default:
+                    break;
+            }
+            unite.setIndentifiant(Integer.parseInt(spl1[1]));
+            unite.setPointDeVieActuel(Integer.parseInt(spl1[2]));
+            unite.setDeplacementActuel(Integer.parseInt(spl1[3]));
+            unite.setAAttaque(Boolean.parseBoolean(spl1[4]));
+            unite.setEnRepos(Boolean.parseBoolean(spl1[5]));
+            for (int i = 0; i < listeUnite.length; i++) {
+                for (int j = 0; j < listeUnite.length; j++) {
+                    if (unite.getIdentifiant() == listeUnite[i][j]) {
+                        listeJoueur.get(i).getArmee().add(unite);
+                    }
+                }
+            }
+            return unite;
+        }
+        return null;
+    }
+    
+    public static void sauvegardePartie() {
+        try {
+			
+			File file = new File("src\\data\\partie\\savePartie1.txt");
+			
+			if (!file.exists()) {
+			    file.createNewFile();
+			   }
+		
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			
+			String chaine = new String();
+            for (int i = 0; i < listeJoueur.size(); i++) {
+                chaine +="[";
+                chaine +=listeJoueur.get(i).getPseudo()+","+listeJoueur.get(i).getEstIa()+","+listeJoueur.get(i).getPieces()+",{";
+                for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++) {
+                    chaine += listeJoueur.get(i).getArmee().get(j).getIdentifiant();
+                    if (j<listeJoueur.get(i).getArmee().size()-1) {
+                        chaine+=".";
+                    }
+                }
+                chaine +="}";
+                //chaine += listeJoueur.get(i).getBase().getIdentifiant();
+                if (i<listeJoueur.size()-1) {
+                    chaine+="];";
+                }
+            }
+            chaine +="]\n";
+			
+			for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size(); j++) {
+                        /// Ajout du premier [ pour chaque case
+                        chaine+="[";
+    
+                        /// Déclaration des variables utiles
+                        Terrain terrain = plateau.get(i).get(j).getTerrain();
+                        Unite unite = plateau.get(i).get(j).getUnite();
+                        Batiment batiment = plateau.get(i).get(j).getBatiment();
+                        String [] splStrings = new String[5];
+                        String chaineTerrain = new String();
+                        String chaineUnite = new String();
+                        String chaineBatiment = new String();
+    
+                        /// Recuperation du type de Terrain
+                        chaineTerrain = terrain.toString();
+                        splStrings = chaineTerrain.split(":");
+                        chaineTerrain = splStrings[0];
+                        splStrings = chaineTerrain.split(" ");
+                        chaine += splStrings[0]+":";
+    
+                        /// Unite
+                        if (!(unite == null)) {
+                            chaineUnite = unite.toString()+","+unite.getIdentifiant()+","+unite.getPointDeVieActuel()+","+unite.getDeplacementActuel()+","+unite.getAAttaque()+","+unite.getEnRepos();
+                        }
+                        chaine += chaineUnite+":";
+    
+                        /// Batiment
+                        if (!(batiment == null) && (batiment.getEstBase() != TypeBatiment.BASE)){
+                            chaineBatiment = batiment.toString()+","+batiment.getIdentifiant()+","+batiment.getPointDeVieActuel();
+                        }
+                        chaine += chaineBatiment;
+    
+                        /// Ajout de fin
+                        chaine+="]";
+                        if (j<plateau.size()-1) {
+                        chaine+=";";
+                    }
+                }
+                chaine+="\n";
+            }
+            chaine += tour+"\n";
+            chaine += joueurActuel.getNumeroJoueur()+"\n";
+            for (int i = 0; i < postionBaseJoueur.size(); i++) {
+                chaine +="[";
+                chaine += postionBaseJoueur.get(i).get(0)+","+ postionBaseJoueur.get(i).get(1)+","+plateau.get(postionBaseJoueur.get(i).get(0)).get(postionBaseJoueur.get(i).get(1)).getBatiment().getPointDeVieActuel();
+                if (i<postionBaseJoueur.size()-1) {
+                    chaine+="];";
+                }
+            }
+            chaine +="]\n";
+            chaine += finpartie;
+			
+			fw.write(chaine);
+			fw.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Erreur ecriture");
+		}
+
+    }
+
+    public static void chargePartie(FileInputStream file) {
+        
+        //try {
+
+            String line = new String();
+		    String [] strValues1;
+            String [] strValues2;
+            String [] strValues3;
+			Scanner scanner = new Scanner(file);  
+            
+
+            line = scanner.nextLine();
+            strValues1 = line.split(";");
+
+            int[][] listeUnite = new int[50][50];
+
+            for (int i = 0; i < strValues1.length; i++) {
+                strValues1[i] = strValues1[i].replace("[", "");
+                strValues1[i] = strValues1[i].replace("]", "");
+                strValues2 = strValues1[i].split(",");
+                Joueur joueur = new Joueur(strValues2[0],Boolean.parseBoolean(strValues2[1]));
+                listeJoueur.add(joueur);
+                joueur.setPieces(Integer.parseInt(strValues2[2]));
+
+                strValues2[3] = strValues2[3].replace("{", "");
+                strValues2[3] = strValues2[3].replace("}", "");
+                if(strValues2[3].length() > 0){
+                    strValues3 = strValues2[3].split(".");
+                    for (int j = 0; j < strValues3.length; j++) {
+                        listeUnite[i][j]=Integer.parseInt(strValues3[j]);
+                    }
+                }
+                else{
+                    listeUnite[i][0] = -1 ;
+                }
+            }
+            
+            for (int i = 0; i < plateau.size(); i++) {
+                line = scanner.nextLine();
+                strValues1 = line.split(",");
+                chargeLineMap(line,i,listeUnite);
+            }
+            
+            line = scanner.nextLine();
+            tour = Integer.parseInt(line);
+            line = scanner.nextLine();
+            joueurActuel = listeJoueur.get(Integer.parseInt(line));
+
+            line = scanner.nextLine();
+            strValues1 = line.split(";");
+            
+            for (int i = 0; i < strValues1.length; i++) {
+                strValues1[i] = strValues1[i].replace("[", "");  
+                strValues1[i] = strValues1[i].replace("]", "");
+                strValues2 = strValues1[i].split(",");
+                placerBaseJoueur(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
+                
+            }
+
+            line = scanner.nextLine();
+            finpartie = Boolean.parseBoolean(line);
+
+	        scanner.close();    
+        //} catch (Exception e) {
+            //TODO: handle exception
+            //System.out.println("Erreur lecture");
+        //}
+    }
+
+    public static void sauvegardeMap() {
+        
+    }
+
+    public static void chargeLineMap(String line,int iline,int [][] listeUnite) {
+        
+        String [] spl1;
+        String [] spl2;
+
+        spl1 = line.split(";");
+
+        for (int i = 0; i < spl1.length; i++) {
+           // System.out.println(spl1[i]);
+            //System.out.println(i);
+            spl1[i] = spl1[i].replace("[", "");
+            spl1[i] = spl1[i].replace("]", "");
+            spl2 = spl1[i].split(":");   
+            switch (spl2[0]) {
+                case "Plaine":
+                    plateau.get(iline).get(i).setTerrain(new Plaine());
+                    break;
+                case "Desert":
+                    plateau.get(iline).get(i).setTerrain(new Desert());
+                    break; 
+                case "Foret":
+                    plateau.get(iline).get(i).setTerrain(new Foret());
+                    break; 
+                case "Mer":
+                    plateau.get(iline).get(i).setTerrain(new Mer());
+                    break; 
+                case "Montagne":
+                    plateau.get(iline).get(i).setTerrain(new Montagne());
+                    break; 
+                case "ToundraNeige":
+                    plateau.get(iline).get(i).setTerrain(new ToundraNeige());
+                    break; 
+                default:
+                    plateau.get(iline).get(i).setTerrain(new Plaine());
+                    break;
+            }
+            if(spl2.length == 2){
+                plateau.get(iline).get(i).setUnite(analyseSplUnite(spl2[1],listeUnite));
+            } 
+            else if (spl2.length == 3){
+                plateau.get(iline).get(i).setBatiment(analyseSplBatiment(spl2[2]));
+            }
+        }
+    }
 /*
             Debut Jeu
 

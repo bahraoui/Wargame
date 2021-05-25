@@ -10,4 +10,7 @@ public class Cavalerie extends Unite{
         setCout(12);
     }
     
+    public String toString(){
+        return "Cavalerie";
+    }
 }

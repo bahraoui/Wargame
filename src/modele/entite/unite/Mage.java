@@ -10,4 +10,7 @@ public class Mage extends Unite{
         setCout(20);
     }
     
+    public String toString(){
+        return "Mage";
+    }
 }

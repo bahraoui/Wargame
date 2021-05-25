@@ -9,5 +9,9 @@ public class Archer extends Unite{
         setDeplacementActuel(3);
         setCout(5);
     }
+
+    public String toString(){
+        return "Archer";
+    }
     
 }

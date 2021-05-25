@@ -14,8 +14,10 @@ public class Joueur {
     private static int compteur = 0;
     private boolean estIa;
     private boolean enJeu;
+    private String pseudo;
 
-    public Joueur(boolean parEstIa){
+    public Joueur(String pseudo,boolean parEstIa){
+        this.pseudo = pseudo;
         this.numeroJoueur = compteur++;
         this.pieces = 40;
         this.estIa = parEstIa;
@@ -48,6 +50,9 @@ public class Joueur {
     public boolean getEnJeu() {
         return enJeu;
     }
+    public String getPseudo() {
+        return pseudo;
+    }
 
     public void setEstIa(boolean estIa) {
         this.estIa = estIa;
@@ -63,5 +68,8 @@ public class Joueur {
     }
     public void setEnJeu(boolean enJeu) {
         this.enJeu = enJeu;
+    }
+    public void setPseudo(String pseudo){
+        this.pseudo=pseudo;
     }
 }

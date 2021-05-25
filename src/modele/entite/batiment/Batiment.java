@@ -8,28 +8,29 @@ public class Batiment extends Entite{
     private TypeBatiment estBase;
     
     /// Base : 500 , 20 , 40 , 4 , Base
-
     /// Monument : 150 , 0 , 20 , 0 , Monument
 
-    public Batiment(int parPointDeVieActuel,  int parAttaque,  int parDefense,  int parVision, TypeBatiment parEstBase) { 
-        super(parPointDeVieActuel,parAttaque,parDefense,parVision);
+    public Batiment(TypeBatiment parEstBase) {
+        super(150,0,20,0);
         this.estBase = parEstBase;
-
         if (parEstBase == TypeBatiment.MONUMENT)
             this.tresor = 50; //aleatoire
         else 
+            setPointDeVieActuel(500);
+            setAttaque(20);
+            setDefense(40);
+            setVision(4);
             this.tresor = 0;
 
     }
 
     public String toString(){
         if (this.estBase == TypeBatiment.BASE)
-            return "Le batiment est une base";
+            return "Base";
         else
-            return "Le batiment est un monument";
+            return "Monument";
     }
 
-    
     public TypeBatiment getEstBase() {
         return estBase;
     }

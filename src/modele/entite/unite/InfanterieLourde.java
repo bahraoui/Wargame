@@ -10,4 +10,7 @@ public class InfanterieLourde extends Unite{
         setCout(30);
     }
     
+    public String toString(){
+        return "InfanterieLourde";
+    }
 }
