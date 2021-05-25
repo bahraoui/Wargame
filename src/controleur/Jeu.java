@@ -76,7 +76,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         PanelJeu pj = new PanelJeu();
         //Hexagone cells[][] = pj.getCells();
         FenetreJeu = new FrameJeu(pj);
-        TimeUnit.SECONDS.sleep(1);
+        //TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
 
         tour = 0;
@@ -363,8 +363,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Nouvelle Partie"
              */
             else if (evt.getActionCommand().equals("nouvellePartie")) {
-                System.out.println("Nouvelle partie !");
-                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                //System.out.println("Nouvelle partie !");
+                FenetreJeu.changePanel(PanelActuel.JEU);
             }
             /**
              * Bouton "Charger Partie"
