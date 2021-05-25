@@ -543,6 +543,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Choix Monument"
              */
             else if (evt.getActionCommand().equals("choixMonument")) {
+                terrainChoisi = null;
                 FenetreJeu.setChoixMonumentTxt("Monument selctionne");;
             }
             /**
@@ -619,8 +620,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Continuer" -- Fenetre nouvelle partie
              */
             else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
-                // TEST combo box nbjoueursH et nbJoueursIA =>
-                //System.out.println("nb joueurs humain : " + String.valueOf(nbJoueursH) + "\n###\nb joueurs IA : " + String.valueOf(nbJoueursIA));
                 if (carteChoisis.equals("")){
                     JOptionPane.showMessageDialog(FenetreJeu, "Veuillez choisir une carte ! ");
                 }
@@ -639,6 +638,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
                         FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                         panelChargerScenario.enregistreEcouteur(this);
+                        terrainChoisi = TypeTerrain.NEIGE;
                         FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -722,13 +722,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() instanceof Hexagone) {
             Hexagone clic = (Hexagone) e.getSource();
-            if (FenetreJeu.getPanelActuel().equals(PanelActuel.CHANGERSCENARIO)) {
-                try {
-                    clic.setTerrain(terrainChoisi);
-                    cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+            switch (FenetreJeu.getPanelActuel()) {
+                case CHANGERSCENARIO:
+                    if (terrainChoisi != null) {
+                        try {
+                            clic.setTerrain(terrainChoisi);
+                            cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                    break;
+                case JEU:
+                    System.out.println(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase());
+            
+                default:
+                    break;
             }
         }
     }
