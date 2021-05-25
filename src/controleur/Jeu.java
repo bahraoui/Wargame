@@ -625,6 +625,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("choixMap")) {
                 JComboBox<String> nomCarte = (JComboBox<String>) evt.getSource();
                 carteChoisis = (String) nomCarte.getSelectedItem();
+            }
             else if (evt.getActionCommand().equals("listeTerrains")) {
                 JComboBox<String> choixTerrain = (JComboBox<String>) evt.getSource();
                 FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem());
