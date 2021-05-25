@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import controleur.Cellule;
 import controleur.Jeu;
 
 /**
@@ -36,9 +37,11 @@ public class PanelJeu extends JPanel {
 	private int golds;
 	private JLabel labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage;
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
-	private JButton boutonFinDeTour, boutonAbandonner;
+	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
 
-	public PanelJeu() throws IOException {
+	
+
+	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
 		this.bdl = new BorderLayout();
 		this.setLayout(bdl);
@@ -197,7 +200,7 @@ public class PanelJeu extends JPanel {
 		this.add(panelGaucheInfos,BorderLayout.WEST);
 
 		/* PANEL CENTRE : plateau de jeu */
-		this.PanelCentrePlateau = new PanelMap();
+		this.PanelCentrePlateau = new PanelMap(parHexs);
 		this.add(PanelCentrePlateau,BorderLayout.CENTER);
 
 		/* PANEL BAS : boutons */
@@ -205,9 +208,13 @@ public class PanelJeu extends JPanel {
 		panelBasBoutons.setLayout(new BoxLayout(panelBasBoutons, BoxLayout.X_AXIS));
 		boutonFinDeTour = new JButton("Fin de Tour");
 		boutonAbandonner = new JButton("Abandonner");
+		boutonQuitter = new JButton("Quitter");
+		boutonQuitter.setActionCommand("retourMenuSauvegarde");
+		boutonAbandonner.setActionCommand("abandonner");
 
 		panelBasBoutons.add(boutonFinDeTour);
 		panelBasBoutons.add(boutonAbandonner);
+		panelBasBoutons.add(boutonQuitter);
 
 		this.add(panelBasBoutons,BorderLayout.SOUTH);
 		
@@ -225,6 +232,7 @@ public class PanelJeu extends JPanel {
 		boutonInfanterie.addActionListener(controleur);
 		boutonInfanterieLourde.addActionListener(controleur);
 		boutonMage.addActionListener(controleur);
+		boutonQuitter.addActionListener(controleur);
 	}
 
 	/**

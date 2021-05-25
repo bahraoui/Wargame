@@ -9,6 +9,7 @@ import modele.entite.batiment.TypeBatiment;
 import modele.entite.unite.Archer;
 import modele.entite.unite.Unite;
 import modele.terrain.Desert;
+import modele.terrain.Montagne;
 
 public class Plateau extends ArrayList<ArrayList<Case>> {
     private int cote = 16;
@@ -25,7 +26,7 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
                     cellule.setUnite(null);
                 }
                 else {
-                    Desert caseTerrainD = new Desert();
+                    Montagne caseTerrainD = new Montagne();
                     Case cellule = new Case(caseTerrainD);
                     ligne.add(cellule);
                     cellule.setBatiment(null);

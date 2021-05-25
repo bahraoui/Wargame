@@ -3,7 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
@@ -27,6 +29,7 @@ import javax.swing.filechooser.FileSystemView;
 import Vue.Hexagone;
 import Vue.PanelActuel;
 import Vue.PanelChargerPartie;
+import Vue.PanelChargerScenario;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
 import Vue.Sol;
@@ -39,6 +42,7 @@ import modele.entite.unite.Infanterie;
 import modele.entite.unite.InfanterieLourde;
 import modele.entite.unite.Mage;
 import modele.entite.unite.Unite;
+import modele.joueur.IA;
 import modele.joueur.Joueur;
 import modele.plateau.Case;
 import modele.plateau.Plateau;
@@ -53,6 +57,19 @@ import modele.terrain.ToundraNeige;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/*
+
+
+
+
+
+DEFINE TAILLE COLLONE 
+
+
+
+
+*/
+
 
 public class Jeu extends MouseAdapter implements ActionListener {
     private static Plateau plateau;
@@ -64,104 +81,40 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static FrameJeu FenetreJeu;
     private static Integer nbJoueursH;
     private static Integer nbJoueursIA;
+    private static String carteChoisis;
     private static File sauvegardeChoisis;
+    private static Cellule[][] cellulesCarte;
+    private static PanelJeu pj;
+    private static Sol terrainChoisi;
+    private static PanelChargerScenario panelChargerScenario;
 
-    /*public void Jeu() {
-
-    }*/
-
-    /*public static void main(String[] args) throws IOException, InterruptedException {
-        
-        plateau = new Plateau();
-        
-       // System.out.println(plateau.affichage());
-        /// Initialisation plateau joueur
-
-        Joueur j1 = new Joueur("joueur1",false);
-        Joueur j2 = new Joueur("joueur2",false);
-        //Joueur j3 = new Joueur(false);
-        //Joueur j4 = new Joueur(false);
-        listeJoueur.add(j1);
-        listeJoueur.add(j2);
-        //listeJoueur.add(j3);
-        //listeJoueur.add(j4);
-        joueurActuel = j1;
-
-        tour = 0;
-
-        String [] spl1 = new String[100];
-        String [] spl2 = new String[50];
-        String chaineTerrain = "Plaine::";
-        spl1 = chaineTerrain.split(":");
-        System.out.println(spl1.length);*/
-        //System.out.println(plateau.affichage());
-
-        /*FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");
-        chargePartie(file);
-        System.out.println(plateau.affichage());
-        /// Placement base
-
-        int x,y = 0;
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            do {
-                System.out.println("Placer votre base");
-                Scanner sc = new Scanner(System.in);
-                y = sc.nextInt();
-                x = sc.nextInt();
-                System.out.println("y : "+y+"x : "+x);
-            } while (!testCoordBase(y, x));
-            placerBaseJoueur(listeJoueur.get(i),y,x);
-            System.out.println(plateau.affichage());
-        }
-
-        for (int j = 0; j < plateau.size(); j++) {
-            Archer unite = new Archer();
-            plateau.get(0).get(j).setUnite(unite);
-            j1.getArmee().add(unite);
-        }
-
-        for (int j = 0; j < plateau.size(); j++) {
-            Archer unite = new Archer();
-            plateau.get(15).get(j).setUnite(unite);
-            //.getArmee().add(unite);
-        }
-
-        sauvegardePartie();
-                  
-        FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");  
-        chargePartie(file);
-
-        System.out.println(plateau.affichage());
-
-        /// Deroulement Tour
-
-        ///do {
-            
-        //    regenerationUniteArmee(joueurActuel);
-        //    gainTourJoueur(joueurActuel);
-
-        ///} while (!finpartie || !conditionVictoire());
-
-    }*/
 
     
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Jeu controleur = new Jeu();
 
+        carteChoisis = "";
+
         finpartie = false;
+        cellulesCarte = new Cellule[16][16];
+        terrainChoisi = Sol.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
-            
+        Joueur j1 = new Joueur("j1",false);
+        listeJoueur.add(j1);
+        placerBaseJoueur(j1, 5, 5);
+        System.out.println(plateau.affichage());
+        setCellulesMap();
         /// Initialisation plateau joueur
         
-        sauvegardeMap();
+        
        
 
-        /*Joueur j1 = new Joueur("j1",false);
-        Joueur j2 = new Joueur("j2",false);
+        Joueur j2 = new Joueur("j2",true);
+        IA j2IA = new IA(j2);
         Joueur j3 = new Joueur("j3",false);
         Joueur j4 = new Joueur("j4",false);
         listeJoueur.add(j1);
@@ -170,43 +123,62 @@ public class Jeu extends MouseAdapter implements ActionListener {
         listeJoueur.add(j4);
         joueurActuel = j1;
 
-        PanelJeu pj = new PanelJeu();
+        
+        
         //Hexagone cells[][] = pj.getCells();
-        FenetreJeu = new FrameJeu(pj);
-        TimeUnit.SECONDS.sleep(1);
+        FenetreJeu = new FrameJeu(/*pj*/);
+        //TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
 
-        tour = 0;*/
-
-        
-
-        /// Placement base
+        tour = 0;
 
         /*
-        int x,y = 0;
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            do {
-                System.out.println("Placer votre base");
-                Scanner sc = new Scanner(System.in);
-                y = sc.nextInt();
-                x = sc.nextInt();
-                System.out.println("y : "+y+"x : "+x);
-            } while (!testCoordBase(y, x));
-            placerBaseJoueur(listeJoueur.get(i),y,x);
-            System.out.println(plateau.affichage());
-        }
-        */
+        placerBaseJoueur(j1, 5, 5);
+        placerBaseJoueur(j2IA.getJoueurIA(), 10, 10);
 
-        /// Deroulement Tour
+        achatTroupesIA(j2IA);
 
-        ///do {
-            
-            //regenerationUniteArmee(joueurActuel);
-            //gainTourJoueur(joueurActuel);
-
-        ///} while (!finpartie || !conditionVictoire());
+        System.out.println(plateau.affichage());*/
 
     }
+
+
+    public static void setCellulesMap() throws IOException {
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                Sol sol = null;
+                if (plateau.get(i).get(j).getTerrain() instanceof Plaine)
+                    sol = Sol.PLAINE;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Desert)
+                    sol = Sol.DESERT;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
+                    sol = Sol.FORET;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Mer)
+                    sol = Sol.MER;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Montagne)
+                    sol = Sol.MONTAGNE;
+                else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
+                    sol = Sol.NEIGE;
+                Cellule cell = new Cellule(new Hexagone(sol), plateau.get(i).get(j));
+                cellulesCarte[i][j] = cell;
+            }
+        }
+    }
+
+    public static Hexagone[][] celluleToHexagone() throws IOException {
+        Hexagone[][] hexs = new Hexagone[16][16];
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                hexs[i][j] = cellulesCarte[i][j].getHex();
+            }
+        }
+        return hexs;
+    }
+    
+    public static String[] getNames(Class<? extends Enum<?>> e) {
+        return Arrays.stream(e.getEnumConstants()).map(Enum::name).toArray(String[]::new);
+    }
+
 
     public static void combat(Case attaquant, Case defenseur){
         Entite def = new Entite();
@@ -304,7 +276,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return false;
     }
 
-    public static void placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
+    public static boolean placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
         Case caseUnite = plateau.get(coordY).get(coordX);
         int coordYBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(0);
         int coordXBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(1);
@@ -315,11 +287,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             System.out.println("Unite ajoute a l'armee");
             plateau.get(coordY).get(coordX).setUnite(unite);
             System.out.println("Unite ajoute au plateau");
+            return true;
         }
-        else {
-            System.out.println("Unite trop loin ou sur une case occupe ");
-        }
-
+        System.out.println("Unite trop loin ou sur une case occupe ");
+        return false;
     }
 
     public static boolean achatUniteArmee(Joueur joueur, Unite unite){
@@ -434,6 +405,97 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
+    /*
+    
+    PARTIE IA
+    
+    */
+
+    public static void joueurAAttaquerIA() {
+        
+        //verfie si encore in game
+        //sinon
+        //random
+        //assigner
+    }
+
+    public static void placementUnite(IA ia, Unite unite) {
+        int coordX = postionBaseJoueur.get(ia.getJoueurIA().getNumeroJoueur()).get(0);
+        int coordY = postionBaseJoueur.get(ia.getJoueurIA().getNumeroJoueur()).get(1);
+        for (int i = coordX - 1 ; i < coordX + 3; i++) {
+            for (int j = coordY - 2; j < coordY + 3; j++) {
+                //Hors quatre coins
+                if (placerUniteJoueur(ia.getJoueurIA(), unite, i,j)){
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void achatTroupesIA(IA ia) throws InterruptedException{
+        int depense = new Random().nextInt(ia.getJoueurIA().getPieces()/2);
+        System.out.println("Initial : "+depense);
+        while (depense >= new Archer().getCout()) {
+            System.out.println("Nouvelle : "+depense);
+            if (depense >= new InfanterieLourde().getCout()) {
+                InfanterieLourde infanterieLourde = new InfanterieLourde();
+                placementUnite(ia,infanterieLourde);
+                depense -= infanterieLourde.getCout();
+                System.out.println("IF ACHETE");
+                //placerUniteJoueur(ia.getJoueurIA(), infanterieLourde, coordY, coordX);
+            }
+            else if (depense >= new Mage().getCout()) {
+                Mage mage = new Mage();
+                placementUnite(ia,mage);
+                System.out.println("Mage ACHETE");
+                depense -= mage.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), mage, coordY, coordX);
+            }
+            else if (depense >= new Cavalerie().getCout()) {
+                Cavalerie cavalerie = new Cavalerie();
+                placementUnite(ia,cavalerie);
+                System.out.println("Cavalerie ACHETE");
+                depense -= cavalerie.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), cavalerie, coordY, coordX);
+            }
+            else if (depense >= new Infanterie().getCout()) {
+                Infanterie infanterie = new Infanterie();
+                placementUnite(ia,infanterie);
+                System.out.println("Infanterie ACHETE");
+                depense -= infanterie.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), infanterie, coordY, coordX);
+            }
+            else if (depense >= new Archer().getCout()) {
+                Archer archer = new Archer();
+                placementUnite(ia,archer);
+                System.out.println("Archer ACHETE");
+                depense -= archer.getCout();
+                //placerUniteJoueur(ia.getJoueurIA(), archer, coordY, coordX);
+            }
+            //Thread.sleep(2000);
+        }
+        System.out.println("Fin de depense");        
+    }
+
+    public static void deplacementUniteIA() {
+        // rechercher plus court chemin entre troupe et base
+        // 
+    }
+
+    public static void tourIA(){
+        //achat
+        //joueurAAttaquer
+        //pour chaque unite attaque
+            //trouver deplacement jusqua base
+    }
+
+    /*
+    
+    FIN PARTIE IA
+    
+    */
+
+
     /**
      * 
      */
@@ -457,8 +519,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Nouvelle Partie"
              */
             else if (evt.getActionCommand().equals("nouvellePartie")) {
-                System.out.println("Nouvelle partie !");
-                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                //System.out.println("Nouvelle partie !");
+                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);                
+            }
+            /**
+             * Bouton "Choix Monument"
+             */
+            else if (evt.getActionCommand().equals("choixMonument")) {
+                FenetreJeu.setChoixMonumentTxt("Monument selctionne");;
             }
             /**
              * Bouton "Charger Partie"
@@ -495,21 +563,36 @@ public class Jeu extends MouseAdapter implements ActionListener {
              */
             else if (evt.getActionCommand().equals("lancerPartieChargee")) {
                 if (sauvegardeChoisis != null) {
-                    System.out.println("Lancer une partie chargee!");
-                    FenetreJeu.changePanel(PanelActuel.JEU);
+                    try {
+                        //charger
+                        pj = new PanelJeu(celluleToHexagone());
+                        FenetreJeu.setPanelJeu(pj);
+                        pj.enregistreEcouteur(this);
+                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");
                 }
                 
-            } 
+            }
+            else if (evt.getActionCommand().equals("abandonner")) {
+                System.out.println("ABANDON");
+                
+                
+            }
+            else if (evt.getActionCommand().equals("retourMenuSauvegarde")) {
+                System.out.println("Retour Menu Sauvegarde ");
+                FenetreJeu.changePanel(PanelActuel.MENU);
+            }
             /**
              * Bouton "Règles"
              */
             else if (evt.getActionCommand().equals("afficherRegles")) {
                 System.out.println("Voici les regles : Il n'y a pas de regles !");
                 FenetreJeu.changePanel(PanelActuel.REGLES);
-                
             }
             /**
              * Bouton "Continuer" -- Fenetre nouvelle partie
@@ -517,10 +600,36 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
                 // TEST combo box nbjoueursH et nbJoueursIA =>
                 //System.out.println("nb joueurs humain : " + String.valueOf(nbJoueursH) + "\n###\nb joueurs IA : " + String.valueOf(nbJoueursIA));
-                if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
+                if (carteChoisis.equals("")){
+                    JOptionPane.showMessageDialog(FenetreJeu, "Veuillez choisir une carte ! ");
+                }
+                else if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
-                else 
-                    FenetreJeu.changePanel(PanelActuel.JEU);
+                
+                else {
+                    try {
+                        panelChargerScenario = new PanelChargerScenario(celluleToHexagone());
+                        FenetreJeu.setPanelChangerScenario(panelChargerScenario);
+                        panelChargerScenario.enregistreEcouteur(this);
+                        FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }  
+                }
+            }
+            /**
+             * Bouton "Lancer Partie" -- Fenetre nouvelle partie apres scénario
+             */
+            else if (evt.getActionCommand().equals("lancerPartieApresScenario")) {
+                try {
+                    //charger
+                    pj = new PanelJeu(celluleToHexagone());
+                    FenetreJeu.setPanelJeu(pj);
+                    pj.enregistreEcouteur(this);
+                    FenetreJeu.changePanel(PanelActuel.JEU);  
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }  
             }
             /**
              * Bouton "Retour"
@@ -533,7 +642,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         /**
          * Clic sur une liste
          */
-        else if (evt.getSource() instanceof JComboBox) {
+        else if (evt.getSource() instanceof JComboBox<?>) {
             if (evt.getActionCommand().equals("nbJoueursH")) {
                 JComboBox<Integer> nbH = (JComboBox<Integer>) evt.getSource();
                 nbJoueursH = (Integer) nbH.getSelectedItem();
@@ -542,17 +651,33 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
                 nbJoueursIA = (Integer) nbIA.getSelectedItem();
             }
+            else if (evt.getActionCommand().equals("choixMap")) {
+                JComboBox<String> nomCarte = (JComboBox<String>) evt.getSource();
+                carteChoisis = (String) nomCarte.getSelectedItem();
+            }
+            else if (evt.getActionCommand().equals("listeTerrains")) {
+                JComboBox<Sol> choixTerrain = (JComboBox<Sol>) evt.getSource();
+                Jeu.terrainChoisi = (Sol) choixTerrain.getSelectedItem();
+                FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem().toString());
+            }
         }
+        
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println((Hexagone) e.getSource());
-        Hexagone clic = (Hexagone) e.getSource();
-        try {
-            clic.setTerrain(Sol.NEIGE);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        if (e.getSource() instanceof Hexagone) {
+            System.out.println((Hexagone) e.getSource());
+            Hexagone clic = (Hexagone) e.getSource();
+            int i = 0, j =0;
+            if (FenetreJeu.getPAnelActuel().equals(PanelActuel.CHANGERSCENARIO)) {
+                try { 
+                    clic.setTerrain(Jeu.terrainChoisi);
+                    //setPlateau
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
         // recuperer informations CASE/celulle/hexagone
         // solutions :

@@ -9,28 +9,28 @@ import controleur.Jeu;
 
 public class PanelMap extends JPanel {
 
-	private Hexagone[][] cells;
+	private Hexagone[][] hexs;
 	private Integer totalCells;
 	private boolean petiteLigne;
+	
     
-    public PanelMap() throws IOException {
+    public PanelMap(Hexagone[][] parHexs) throws IOException {
         super();
 		petiteLigne = false;
-		HexagonalLayout hex = new HexagonalLayout(20, new Insets(1,1,1,1), petiteLigne, 254);
-		cells = new Hexagone[20][14]; // 20 dimension 1 ### 13 dimension 2
-		totalCells = hex.getNbComposants();
-		this.setLayout(hex);
+		HexagonalLayout hexLayout = new HexagonalLayout(16, new Insets(1,1,1,1), petiteLigne, 248);
+		this.hexs = parHexs;
+		totalCells = hexLayout.getNbComposants();
+		this.setLayout(hexLayout);
 		int col=0,ligne=0;
 		System.out.println("totalcells : "+totalCells);
 		for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
-			cells[col][ligne] = new Hexagone();
-			this.add(cells[col][ligne]);
+			this.add(hexs[col][ligne]);
 			col++;
-			if (col%20==0 && !petiteLigne) {
+			if (col%16==0 && !petiteLigne) {
 				col=0;
 				ligne++;
 				petiteLigne = !petiteLigne;
-			} else if (col%19==0 && petiteLigne) {
+			} else if (col%15==0 && petiteLigne) {
 				col=0;
 				ligne++;
 				petiteLigne = !petiteLigne;
@@ -39,33 +39,33 @@ public class PanelMap extends JPanel {
     }
 
     public Hexagone[][] getCells() {
-		return cells;
+		return hexs;
 	}
 
 	public void setCells(Hexagone[][] parCells) throws IOException {
-		cells = parCells;
+		hexs = parCells;
 		this.removeAll();
 		int col=0,ligne=0;
 		for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
 			Hexagone cell = new Hexagone();
 			col++;
-			if (col%20==0 && !petiteLigne) {
+			if (col%16==0 && !petiteLigne) {
 				col=0;
 				ligne++;
 				petiteLigne = !petiteLigne;
-			} else if (col%19==0 && petiteLigne) {
+			} else if (col%15==0 && petiteLigne) {
 				col=0;
 				ligne++;
 				petiteLigne = !petiteLigne;
 			}
-			cells[col][ligne] = cell;
-			this.add(cells[col][ligne]);
+			hexs[col][ligne] = cell;
+			this.add(hexs[col][ligne]);
 		}
 		this.updateUI();
 	}
 
 	public void enregistreEcouteur(Jeu controleur) {
-		for (Hexagone[] hexagones : cells) {
+		for (Hexagone[] hexagones : hexs) {
 			for (Hexagone hexagone : hexagones) {
 				if (hexagone != null) {
 					hexagone.addMouseListener(controleur);
