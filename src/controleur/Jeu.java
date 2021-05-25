@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
@@ -67,6 +68,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Integer nbJoueursIA;
     private static String carteChoisis;
     private static File sauvegardeChoisis;
+    private static Sol terrainChoisi;
 
     /*public void Jeu() {
 
@@ -157,6 +159,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         carteChoisis = "";
 
         finpartie = false;
+        terrainChoisi = Sol.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
@@ -210,6 +213,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         ///} while (!finpartie || !conditionVictoire());
 
+    }
+    
+    public static String[] getNames(Class<? extends Enum<?>> e) {
+        return Arrays.stream(e.getEnumConstants()).map(Enum::name).toArray(String[]::new);
     }
 
     public static void combat(Case attaquant, Case defenseur){
@@ -627,8 +634,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 carteChoisis = (String) nomCarte.getSelectedItem();
             }
             else if (evt.getActionCommand().equals("listeTerrains")) {
-                JComboBox<String> choixTerrain = (JComboBox<String>) evt.getSource();
-                FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem());
+                JComboBox<Sol> choixTerrain = (JComboBox<Sol>) evt.getSource();
+                Jeu.terrainChoisi = (Sol) choixTerrain.getSelectedItem();
+                FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem().toString());
             }
         }
         
@@ -636,12 +644,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println((Hexagone) e.getSource());
-        Hexagone clic = (Hexagone) e.getSource();
-        try {
-            clic.setTerrain(Sol.NEIGE);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        if (e.getSource() instanceof Hexagone) {
+            System.out.println((Hexagone) e.getSource());
+            Hexagone clic = (Hexagone) e.getSource();
+            if (FenetreJeu.getPAnelActuel().equals(PanelActuel.CHANGERSCENARIO)) {
+                try { 
+                    clic.setTerrain(Jeu.terrainChoisi);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
         // recuperer informations CASE/celulle/hexagone
         // solutions :
