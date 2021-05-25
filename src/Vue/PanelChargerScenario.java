@@ -3,13 +3,10 @@ package Vue;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -23,7 +20,7 @@ import controleur.Jeu;
 public class PanelChargerScenario extends JPanel{
     private PanelMap panelMap;
     private JPanel panelGauche;
-    private JComboBox<String> listeTerrains;
+    private JComboBox<Sol> listeTerrains;
     private JLabel terrainChoisi;
     private JButton btnChoixMonument;
     private JLabel monumentChoisi;
@@ -36,10 +33,11 @@ public class PanelChargerScenario extends JPanel{
         JPanel panelMonuments = new JPanel();
         btnChoixMonument = new JButton("Monument");
 
-        String[] listeTerrainsNoms = {"Neige","Désert","Forêt","Montagne","Plaine","Mer"};
-        listeTerrains = new JComboBox<String>(listeTerrainsNoms);
+        //String[] listeTerrainsNoms = {"Neige","Désert","Forêt","Montagne","Plaine","Mer"};
+        Sol[] listeTerrainsNoms = {Sol.NEIGE,Sol.DESERT,Sol.FORET,Sol.MONTAGNE,Sol.PLAINE,Sol.MER};
+        listeTerrains = new JComboBox<Sol>(listeTerrainsNoms);
         listeTerrains.setActionCommand("listeTerrains");
-        terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0]+" selectionné</html>");
+        terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0].toString()+" <br/>selectionné</html>");
         //terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
         panelTerrains.add(listeTerrains);
         panelTerrains.add(terrainChoisi);
@@ -78,7 +76,7 @@ public class PanelChargerScenario extends JPanel{
     }
 
     public void setChoixTerrainTxt(String txt) {
-        this.terrainChoisi.setText("<html><br/>"+txt+" selectionné</html>");
+        this.terrainChoisi.setText("<html><br/>"+txt+" <br/>selectionné</html>");
         this.monumentChoisi.setText("");
     }
 

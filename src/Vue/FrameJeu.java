@@ -40,9 +40,9 @@ public class FrameJeu extends JFrame{
 		panelRegles = new PanelRegles();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
-		this.setPreferredSize(new Dimension(1500,900));
-		this.setVisible(true);	this.setSize(1500,900);
-		this.setLocation(50, 50);	this.setResizable(true);
+		this.setPreferredSize(new Dimension(1500,800));
+		this.setVisible(true);	this.setSize(1500,800);
+		this.setLocation(20, 15);	this.setResizable(true);
 		
 	}
 
@@ -126,4 +126,7 @@ public class FrameJeu extends JFrame{
     public void setPanelJeu(PanelJeu pj) {
 		FrameJeu.panelJeu = pj;
     }
+	public PanelActuel getPAnelActuel(){
+		return FrameJeu.panelActuel;
+	}
 }
