@@ -24,7 +24,7 @@ public class PanelMap extends JPanel {
 		int col=0,ligne=0;
 		System.out.println("totalcells : "+totalCells);
 		for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
-			this.add(hexs[col][ligne]);
+			this.add(hexs[ligne][col]);
 			col++;
 			if (col%16==0 && !petiteLigne) {
 				col=0;
@@ -58,8 +58,8 @@ public class PanelMap extends JPanel {
 				ligne++;
 				petiteLigne = !petiteLigne;
 			}
-			hexs[col][ligne] = cell;
-			this.add(hexs[col][ligne]);
+			hexs[ligne][col] = cell;
+			this.add(hexs[ligne][col]);
 		}
 		this.updateUI();
 	}

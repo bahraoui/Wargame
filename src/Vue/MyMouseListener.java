@@ -36,7 +36,7 @@ public class MyMouseListener extends MouseAdapter {
       System.out.println((Hexagone) e.getSource());
       Hexagone clic = (Hexagone) e.getSource();
       try {
-         clic.setTerrain(Sol.NEIGE);
+         clic.setTerrain(TypeTerrain.NEIGE);
       } catch (IOException e1) {
          e1.printStackTrace();
       }

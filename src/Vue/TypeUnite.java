@@ -1,5 +1,5 @@
 package Vue;
 
-public enum Unite {
+public enum TypeUnite {
     ARCHER,CAVALERIE,INFANTERIE,INFANTERIELOURDE,MAGE
 }
