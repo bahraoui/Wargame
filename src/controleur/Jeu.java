@@ -565,14 +565,30 @@ public class Jeu extends MouseAdapter implements ActionListener {
              */
             else if (evt.getActionCommand().equals("lancerPartieChargee")) {
                 if (sauvegardeChoisis != null) {
-                    System.out.println("Lancer une partie chargee!");
-                    FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);
+                    try {
+                        //charger
+                        pj = new PanelJeu(celluleToHexagone());
+                        FenetreJeu.setPanelJeu(pj);
+                        pj.enregistreEcouteur(this);
+                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else {
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");
                 }
                 
-            } 
+            }
+            else if (evt.getActionCommand().equals("abandonner")) {
+                System.out.println("ABANDON");
+                
+                
+            }
+            else if (evt.getActionCommand().equals("retourMenuSauvegarde")) {
+                System.out.println("Retour Menu Sauvegarde ");
+                FenetreJeu.changePanel(PanelActuel.MENU);
+            }
             /**
              * Bouton "Règles"
              */
@@ -594,7 +610,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 
                 else {
                     try {
-                        //charger
                         panelChargerScenario = new PanelChargerScenario(celluleToHexagone());
                         FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                         panelChargerScenario.enregistreEcouteur(this);
@@ -603,6 +618,20 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         e.printStackTrace();
                     }  
                 }
+            }
+            /**
+             * Bouton "Lancer Partie" -- Fenetre nouvelle partie apres scénario
+             */
+            else if (evt.getActionCommand().equals("lancerPartieApresScenario")) {
+                try {
+                    //charger
+                    pj = new PanelJeu(celluleToHexagone());
+                    FenetreJeu.setPanelJeu(pj);
+                    pj.enregistreEcouteur(this);
+                    FenetreJeu.changePanel(PanelActuel.JEU);  
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }  
             }
             /**
              * Bouton "Retour"
@@ -642,9 +671,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
         if (e.getSource() instanceof Hexagone) {
             System.out.println((Hexagone) e.getSource());
             Hexagone clic = (Hexagone) e.getSource();
+            int i = 0, j =0;
             if (FenetreJeu.getPAnelActuel().equals(PanelActuel.CHANGERSCENARIO)) {
                 try { 
                     clic.setTerrain(Jeu.terrainChoisi);
+                    //setPlateau
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

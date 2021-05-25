@@ -37,7 +37,8 @@ public class PanelJeu extends JPanel {
 	private int golds;
 	private JLabel labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage;
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
-	private JButton boutonFinDeTour, boutonAbandonner;
+	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
+
 	
 
 	public PanelJeu(Hexagone[][] parHexs) throws IOException {
@@ -207,9 +208,13 @@ public class PanelJeu extends JPanel {
 		panelBasBoutons.setLayout(new BoxLayout(panelBasBoutons, BoxLayout.X_AXIS));
 		boutonFinDeTour = new JButton("Fin de Tour");
 		boutonAbandonner = new JButton("Abandonner");
+		boutonQuitter = new JButton("Quitter");
+		boutonQuitter.setActionCommand("retourMenuSauvegarde");
+		boutonAbandonner.setActionCommand("abandonner");
 
 		panelBasBoutons.add(boutonFinDeTour);
 		panelBasBoutons.add(boutonAbandonner);
+		panelBasBoutons.add(boutonQuitter);
 
 		this.add(panelBasBoutons,BorderLayout.SOUTH);
 		
@@ -227,6 +232,7 @@ public class PanelJeu extends JPanel {
 		boutonInfanterie.addActionListener(controleur);
 		boutonInfanterieLourde.addActionListener(controleur);
 		boutonMage.addActionListener(controleur);
+		boutonQuitter.addActionListener(controleur);
 	}
 
 	/**

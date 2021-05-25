@@ -69,7 +69,7 @@ public class PanelChargerScenario extends JPanel{
         panelGauche.setBorder(new CompoundBorder(margin, border));
 
 
-        btnLancerPartie.setActionCommand("lancerPartie");
+        btnLancerPartie.setActionCommand("lancerPartieApresScenario");
         btnQuitter.setActionCommand("retourMenu");
         panelActions.add(btnLancerPartie);
         panelActions.add(btnQuitter);
