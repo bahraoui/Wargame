@@ -94,8 +94,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         String chaineTerrain = "Plaine::";
         spl1 = chaineTerrain.split(":");
         System.out.println(spl1.length);*/
-
-
         //System.out.println(plateau.affichage());
 
         /*FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");
@@ -129,8 +127,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
 
         sauvegardePartie();
-        
-                    
+                  
         FileInputStream file = new FileInputStream("src\\data\\partie\\savePartie1.txt");  
         chargePartie(file);
 
@@ -159,8 +156,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
         plateau = new Plateau();
             
         /// Initialisation plateau joueur
+        
+        sauvegardeMap();
+       
 
-        Joueur j1 = new Joueur("j1",false);
+        /*Joueur j1 = new Joueur("j1",false);
         Joueur j2 = new Joueur("j2",false);
         Joueur j3 = new Joueur("j3",false);
         Joueur j4 = new Joueur("j4",false);
@@ -176,7 +176,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
 
-        tour = 0;
+        tour = 0;*/
 
         
 
@@ -201,8 +201,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         ///do {
             
-            regenerationUniteArmee(joueurActuel);
-            gainTourJoueur(joueurActuel);
+            //regenerationUniteArmee(joueurActuel);
+            //gainTourJoueur(joueurActuel);
 
         ///} while (!finpartie || !conditionVictoire());
 
@@ -242,7 +242,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             mortEntite(defenseur);
         }
     }
-
 
     public static void mortEntite(Case defenseur){
         if (defenseur.getUnite() != null) {
@@ -338,7 +337,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return plateau.get(coordY).get(coordX);
     }
 
-
     public static void deplacementUnite(Unite unite, Case caseInitial, Case caseFinal){
         int deplacementTerrain = caseInitial.getTerrain().getPtsDeplacement();
         if (caseInitial.getBatiment() == null && caseInitial.getUnite() != null && caseFinal.getBatiment() == null && caseFinal.getUnite() == null && unite.getDeplacementActuel() > 0 && unite.getDeplacementActuel() >= deplacementTerrain){
@@ -352,7 +350,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             System.out.println("Case trop loin ou point de deplacement insufisant, ou case occupé");
         }
     }
-
     //DebutTour
     public static void regenerationUniteArmee(Joueur joueur) {
         for(int i = 0; i<joueur.getArmee().size();i++) {
@@ -390,7 +387,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return true;
     }
 
-
     public static void chronometre() {
     	Timer chrono =  new Timer();
     	chrono.schedule(new TimerTask(){
@@ -414,7 +410,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
 			}
     	}, 120000 , 120000);
     }
-
 
     public static void actionDopportunite(Joueur joueur, int coordYFinalJoueur, int coordXFinalJoueur, int coordYOpportunite, int coordXOpportunite, Case caseAttaque) {
     	Case positionFinalJoueur = plateau.get(coordYFinalJoueur).get(coordXFinalJoueur); 
@@ -567,11 +562,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         // fin Solutions
     }
     
-
-
-
-
-
     /*public static boolean conditionBase(){
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
@@ -681,48 +671,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 }
             }
             chaine +="]\n";
-			
-			for (int i = 0; i < plateau.size(); i++) {
-                for (int j = 0; j < plateau.size(); j++) {
-                        /// Ajout du premier [ pour chaque case
-                        chaine+="[";
-    
-                        /// Déclaration des variables utiles
-                        Terrain terrain = plateau.get(i).get(j).getTerrain();
-                        Unite unite = plateau.get(i).get(j).getUnite();
-                        Batiment batiment = plateau.get(i).get(j).getBatiment();
-                        String [] splStrings = new String[5];
-                        String chaineTerrain = new String();
-                        String chaineUnite = new String();
-                        String chaineBatiment = new String();
-    
-                        /// Recuperation du type de Terrain
-                        chaineTerrain = terrain.toString();
-                        splStrings = chaineTerrain.split(":");
-                        chaineTerrain = splStrings[0];
-                        splStrings = chaineTerrain.split(" ");
-                        chaine += splStrings[0]+":";
-    
-                        /// Unite
-                        if (!(unite == null)) {
-                            chaineUnite = unite.toString()+","+unite.getIdentifiant()+","+unite.getPointDeVieActuel()+","+unite.getDeplacementActuel()+","+unite.getAAttaque()+","+unite.getEnRepos();
-                        }
-                        chaine += chaineUnite+":";
-    
-                        /// Batiment
-                        if (!(batiment == null) && (batiment.getEstBase() != TypeBatiment.BASE)){
-                            chaineBatiment = batiment.toString()+","+batiment.getIdentifiant()+","+batiment.getPointDeVieActuel();
-                        }
-                        chaine += chaineBatiment;
-    
-                        /// Ajout de fin
-                        chaine+="]";
-                        if (j<plateau.size()-1) {
-                        chaine+=";";
-                    }
-                }
-                chaine+="\n";
-            }
+			chaine += sauvegardeStringMap(chaine);
             chaine += tour+"\n";
             chaine += joueurActuel.getNumeroJoueur()+"\n";
             for (int i = 0; i < postionBaseJoueur.size(); i++) {
@@ -814,8 +763,100 @@ public class Jeu extends MouseAdapter implements ActionListener {
         //}
     }
 
-    public static void sauvegardeMap() {
+    public static void sauvegardeMap(){
         
+        try {
+            System.out.println("Tapez la map a sauvegarder");
+            Scanner sc = new Scanner(System.in);
+            int saisie = sc.nextInt();
+            String fichier;
+
+            switch (saisie) {
+                case 1:
+                fichier = "Desert";
+                plateau.replace(new Desert());
+                    break;
+                case 2:
+                fichier = "Foret";
+                plateau.replace(new Foret());
+                    break;
+                case 3:
+                fichier = "Mer";
+                plateau.replace(new Mer());
+                    break;
+                case 4:
+                fichier = "Montagne";
+                plateau.replace(new Montagne());
+                    break;
+                case 5:
+                fichier = "ToundraNeige";
+                plateau.replace(new ToundraNeige());
+                    break;
+                default:
+                fichier = "Plaine";
+                plateau.replace(new Plaine());
+                    break;
+            }
+            sc.close();
+            File file = new File("src\\data\\cartes\\default\\"+fichier+".txt");
+			
+			if (!file.exists()) {
+			    file.createNewFile();
+			   }
+		
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			String chaine = new String();
+            chaine = sauvegardeStringMap(chaine);
+            fw.write(chaine);
+            fw.close();
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+    }
+
+    public static String sauvegardeStringMap(String chaine) {
+        for (int i = 0; i < plateau.size(); i++) {
+            for (int j = 0; j < plateau.size(); j++) {
+                    /// Ajout du premier [ pour chaque case
+                    chaine+="[";
+
+                    /// Déclaration des variables utiles
+                    Terrain terrain = plateau.get(i).get(j).getTerrain();
+                    Unite unite = plateau.get(i).get(j).getUnite();
+                    Batiment batiment = plateau.get(i).get(j).getBatiment();
+                    String [] splStrings;
+                    String chaineTerrain = new String();
+                    String chaineUnite = new String();
+                    String chaineBatiment = new String();
+
+                    /// Recuperation du type de Terrain
+                    chaineTerrain = terrain.toString();
+                    splStrings = chaineTerrain.split(":");
+                    chaineTerrain = splStrings[0];
+                    splStrings = chaineTerrain.split(" ");
+                    chaine += splStrings[0]+":";
+
+                    /// Unite
+                    if (!(unite == null)) {
+                        chaineUnite = unite.toString()+","+unite.getIdentifiant()+","+unite.getPointDeVieActuel()+","+unite.getDeplacementActuel()+","+unite.getAAttaque()+","+unite.getEnRepos();
+                    }
+                    chaine += chaineUnite+":";
+
+                    /// Batiment
+                    if (!(batiment == null) && (batiment.getEstBase() != TypeBatiment.BASE)){
+                        chaineBatiment = batiment.toString()+","+batiment.getIdentifiant()+","+batiment.getPointDeVieActuel();
+                    }
+                    chaine += chaineBatiment;
+
+                    /// Ajout de fin
+                    chaine+="]";
+                    if (j<plateau.size()-1) {
+                    chaine+=";";
+                }
+            }
+            chaine+="\n";
+        }
+        return chaine;
     }
 
     public static void chargeLineMap(String line,int iline,int [][] listeUnite) {
@@ -826,8 +867,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         spl1 = line.split(";");
 
         for (int i = 0; i < spl1.length; i++) {
-           // System.out.println(spl1[i]);
-            //System.out.println(i);
             spl1[i] = spl1[i].replace("[", "");
             spl1[i] = spl1[i].replace("]", "");
             spl2 = spl1[i].split(":");   
