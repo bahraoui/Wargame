@@ -2,6 +2,7 @@ package Vue;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -102,9 +103,6 @@ public class Hexagone extends JLabel {
         this.paintChildren(g);
     }
 
-    public void setTerrain(Graphics g) {
-        this.paintChildren(g);
-    }
 
     /*
     * (non-Javadoc)
@@ -174,6 +172,7 @@ public class Hexagone extends JLabel {
         super.processMouseEvent(e);
     }
     
+
     /*
     * (non-Javadoc)
     * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
@@ -217,7 +216,7 @@ public class Hexagone extends JLabel {
             }        
         } else {
             try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"VIDE.png")), 0, 0, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -283,7 +282,7 @@ public class Hexagone extends JLabel {
         }
         else {
             try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 0, 10, null);
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"VIDE.png")), 0, 10, null);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -111,6 +111,7 @@ public class FrameJeu extends JFrame{
 		panelRegles.enregistreEcouteur(controleur);
 	}
 
+
 	public void setChoixTerrainTxt(String txt) {
         panelChargerScenario.setChoixTerrainTxt(txt);
     }
@@ -128,5 +129,9 @@ public class FrameJeu extends JFrame{
     }
 	public PanelActuel getPAnelActuel(){
 		return FrameJeu.panelActuel;
+	}
+
+	public void setPanelChangerScenario(PanelChargerScenario parPanelChargerScenario) {
+		FrameJeu.panelChargerScenario = parPanelChargerScenario;
 	}
 }

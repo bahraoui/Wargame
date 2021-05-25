@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileSystemView;
 import Vue.Hexagone;
 import Vue.PanelActuel;
 import Vue.PanelChargerPartie;
+import Vue.PanelChargerScenario;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
 import Vue.Sol;
@@ -85,6 +86,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Cellule[][] cellulesCarte;
     private static PanelJeu pj;
     private static Sol terrainChoisi;
+    private static PanelChargerScenario panelChargerScenario;
 
 
     
@@ -122,7 +124,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         
         //Hexagone cells[][] = pj.getCells();
         FenetreJeu = new FrameJeu(/*pj*/);
-        TimeUnit.SECONDS.sleep(1);
+        //TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
 
         tour = 0;
@@ -142,7 +144,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 Sol sol = null;
-                if (plateau.get(i).get(j).getTerrain() instanceof Desert)
+                if (plateau.get(i).get(j).getTerrain() instanceof Plaine)
+                    sol = Sol.PLAINE;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Desert)
                     sol = Sol.DESERT;
                 else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
                     sol = Sol.FORET;
@@ -152,7 +156,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     sol = Sol.MONTAGNE;
                 else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
                     sol = Sol.NEIGE;
-                System.out.println("i : "+i+" j : "+j);
                 Cellule cell = new Cellule(new Hexagone(sol), plateau.get(i).get(j));
                 cellulesCarte[i][j] = cell;
             }
@@ -519,7 +522,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
              */
             else if (evt.getActionCommand().equals("nouvellePartie")) {
                 //System.out.println("Nouvelle partie !");
-                FenetreJeu.changePanel(PanelActuel.JEU);
+                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);                
             }
             /**
              * Bouton "Choix Monument"
@@ -532,7 +535,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
              */
             else if (evt.getActionCommand().equals("chargerPartie")) {
                 System.out.println("Charger partie !");
-                FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);
+                FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
             }
             /**
              * Bouton "Charger une partie sauvegardée"
@@ -563,7 +566,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("lancerPartieChargee")) {
                 if (sauvegardeChoisis != null) {
                     System.out.println("Lancer une partie chargee!");
-                    FenetreJeu.changePanel(PanelActuel.JEU);
+                    FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);
                 }
                 else {
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");
@@ -590,13 +593,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
                 
                 else {
-                    //charger
                     try {
-                        pj = new PanelJeu(celluleToHexagone());
-                        FenetreJeu.setPanelJeu(pj);
-                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                        //charger
+                        panelChargerScenario = new PanelChargerScenario(celluleToHexagone());
+                        FenetreJeu.setPanelChangerScenario(panelChargerScenario);
+                        panelChargerScenario.enregistreEcouteur(this);
+                        FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }  
                 }

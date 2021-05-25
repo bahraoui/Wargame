@@ -24,14 +24,19 @@ public class PanelChargerScenario extends JPanel{
     private JLabel terrainChoisi;
     private JButton btnChoixMonument;
     private JLabel monumentChoisi;
+    private JButton btnLancerPartie;
+    private JButton btnQuitter;
 	
-	public PanelChargerScenario() throws IOException {
+	public PanelChargerScenario(Hexagone[][] parHexs) throws IOException {
         super(new BorderLayout());
-        //panelMap = new PanelMap();
+        panelMap = new PanelMap(parHexs);
         panelGauche = new JPanel();
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
+        JPanel panelActions = new JPanel();
         btnChoixMonument = new JButton("Monument");
+        btnLancerPartie = new JButton("Lancer la partie");
+        btnQuitter = new JButton("Quitter");
 
         //String[] listeTerrainsNoms = {"Neige","Désert","Forêt","Montagne","Plaine","Mer"};
         Sol[] listeTerrainsNoms = {Sol.NEIGE,Sol.DESERT,Sol.FORET,Sol.MONTAGNE,Sol.PLAINE,Sol.MER};
@@ -62,9 +67,16 @@ public class PanelChargerScenario extends JPanel{
         border = panelGauche.getBorder();
         margin = new EmptyBorder(3,3,3,1);
         panelGauche.setBorder(new CompoundBorder(margin, border));
+
+
+        btnLancerPartie.setActionCommand("lancerPartie");
+        btnQuitter.setActionCommand("retourMenu");
+        panelActions.add(btnLancerPartie);
+        panelActions.add(btnQuitter);
         
         panelGauche.add(panelTerrains);
         panelGauche.add(panelMonuments);
+        panelGauche.add(panelActions);
         this.add(panelMap,BorderLayout.CENTER);
         this.add(panelGauche,BorderLayout.WEST);
 	}
@@ -73,6 +85,8 @@ public class PanelChargerScenario extends JPanel{
         panelMap.enregistreEcouteur(controleur);
         listeTerrains.addActionListener(controleur);
         btnChoixMonument.addActionListener(controleur);
+        btnLancerPartie.addActionListener(controleur);
+        btnQuitter.addActionListener(controleur);
     }
 
     public void setChoixTerrainTxt(String txt) {
