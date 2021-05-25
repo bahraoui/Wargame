@@ -1,5 +1,5 @@
 package Vue;
 
-public enum Sol {
+public enum TypeTerrain {
     DESERT, FORET, MER, MONTAGNE, PLAINE, NEIGE;
 }

@@ -20,7 +20,7 @@ import controleur.Jeu;
 public class PanelChargerScenario extends JPanel{
     private PanelMap panelMap;
     private JPanel panelGauche;
-    private JComboBox<Sol> listeTerrains;
+    private JComboBox<TypeTerrain> listeTerrains;
     private JLabel terrainChoisi;
     private JButton btnChoixMonument;
     private JLabel monumentChoisi;
@@ -39,8 +39,8 @@ public class PanelChargerScenario extends JPanel{
         btnQuitter = new JButton("Quitter");
 
         //String[] listeTerrainsNoms = {"Neige","Désert","Forêt","Montagne","Plaine","Mer"};
-        Sol[] listeTerrainsNoms = {Sol.NEIGE,Sol.DESERT,Sol.FORET,Sol.MONTAGNE,Sol.PLAINE,Sol.MER};
-        listeTerrains = new JComboBox<Sol>(listeTerrainsNoms);
+        TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
+        listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
         listeTerrains.setActionCommand("listeTerrains");
         terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0].toString()+" <br/>selectionné</html>");
         //terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));

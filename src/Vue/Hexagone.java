@@ -19,9 +19,9 @@ import javax.swing.JLabel;
 public class Hexagone extends JLabel {
     private static final long serialVersionUID = -7142502695252118612L;
     private Polygon hexagonalShape;
-    private Sol sol;
-    private Unite unite;
-    private Batiment batiment;
+    private TypeTerrain sol;
+    private TypeUnite unite;
+    private TypeBatimentVue batiment;
 
     
     public Hexagone() throws IOException {
@@ -30,13 +30,13 @@ public class Hexagone extends JLabel {
     }
 
 
-    public Hexagone(Sol sol) throws IOException {
+    public Hexagone(TypeTerrain sol) throws IOException {
         super();
         hexagonalShape = getHexPolygon();
         this.sol = sol;
     }
 
-    public Hexagone(Sol sol, Unite unite, Batiment batiment) throws IOException {
+    public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment) throws IOException {
         super();
         hexagonalShape = getHexPolygon();
         this.sol = sol;
@@ -73,7 +73,7 @@ public class Hexagone extends JLabel {
     
     // END Getters and setters
 
-    public void setTerrain(Sol sol) throws IOException{
+    public void setTerrain(TypeTerrain sol) throws IOException{
         // , , MER, , , ;
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);

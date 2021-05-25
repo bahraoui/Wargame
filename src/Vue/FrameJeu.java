@@ -134,4 +134,8 @@ public class FrameJeu extends JFrame{
 	public void setPanelChangerScenario(PanelChargerScenario parPanelChargerScenario) {
 		FrameJeu.panelChargerScenario = parPanelChargerScenario;
 	}
+
+    public PanelNouvellePartie getPanelNouvellePartie() {
+        return FrameJeu.panelNouvellePartie;
+    }
 }

@@ -32,7 +32,10 @@ import Vue.PanelChargerPartie;
 import Vue.PanelChargerScenario;
 import Vue.FrameJeu;
 import Vue.PanelJeu;
-import Vue.Sol;
+import Vue.PanelNouvellePartie;
+import Vue.TypeBatimentVue;
+import Vue.TypeTerrain;
+import Vue.TypeUnite;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
@@ -42,7 +45,6 @@ import modele.entite.unite.Infanterie;
 import modele.entite.unite.InfanterieLourde;
 import modele.entite.unite.Mage;
 import modele.entite.unite.Unite;
-import modele.joueur.IA;
 import modele.joueur.Joueur;
 import modele.plateau.Case;
 import modele.plateau.Plateau;
@@ -85,7 +87,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static File sauvegardeChoisis;
     private static Cellule[][] cellulesCarte;
     private static PanelJeu pj;
-    private static Sol terrainChoisi;
+    private static TypeTerrain terrainChoisi;
     private static PanelChargerScenario panelChargerScenario;
 
 
@@ -98,7 +100,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         finpartie = false;
         cellulesCarte = new Cellule[16][16];
-        terrainChoisi = Sol.NEIGE;
+        terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
@@ -114,7 +116,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
        
 
         Joueur j2 = new Joueur("j2",true);
-        IA j2IA = new IA(j2);
         Joueur j3 = new Joueur("j3",false);
         Joueur j4 = new Joueur("j4",false);
         listeJoueur.add(j1);
@@ -146,20 +147,35 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public static void setCellulesMap() throws IOException {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
-                Sol sol = null;
+                TypeTerrain sol = null;
+                TypeUnite unite = null;
+                TypeBatimentVue batiment = null;
                 if (plateau.get(i).get(j).getTerrain() instanceof Plaine)
-                    sol = Sol.PLAINE;
+                    sol = TypeTerrain.PLAINE;
                 else if (plateau.get(i).get(j).getTerrain() instanceof Desert)
-                    sol = Sol.DESERT;
+                    sol = TypeTerrain.DESERT;
                 else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
-                    sol = Sol.FORET;
+                    sol = TypeTerrain.FORET;
                 else if (plateau.get(i).get(j).getTerrain() instanceof Mer)
-                    sol = Sol.MER;
+                    sol = TypeTerrain.MER;
                 else if (plateau.get(i).get(j).getTerrain() instanceof Montagne)
-                    sol = Sol.MONTAGNE;
+                    sol = TypeTerrain.MONTAGNE;
                 else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
-                    sol = Sol.NEIGE;
-                Cellule cell = new Cellule(new Hexagone(sol), plateau.get(i).get(j));
+                    sol = TypeTerrain.NEIGE;
+
+                if (plateau.get(i).get(j).getUnite() instanceof Archer)
+                    unite = TypeUnite.ARCHER;
+                else if (plateau.get(i).get(j).getUnite() instanceof Cavalerie)
+                    unite = TypeUnite.CAVALERIE;
+                else if (plateau.get(i).get(j).getUnite() instanceof Infanterie)
+                    unite = TypeUnite.INFANTERIE;
+                else if (plateau.get(i).get(j).getUnite() instanceof InfanterieLourde)
+                    unite = TypeUnite.INFANTERIELOURDE;
+                else if (plateau.get(i).get(j).getUnite() instanceof Mage)
+                    unite = TypeUnite.MAGE;
+                
+
+                Cellule cell = new Cellule(new Hexagone(sol, unite, batiment), plateau.get(i).get(j));
                 cellulesCarte[i][j] = cell;
             }
         }
@@ -419,21 +435,21 @@ public class Jeu extends MouseAdapter implements ActionListener {
         //assigner
     }
 
-    public static void placementUnite(IA ia, Unite unite) {
-        int coordX = postionBaseJoueur.get(ia.getJoueurIA().getNumeroJoueur()).get(0);
-        int coordY = postionBaseJoueur.get(ia.getJoueurIA().getNumeroJoueur()).get(1);
+    public static void placementUnite(Joueur ia, Unite unite) {
+        int coordX = postionBaseJoueur.get(ia.getNumeroJoueur()).get(0);
+        int coordY = postionBaseJoueur.get(ia.getNumeroJoueur()).get(1);
         for (int i = coordX - 1 ; i < coordX + 3; i++) {
             for (int j = coordY - 2; j < coordY + 3; j++) {
                 //Hors quatre coins
-                if (placerUniteJoueur(ia.getJoueurIA(), unite, i,j)){
+                if (placerUniteJoueur(ia, unite, i,j)){
                     return;
                 }
             }
         }
     }
 
-    public static void achatTroupesIA(IA ia) throws InterruptedException{
-        int depense = new Random().nextInt(ia.getJoueurIA().getPieces()/2);
+    public static void achatTroupesIA(Joueur ia) throws InterruptedException{
+        int depense = new Random().nextInt(ia.getPieces()/2);
         System.out.println("Initial : "+depense);
         while (depense >= new Archer().getCout()) {
             System.out.println("Nouvelle : "+depense);
@@ -564,13 +580,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("lancerPartieChargee")) {
                 if (sauvegardeChoisis != null) {
                     try {
-                        //charger
+                        // Generer un action pane si fichier pas bon
+                        chargePartie(new FileInputStream(sauvegardeChoisis));
+                        System.out.println("File bien chargee");
+                        System.out.println(plateau.affichage());
+                        setCellulesMap();
                         pj = new PanelJeu(celluleToHexagone());
                         FenetreJeu.setPanelJeu(pj);
                         pj.enregistreEcouteur(this);
                         FenetreJeu.changePanel(PanelActuel.JEU);  
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        e.printStackTrace();                   
                     }
                 }
                 else {
@@ -605,9 +625,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 }
                 else if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
-                
+                else if (!FenetreJeu.getPanelNouvellePartie().setAllNames(nbJoueursH+nbJoueursIA))
+                    JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
                 else {
                     try {
+                        for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
+                            if (i < nbJoueursH)
+                                listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
+                            else 
+                                listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
+                        }
                         panelChargerScenario = new PanelChargerScenario(celluleToHexagone());
                         FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                         panelChargerScenario.enregistreEcouteur(this);
@@ -646,18 +673,44 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (evt.getActionCommand().equals("nbJoueursH")) {
                 JComboBox<Integer> nbH = (JComboBox<Integer>) evt.getSource();
                 nbJoueursH = (Integer) nbH.getSelectedItem();
+                int nomJ = nbJoueursH + nbJoueursIA;
+                if (nomJ > 4)
+                    nomJ = 4;
+                for (int i = 0; i < 4; i++) {
+                    if(i < nomJ) {
+                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(true);
+                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(true);
+                    }
+                    else {
+                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(false);
+                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(false);
+                    }
+                }
             } 
             else if (evt.getActionCommand().equals("nbJoueursIA")) {
                 JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
                 nbJoueursIA = (Integer) nbIA.getSelectedItem();
+                int nomJ = nbJoueursH + nbJoueursIA;
+                if (nomJ > 4)
+                    nomJ = 4;
+                for (int i = 0; i < 4; i++) {
+                    if(i < nomJ) {
+                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(true);
+                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(true);
+                    }
+                    else {
+                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(false);
+                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(false);
+                    }
+                }
             }
             else if (evt.getActionCommand().equals("choixMap")) {
                 JComboBox<String> nomCarte = (JComboBox<String>) evt.getSource();
                 carteChoisis = (String) nomCarte.getSelectedItem();
             }
             else if (evt.getActionCommand().equals("listeTerrains")) {
-                JComboBox<Sol> choixTerrain = (JComboBox<Sol>) evt.getSource();
-                Jeu.terrainChoisi = (Sol) choixTerrain.getSelectedItem();
+                JComboBox<TypeTerrain> choixTerrain = (JComboBox<TypeTerrain>) evt.getSource();
+                Jeu.terrainChoisi = (TypeTerrain) choixTerrain.getSelectedItem();
                 FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem().toString());
             }
         }
@@ -671,7 +724,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             Hexagone clic = (Hexagone) e.getSource();
             int i = 0, j =0;
             if (FenetreJeu.getPAnelActuel().equals(PanelActuel.CHANGERSCENARIO)) {
-                try { 
+                try {
                     clic.setTerrain(Jeu.terrainChoisi);
                     //setPlateau
                 } catch (IOException e1) {
