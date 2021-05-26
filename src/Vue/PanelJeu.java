@@ -26,15 +26,12 @@ public class PanelJeu extends JPanel {
 	private JPanel panelInfoTour;
 	private JPanel panelInfoPartie;
 	private JLabel labelNbTours;
-	private int NbTours;
 	private JLabel labelNomJoueur;
-	private String NomJoueur;
 	private static int minute=0,seconde=0;
 	private JLabel labelTypeTerrain;
 	private JLabel labelBatimentUnite;
 	private JPanel panelBoutique;
 	private JLabel labelGolds;
-	private int golds;
 	private JLabel labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage;
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
 	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
@@ -64,13 +61,11 @@ public class PanelJeu extends JPanel {
 		
 
 		// Tours
-		NbTours=1;
-		labelNbTours = new JLabel("Nombre de tour(s) : "+NbTours+" / 30");
+		labelNbTours = new JLabel("Nombre de tour(s) : ");
 		panelInfoTour.add(labelNbTours);
 
 		// Nom du joueur
-		NomJoueur="Clement";
-		labelNomJoueur = new JLabel("Tour de : "+NomJoueur);
+		labelNomJoueur = new JLabel("Tour de : ");
 		panelInfoTour.add(labelNomJoueur);
 
 		// Chrono
@@ -139,8 +134,7 @@ public class PanelJeu extends JPanel {
 		panelBoutique.add(labelTitreBoutique);
 
 		// golds
-		golds = 150; // exemple
-		labelGolds = new JLabel(golds+" Golds");
+		labelGolds = new JLabel(" Golds");
 		panelBoutique.add(labelGolds);
 
 		// liste d'achat
@@ -153,7 +147,7 @@ public class PanelJeu extends JPanel {
 		labelArcher = new JLabel("Archer");
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
-		boutonArcher = new JButton("50 Golds");
+		boutonArcher = new JButton("Golds");
 		boutonArcher.setActionCommand("achatArcher");
 		panelListeAchat.add(boutonArcher,contrainte);
 
@@ -162,7 +156,7 @@ public class PanelJeu extends JPanel {
 		labelCavalerie = new JLabel("Cavalerie");
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
-		boutonCavalerie = new JButton("150 Golds");
+		boutonCavalerie = new JButton("Golds");
 		boutonCavalerie.setActionCommand("achatCavalerie");
 		panelListeAchat.add(boutonCavalerie,contrainte);
 
@@ -171,7 +165,7 @@ public class PanelJeu extends JPanel {
 		labelInfanterie = new JLabel("Infanterie");
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
-		boutonInfanterie = new JButton("200 Golds");
+		boutonInfanterie = new JButton("Golds");
 		boutonInfanterie.setActionCommand("achatInfanterie");
 		panelListeAchat.add(boutonInfanterie,contrainte);
 
@@ -180,7 +174,7 @@ public class PanelJeu extends JPanel {
 		labelInfanterieLourde = new JLabel("Infanterie Lourde");
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
-		boutonInfanterieLourde = new JButton("200 Golds");
+		boutonInfanterieLourde = new JButton("Golds");
 		boutonInfanterieLourde.setActionCommand("achatInfanterieLourde");
 		panelListeAchat.add(boutonInfanterieLourde,contrainte);
 
@@ -189,7 +183,7 @@ public class PanelJeu extends JPanel {
 		labelMage = new JLabel("Mage");
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
-		boutonMage = new JButton("300 Golds");
+		boutonMage = new JButton("Golds");
 		boutonMage.setActionCommand("achatMage");
 		panelListeAchat.add(boutonMage,contrainte);
 
@@ -209,6 +203,7 @@ public class PanelJeu extends JPanel {
 		boutonFinDeTour = new JButton("Fin de Tour");
 		boutonAbandonner = new JButton("Abandonner");
 		boutonQuitter = new JButton("Quitter");
+		boutonFinDeTour.setActionCommand("finTour");
 		boutonQuitter.setActionCommand("retourMenuSauvegarde");
 		boutonAbandonner.setActionCommand("abandonner");
 
@@ -235,14 +230,209 @@ public class PanelJeu extends JPanel {
 		boutonQuitter.addActionListener(controleur);
 	}
 
-	/**
-	 * La methode tourPlusUn permet d'ajouter et de mettre a jour l'affichage du nombre de tours
-	 */
-	public void tourPlusUn(){
-		this.NbTours++;
-		labelNbTours = new JLabel("Nombre de tour(s) : +"+NbTours+" / 30");
+	public void updateGoldJoueurAffichage(int nbGold) {
+        labelGolds.setText(nbGold+" Golds");
+    }
+
+
+	public BorderLayout getBdl() {
+		return this.bdl;
 	}
 
+	public void setBdl(BorderLayout bdl) {
+		this.bdl = bdl;
+	}
 
+	public PanelMap getPanelCentrePlateau() {
+		return this.PanelCentrePlateau;
+	}
+
+	public void setPanelCentrePlateau(PanelMap PanelCentrePlateau) {
+		this.PanelCentrePlateau = PanelCentrePlateau;
+	}
+
+	public JPanel getPanelGaucheInfos() {
+		return this.panelGaucheInfos;
+	}
+
+	public void setPanelGaucheInfos(JPanel panelGaucheInfos) {
+		this.panelGaucheInfos = panelGaucheInfos;
+	}
+
+	public JPanel getPanelBasBoutons() {
+		return this.panelBasBoutons;
+	}
+
+	public void setPanelBasBoutons(JPanel panelBasBoutons) {
+		this.panelBasBoutons = panelBasBoutons;
+	}
+
+	public JPanel getPanelInfoTour() {
+		return this.panelInfoTour;
+	}
+
+	public void setPanelInfoTour(JPanel panelInfoTour) {
+		this.panelInfoTour = panelInfoTour;
+	}
+
+	public JPanel getPanelInfoPartie() {
+		return this.panelInfoPartie;
+	}
+
+	public void setPanelInfoPartie(JPanel panelInfoPartie) {
+		this.panelInfoPartie = panelInfoPartie;
+	}
+
+	public JLabel getLabelNbTours() {
+		return this.labelNbTours;
+	}
+
+	public void setLabelNbTours(JLabel labelNbTours) {
+		this.labelNbTours = labelNbTours;
+	}
+
+	public JLabel getLabelNomJoueur() {
+		return this.labelNomJoueur;
+	}
+
+	public void setLabelNomJoueur(JLabel labelNomJoueur) {
+		this.labelNomJoueur = labelNomJoueur;
+	}
+
+	public JLabel getLabelTypeTerrain() {
+		return this.labelTypeTerrain;
+	}
+
+	public void setLabelTypeTerrain(JLabel labelTypeTerrain) {
+		this.labelTypeTerrain = labelTypeTerrain;
+	}
+
+	public JLabel getLabelBatimentUnite() {
+		return this.labelBatimentUnite;
+	}
+
+	public void setLabelBatimentUnite(JLabel labelBatimentUnite) {
+		this.labelBatimentUnite = labelBatimentUnite;
+	}
+
+	public JPanel getPanelBoutique() {
+		return this.panelBoutique;
+	}
+
+	public void setPanelBoutique(JPanel panelBoutique) {
+		this.panelBoutique = panelBoutique;
+	}
+
+	public JLabel getLabelGolds() {
+		return this.labelGolds;
+	}
+
+	public void setLabelGolds(JLabel labelGolds) {
+		this.labelGolds = labelGolds;
+	}
+
+	public JLabel getLabelArcher() {
+		return this.labelArcher;
+	}
+
+	public void setLabelArcher(JLabel labelArcher) {
+		this.labelArcher = labelArcher;
+	}
+
+	public JLabel getLabelCavalerie() {
+		return this.labelCavalerie;
+	}
+
+	public void setLabelCavalerie(JLabel labelCavalerie) {
+		this.labelCavalerie = labelCavalerie;
+	}
+
+	public JLabel getLabelInfanterie() {
+		return this.labelInfanterie;
+	}
+
+	public void setLabelInfanterie(JLabel labelInfanterie) {
+		this.labelInfanterie = labelInfanterie;
+	}
+
+	public JLabel getLabelInfanterieLourde() {
+		return this.labelInfanterieLourde;
+	}
+
+	public void setLabelInfanterieLourde(JLabel labelInfanterieLourde) {
+		this.labelInfanterieLourde = labelInfanterieLourde;
+	}
+
+	public JLabel getLabelMage() {
+		return this.labelMage;
+	}
+
+	public void setLabelMage(JLabel labelMage) {
+		this.labelMage = labelMage;
+	}
+
+	public JButton getBoutonArcher() {
+		return this.boutonArcher;
+	}
+
+	public void setBoutonArcher(JButton boutonArcher) {
+		this.boutonArcher = boutonArcher;
+	}
+
+	public JButton getBoutonCavalerie() {
+		return this.boutonCavalerie;
+	}
+
+	public void setBoutonCavalerie(JButton boutonCavalerie) {
+		this.boutonCavalerie = boutonCavalerie;
+	}
+
+	public JButton getBoutonInfanterie() {
+		return this.boutonInfanterie;
+	}
+
+	public void setBoutonInfanterie(JButton boutonInfanterie) {
+		this.boutonInfanterie = boutonInfanterie;
+	}
+
+	public JButton getBoutonInfanterieLourde() {
+		return this.boutonInfanterieLourde;
+	}
+
+	public void setBoutonInfanterieLourde(JButton boutonInfanterieLourde) {
+		this.boutonInfanterieLourde = boutonInfanterieLourde;
+	}
+
+	public JButton getBoutonMage() {
+		return this.boutonMage;
+	}
+
+	public void setBoutonMage(JButton boutonMage) {
+		this.boutonMage = boutonMage;
+	}
+
+	public JButton getBoutonFinDeTour() {
+		return this.boutonFinDeTour;
+	}
+
+	public void setBoutonFinDeTour(JButton boutonFinDeTour) {
+		this.boutonFinDeTour = boutonFinDeTour;
+	}
+
+	public JButton getBoutonAbandonner() {
+		return this.boutonAbandonner;
+	}
+
+	public void setBoutonAbandonner(JButton boutonAbandonner) {
+		this.boutonAbandonner = boutonAbandonner;
+	}
+
+	public JButton getBoutonQuitter() {
+		return this.boutonQuitter;
+	}
+
+	public void setBoutonQuitter(JButton boutonQuitter) {
+		this.boutonQuitter = boutonQuitter;
+	}
 	
 }

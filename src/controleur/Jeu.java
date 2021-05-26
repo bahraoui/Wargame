@@ -106,34 +106,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
-        Joueur j1 = new Joueur("j1",false);
-        listeJoueur.add(j1);
-        placerBaseJoueur(j1, 5, 5);
-        System.out.println(plateau.affichage());
         setCellulesMap();
-        /// Initialisation plateau joueur
-        
-        
-       
-
-        Joueur j2 = new Joueur("j2",true);
-        Joueur j3 = new Joueur("j3",false);
-        Joueur j4 = new Joueur("j4",false);
-        listeJoueur.add(j1);
-        listeJoueur.add(j2);
-        listeJoueur.add(j3);
-        listeJoueur.add(j4);
-        joueurActuel = j1;
-
-        
+        /// Initialisation plateau joueur        
         
         //Hexagone cells[][] = pj.getCells();
         FenetreJeu = new FrameJeu(/*pj*/);
         //TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
-
-        tour = 0;
-
         /*
         placerBaseJoueur(j1, 5, 5);
         placerBaseJoueur(j2IA.getJoueurIA(), 10, 10);
@@ -275,9 +254,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
         Batiment base = new Batiment(TypeBatiment.BASE);
         joueur.setBase(base);
         plateau.get(coordY).get(coordX).setBatiment(base);
-        plateau.get(coordY).get(coordX-1).setBatiment(base);
-        plateau.get(coordY).get(coordX+1).setBatiment(base);
         plateau.get(coordY+1).get(coordX).setBatiment(base);
+        plateau.get(coordY+1).get(coordX+1).setBatiment(base);
+        plateau.get(coordY+2).get(coordX).setBatiment(base);
         ArrayList<Integer> baseJ1 = new ArrayList<Integer>();
         baseJ1.add(0,coordY);
         baseJ1.add(1,coordX);
@@ -436,6 +415,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         //assigner
     }
 
+    //Par rapport à la base placé vers le centre de la map en prio
     public static void placementUnite(Joueur ia, Unite unite) {
         int coordX = postionBaseJoueur.get(ia.getNumeroJoueur()).get(0);
         int coordY = postionBaseJoueur.get(ia.getNumeroJoueur()).get(1);
@@ -629,18 +609,27 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
                 else {
                     try {
+                        System.out.println(nbJoueursH+nbJoueursIA);
+                        chargerCarte(new FileInputStream("src\\data\\cartes\\default\\"+carteChoisis+".txt"));
                         for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
                             if (i < nbJoueursH)
                                 listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
                             else 
                                 listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
+                            int coordX = ((i+1)*5);
+                            int coordY = ((i+1)*5);
+                            System.out.println("COORDONNEES BASE : "+coordX + " - "+ coordY);
+                            placerBaseJoueur(listeJoueur.get(i), coordX, coordY);
+                            System.out.println(plateau.affichage());
                         }
-                        chargerCarte(new FileInputStream("src\\data\\cartes\\default\\"+carteChoisis+".txt"));
                         setCellulesMap();
                         panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
                         FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                         panelChargerScenario.enregistreEcouteur(this);
                         terrainChoisi = TypeTerrain.NEIGE;
+                        tour = 0;
+                        joueurActuel = listeJoueur.get(0);
+                        System.out.println(listeJoueur);
                         FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -656,10 +645,70 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     pj = new PanelJeu(cellulesToHexagones());
                     FenetreJeu.setPanelJeu(pj);
                     pj.enregistreEcouteur(this);
+                    nouveauTour();
                     FenetreJeu.changePanel(PanelActuel.JEU);  
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }  
+            }
+            /**
+             * 
+             * ACHAT UNITE
+             * 
+             */
+            else if (evt.getActionCommand().equals("achatArcher")) {
+                System.out.println("Achat archer");
+                Archer archerAchete = new Archer();
+                achatUniteArmee(joueurActuel, archerAchete);
+                placementUnite(joueurActuel,archerAchete);
+                System.out.println(plateau.affichage());
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }
+            else if (evt.getActionCommand().equals("achatCavalerie")) {
+                System.out.println("Achat calvalerie");
+                Cavalerie cavalerieAchete = new Cavalerie();
+                achatUniteArmee(joueurActuel, cavalerieAchete);
+                placementUnite(joueurActuel,cavalerieAchete);
+                System.out.println(plateau.affichage());
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }
+            else if (evt.getActionCommand().equals("achatInfanterie")) {
+                System.out.println("Achat infanterie");
+                Infanterie infanterieAchete = new Infanterie();
+                achatUniteArmee(joueurActuel, infanterieAchete);
+                placementUnite(joueurActuel,infanterieAchete);
+                System.out.println(plateau.affichage());
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }
+            else if (evt.getActionCommand().equals("achatInfanterieLourde")) {
+                System.out.println("Achat infanterie lourde");
+                InfanterieLourde infanterieLourdeAchete = new InfanterieLourde();
+                achatUniteArmee(joueurActuel, infanterieLourdeAchete);
+                placementUnite(joueurActuel,infanterieLourdeAchete);
+                System.out.println(plateau.affichage());
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }
+            else if (evt.getActionCommand().equals("achatMage")) {
+                System.out.println("Achat mage");
+                Mage archerMage = new Mage();
+                achatUniteArmee(joueurActuel, archerMage);
+                placementUnite(joueurActuel,archerMage);
+                System.out.println(plateau.affichage());
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }
+
+            /**
+             * Bouton "Fin de tour" -- Fenetre en jeu
+             */
+            else if (evt.getActionCommand().equals("finTour")) {
+                try {
+                    nouveauTour();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             /**
              * Bouton "Retour"
@@ -720,6 +769,26 @@ public class Jeu extends MouseAdapter implements ActionListener {
         
     }
 
+    
+
+
+    private static void nouveauTour() throws InterruptedException {
+        if (tour != 0) {
+            joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
+        }
+        tour++;
+        FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
+        FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : "+tour);;
+        FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+        if (joueurActuel.getEstIa()){
+            tourIA();
+            Thread.sleep(1000);
+        }
+        System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+        
+    }
+
+
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() instanceof Hexagone) {
@@ -755,7 +824,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     break;
                 case JEU:
                     System.out.println(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase());
-            
+                    System.out.println(clic.getCoord().getX()+" - "+clic.getCoord().getY());
+                    break;
                 default:
                     break;
             }
