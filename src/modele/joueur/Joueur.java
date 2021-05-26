@@ -47,6 +47,39 @@ public class Joueur {
         this.identifiantCible = -1;
     }
 
+    public static boolean achatUniteArmee(Joueur joueur, Unite unite){
+        if (joueur.getPieces() >= unite.getCout()){
+            joueur.setPieces(joueur.getPieces()-unite.getCout());
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public static void regenerationUniteArmee(Joueur joueur) {
+        for(int i = 0; i<joueur.getArmee().size();i++) {
+            if (joueur.getArmee().get(i).getEnRepos() == true) {
+                int pointDeVieGagne = joueur.getArmee().get(i).getPointDeVieActuel() + (int)(joueur.getArmee().get(i).getPointDeVieMax() * 0.1);
+                if (pointDeVieGagne > joueur.getArmee().get(i).getPointDeVieMax()) {
+                    joueur.getArmee().get(i).setPointDeVieActuel(joueur.getArmee().get(i).getPointDeVieMax());
+                }
+                else {
+                    joueur.getArmee().get(i).setPointDeVieActuel(pointDeVieGagne);
+                }
+            }
+            else {
+                joueur.getArmee().get(i).setEnRepos(true);
+            }
+            joueur.getArmee().get(i).setAAttaque(false);
+        }
+    }
+
+    public static void gainTourJoueur(Joueur joueur, int tour) {
+        int pieceGain = (int) (tour * 0.2 + 4);
+        joueur.setPieces(joueur.getPieces()+pieceGain);
+    }
+
     //
     //Getters & Setters
     //

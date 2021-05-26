@@ -1,6 +1,9 @@
 //package
 package modele.plateau;
 
+import java.util.Random;
+
+import modele.entite.Entite;
 //import
 import modele.entite.batiment.Batiment;
 import modele.terrain.Terrain;
@@ -60,6 +63,37 @@ public class Case {
             return this.batiment;
         return null; 
     }
+
+    public static void attaquer(Case attaquant, Case defenseur){
+        Entite def = new Entite();
+        Entite att = new Entite();
+        if (defenseur.getBatiment() != null) {
+            def = defenseur.getBatiment();
+        }
+        else if (defenseur.getUnite() != null) {
+            def = defenseur.getUnite();
+            defenseur.getUnite().setEnRepos(false);
+        }
+        if (attaquant.getBatiment() != null) {
+            att = attaquant.getBatiment();
+        }
+        else if (attaquant.getUnite() != null) {
+            att = attaquant.getUnite();
+            attaquant.getUnite().setEnRepos(false);
+            attaquant.getUnite().setAAttaque(true);
+        }
+        int defense = (int)(def.getDefense() * defenseur.getTerrain().getBonusDefense());
+        int degat = att.getAttaque() - defense;       
+        if (degat >= defense){
+            def.setPointDeVieActuel(def.getPointDeVieActuel() - degat);
+        }
+        else {
+            Random random = new Random();
+            def.setPointDeVieActuel(def.getPointDeVieActuel() - random.nextInt(5));
+        }
+    }
+
+   
 
     //
     //Getters et Setters

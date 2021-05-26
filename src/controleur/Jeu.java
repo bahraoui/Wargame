@@ -1,38 +1,32 @@
 package controleur;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import Vue.FrameJeu;
 import Vue.Hexagone;
 import Vue.PanelActuel;
 import Vue.PanelChargerPartie;
 import Vue.PanelChargerScenario;
-import Vue.FrameJeu;
 import Vue.PanelJeu;
-import Vue.PanelNouvellePartie;
 import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
@@ -56,9 +50,6 @@ import modele.terrain.Montagne;
 import modele.terrain.Plaine;
 import modele.terrain.Terrain;
 import modele.terrain.ToundraNeige;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Jeu extends MouseAdapter implements ActionListener {
     private static Plateau plateau;
@@ -95,22 +86,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
         setCellulesMap();
-        /// Initialisation plateau joueur        
-        
-        //Hexagone cells[][] = pj.getCells();
         FenetreJeu = new FrameJeu(/*pj*/);
-        //TimeUnit.SECONDS.sleep(1);
         FenetreJeu.enregistreEcouteur(controleur);
-        /*
-        placerBaseJoueur(j1, 5, 5);
-        placerBaseJoueur(j2IA.getJoueurIA(), 10, 10);
-
-        achatTroupesIA(j2IA);<
-
-        System.out.println(plateau.affichage());*/
 
     }
-
 
     public static void setCellulesMap() throws IOException {
         for (int i = 0; i < 16; i++) {
@@ -164,47 +143,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         return hexs;
     }
-    
-    public static String[] getNames(Class<? extends Enum<?>> e) {
-        return Arrays.stream(e.getEnumConstants()).map(Enum::name).toArray(String[]::new);
-    }
 
-
-    public static void combat(Case attaquant, Case defenseur){
-        Entite def = new Entite();
-        Entite att = new Entite();
-        if (defenseur.getBatiment() != null) {
-            def = defenseur.getBatiment();
-        }
-        else if (defenseur.getUnite() != null) {
-            def = defenseur.getUnite();
-            defenseur.getUnite().setEnRepos(false);
-        }
-        if (attaquant.getBatiment() != null) {
-            att = attaquant.getBatiment();
-        }
-        else if (attaquant.getUnite() != null) {
-            att = attaquant.getUnite();
-            attaquant.getUnite().setEnRepos(false);
-            attaquant.getUnite().setAAttaque(true);
-        }
-        int defense = (int)(def.getDefense() * defenseur.getTerrain().getBonusDefense());
-        int degat = att.getAttaque() - defense;
-        //System.out.println(defense);
-        //System.out.println(degat);        
-        if (degat >= defense){
-            def.setPointDeVieActuel(def.getPointDeVieActuel() - degat);
-        }
-        else {
-            Random random = new Random();
-            def.setPointDeVieActuel(def.getPointDeVieActuel() - random.nextInt(5));
-        }
-
-        if (def.getPointDeVieActuel() <= 0){
+    //donne en parametre uniquement une case pas null
+    public static void combat(Case attaquant, Case defenseur) {
+        Case.attaquer(attaquant,defenseur);
+        if (((Entite) defenseur.estOccupe()).getPointDeVieActuel() <= 0){
             mortEntite(defenseur);
         }
     }
 
+    //revoir
     public static void mortEntite(Case defenseur){
         if (defenseur.getUnite() != null) {
             for (int i = 0; i < listeJoueur.size(); i++) {
@@ -212,10 +160,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     if (defenseur.getUnite().getIdentifiant() == listeJoueur.get(i).getArmee().get(j).getIdentifiant()){
                         listeJoueur.get(i).getArmee().remove(j); //armee
                         defenseur.setUnite(null); //plateau
-                        System.out.println("Unite tue");
                         if (listeJoueur.get(i).getArmee().size() > 0 || listeJoueur.get(i).getPieces() > 10){
                             listeJoueur.get(i).setEnJeu(false);
-                            System.out.println("Armee aneanti joueur eliminé");
                         }
                         return;
                     }
@@ -229,20 +175,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         listeJoueur.get(i).setEnJeu(false);
                         ArrayList<Integer> coordBase = postionBaseJoueur.get(listeJoueur.get(i).getNumeroJoueur());
                         plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
-                        plateau.get(coordBase.get(0)).get(coordBase.get(1)-1).setBatiment(null);
-                        plateau.get(coordBase.get(0)).get(coordBase.get(1)+1).setBatiment(null);
-                        plateau.get(coordBase.get(0)+1).get(coordBase.get(1)).setBatiment(null);
-                        System.out.println("Base detruite");
                     }
                 }
             }
             else {
                 joueurActuel.setPieces(joueurActuel.getPieces() + defenseur.getBatiment().getTresor());
                 defenseur.setBatiment(null); //plateau
-                System.out.println("Batiment detruit");
             }
         }
     }
+    
 
     public static void placerBaseJoueur(Joueur joueur, int coordY, int coordX){
         Batiment base = new Batiment(TypeBatiment.BASE);
@@ -254,83 +196,26 @@ public class Jeu extends MouseAdapter implements ActionListener {
         postionBaseJoueur.add(baseJ1);
     }
 
-    public static boolean testCoordBase(int coordY, int coordX){
-        if (coordX >= 1 && coordX <= 14 && coordY <=14 && plateau.get(coordY).get(coordX).getBatiment() == null && plateau.get(coordY).get(coordX-1).getBatiment() == null && plateau.get(coordY).get(coordX+1).getBatiment() == null && plateau.get(coordY+1).get(coordX).getBatiment() == null){
-            System.out.println("Bon placement");
-            return true;
-        }
-        System.out.println("Mauvais placement");
-        return false;
-    }
-
     public static boolean placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
         Case caseUnite = plateau.get(coordY).get(coordX);
         int coordYBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(0);
         int coordXBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(1);
         int calculVisionY = coordY - coordYBase;
         int calculVisionX = coordX - coordXBase;
-        if (caseUnite.getBatiment() == null && caseUnite.getUnite() == null && Math.abs(calculVisionY) <= joueur.getBase().getVision() && Math.abs(calculVisionX) <= joueur.getBase().getVision() && achatUniteArmee(joueur,unite)) {
+        if (caseUnite.getBatiment() == null && caseUnite.getUnite() == null && Math.abs(calculVisionY) <= joueur.getBase().getVision() && Math.abs(calculVisionX) <= joueur.getBase().getVision() && Joueur.achatUniteArmee(joueur,unite)) {
             joueur.getArmee().add(unite);
-            System.out.println("Unite ajoute a l'armee");
             plateau.get(coordY).get(coordX).setUnite(unite);
-            System.out.println("Unite ajoute au plateau");
             return true;
         }
-        System.out.println("Unite trop loin ou sur une case occupe ");
         return false;
     }
 
-    public static boolean achatUniteArmee(Joueur joueur, Unite unite){
-        if (joueur.getPieces() >= unite.getCout()){
-            joueur.setPieces(joueur.getPieces()-unite.getCout());
-            return true;
-        }
-        else {
-            System.out.println("Vous n'avez pas assez de piece pour acheter l'unite");
-            return false;
-        }
-    }
-
+    
     public static Case coordToCase(int coordY, int coordX){
         return plateau.get(coordY).get(coordX);
     }
-
-    public static void deplacementUnite(Unite unite, Case caseInitial, Case caseFinal){
-        int deplacementTerrain = caseInitial.getTerrain().getPtsDeplacement();
-        if (caseInitial.getBatiment() == null && caseInitial.getUnite() != null && caseFinal.getBatiment() == null && caseFinal.getUnite() == null && unite.getDeplacementActuel() > 0 && unite.getDeplacementActuel() >= deplacementTerrain){
-            unite.setDeplacementActuel(unite.getDeplacementActuel() - deplacementTerrain);
-            caseFinal.setUnite(unite);
-            caseInitial.setUnite(null);
-            caseFinal.getUnite().setEnRepos(false);
-            System.out.println("Unite deplace");
-        }
-        else {
-            System.out.println("Case trop loin ou point de deplacement insufisant, ou case occupé");
-        }
-    }
-    //DebutTour
-    public static void regenerationUniteArmee(Joueur joueur) {
-        for(int i = 0; i<joueur.getArmee().size();i++) {
-            if (joueur.getArmee().get(i).getEnRepos() == true) {
-                int pointDeVieGagne = joueur.getArmee().get(i).getPointDeVieActuel() + (int)(joueur.getArmee().get(i).getPointDeVieMax() * 0.1);
-                if (pointDeVieGagne > joueur.getArmee().get(i).getPointDeVieMax()) {
-                    joueur.getArmee().get(i).setPointDeVieActuel(joueur.getArmee().get(i).getPointDeVieMax());
-                }
-                else {
-                    joueur.getArmee().get(i).setPointDeVieActuel(pointDeVieGagne);
-                }
-            }
-            else {
-                joueur.getArmee().get(i).setEnRepos(true);
-            }
-            joueur.getArmee().get(i).setAAttaque(false);
-        }
-    }
-
-    public static void gainTourJoueur(Joueur joueur) {
-        int pieceGain = (int) (tour * 0.2 + 4);
-        joueur.setPieces(joueur.getPieces()+pieceGain);
-    }
+    
+    //DebutTour    
 
     public static boolean conditionVictoire(){
         /*if (conditionBase() || conditionPiece()) {
@@ -379,14 +264,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
 	        if (postionOpportunite.getBatiment() != null) {
 	            att = postionOpportunite.getBatiment();
 	            if(calculVisionOppX <= att.getVision() && calculVisionOppY <= att.getVision()){
-            		combat(postionOpportunite, positionFinalJoueur);
+            		Case.attaquer(postionOpportunite, positionFinalJoueur);
             	}  
 	        }
 	        else if (postionOpportunite.getUnite() != null && listeJoueur.get(i).getArmee().get(i).getEnRepos() == true) {
 	            att = postionOpportunite.getUnite();
 	            if(positionFinalJoueur.getUnite() != att && (calculVisionOppX <= att.getVision() && calculVisionOppY <= att.getVision())){
-	            	deplacementUnite(postionOpportunite.getUnite(), postionOpportunite, caseAttaque);
-	            	combat(postionOpportunite, positionFinalJoueur);
+	            	Unite.deplacementUnite(postionOpportunite.getUnite(), postionOpportunite, caseAttaque);
+	            	Case.attaquer(postionOpportunite, positionFinalJoueur);
             	}
 	        }
         }
@@ -647,7 +532,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("achatArcher")) {
                 System.out.println("Achat archer");
                 Archer archerAchete = new Archer();
-                achatUniteArmee(joueurActuel, archerAchete);
+                Joueur.achatUniteArmee(joueurActuel, archerAchete);
                 placementUnite(joueurActuel,archerAchete);
                 System.out.println(plateau.affichage());
                 FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
@@ -655,7 +540,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("achatCavalerie")) {
                 System.out.println("Achat calvalerie");
                 Cavalerie cavalerieAchete = new Cavalerie();
-                achatUniteArmee(joueurActuel, cavalerieAchete);
+                Joueur.achatUniteArmee(joueurActuel, cavalerieAchete);
                 placementUnite(joueurActuel,cavalerieAchete);
                 System.out.println(plateau.affichage());
                 FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
@@ -663,7 +548,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("achatInfanterie")) {
                 System.out.println("Achat infanterie");
                 Infanterie infanterieAchete = new Infanterie();
-                achatUniteArmee(joueurActuel, infanterieAchete);
+                Joueur.achatUniteArmee(joueurActuel, infanterieAchete);
                 placementUnite(joueurActuel,infanterieAchete);
                 System.out.println(plateau.affichage());
                 FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
@@ -671,7 +556,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("achatInfanterieLourde")) {
                 System.out.println("Achat infanterie lourde");
                 InfanterieLourde infanterieLourdeAchete = new InfanterieLourde();
-                achatUniteArmee(joueurActuel, infanterieLourdeAchete);
+                Joueur.achatUniteArmee(joueurActuel, infanterieLourdeAchete);
                 placementUnite(joueurActuel,infanterieLourdeAchete);
                 System.out.println(plateau.affichage());
                 FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
@@ -679,7 +564,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (evt.getActionCommand().equals("achatMage")) {
                 System.out.println("Achat mage");
                 Mage archerMage = new Mage();
-                achatUniteArmee(joueurActuel, archerMage);
+                Joueur.achatUniteArmee(joueurActuel, archerMage);
                 placementUnite(joueurActuel,archerMage);
                 System.out.println(plateau.affichage());
                 FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
