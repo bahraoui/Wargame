@@ -117,7 +117,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         placerBaseJoueur(j1, 5, 5);
         placerBaseJoueur(j2IA.getJoueurIA(), 10, 10);
 
-        achatTroupesIA(j2IA);
+        achatTroupesIA(j2IA);<
 
         System.out.println(plateau.affichage());*/
 
@@ -580,11 +580,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 }
                 
             }
-            else if (evt.getActionCommand().equals("abandonner")) {
-                System.out.println("ABANDON");
-                
-                
-            }
             else if (evt.getActionCommand().equals("retourMenuSauvegarde")) {
                 System.out.println("Retour Menu Sauvegarde ");
                 FenetreJeu.changePanel(PanelActuel.MENU);
@@ -616,8 +611,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
                             else 
                                 listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
-                            int coordX = ((i+1)*5);
-                            int coordY = ((i+1)*5);
+                            int coordX = ((i+1)*3);
+                            int coordY = ((i+1)*3);
                             System.out.println("COORDONNEES BASE : "+coordX + " - "+ coordY);
                             placerBaseJoueur(listeJoueur.get(i), coordX, coordY);
                             System.out.println(plateau.affichage());
@@ -711,6 +706,18 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 }
             }
             /**
+             * Bouton "Abandonner" -- Fenetre en jeu
+             */
+            else if (evt.getActionCommand().equals("abandonner")) {
+                try {
+                    joueurActuel.setEnJeu(false);
+                    nouveauTour();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            /**
              * Bouton "Retour"
              */
             else if (evt.getActionCommand().equals("retourMenu")) {
@@ -773,18 +780,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
 
     private static void nouveauTour() throws InterruptedException {
-        if (tour != 0) {
-            joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
+        if (true) { //condition de victoire
+            if (tour != 0) {
+                do {
+                    joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
+                }while(joueurActuel.getEnJeu() == false);
+            }
+            tour++;
+            FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
+            FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : "+tour);;
+            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            if (joueurActuel.getEstIa()){
+                tourIA();
+                Thread.sleep(1000);
+            }
+            System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
         }
-        tour++;
-        FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
-        FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : "+tour);;
-        FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-        if (joueurActuel.getEstIa()){
-            tourIA();
-            Thread.sleep(1000);
-        }
-        System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
         
     }
 
