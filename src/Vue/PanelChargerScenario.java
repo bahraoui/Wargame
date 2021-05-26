@@ -99,8 +99,11 @@ public class PanelChargerScenario extends JPanel{
         this.terrainChoisi.setText("");
     }
 
-    public void setMonumentNb() {
-        this.nbMonumentsRestants--;
+    public void setMonumentNb(boolean diminuer) {
+        if (diminuer)          
+            this.nbMonumentsRestants--;
+        else 
+            this.nbMonumentsRestants++;
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
