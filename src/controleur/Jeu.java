@@ -66,6 +66,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Cellule[][] cellulesCarte;
     private static PanelJeu pj;
     private static TypeTerrain terrainChoisi;
+    private static boolean selectionMonument;
     private static PanelChargerScenario panelChargerScenario;
 
     private static final int cote = 16;
@@ -79,6 +80,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         carteChoisis = "";
 
         finpartie = false;
+        selectionMonument=false;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
@@ -362,6 +364,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             //trouver deplacement jusqua base
     }
 
+
     /*
     
     FIN PARTIE IA
@@ -399,7 +402,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
              * Bouton "Choix Monument"
              */
             else if (evt.getActionCommand().equals("choixMonument")) {
-                terrainChoisi = null;
+                selectionMonument=true;
                 FenetreJeu.setChoixMonumentTxt("Monument selctionne");
             }
             /**
@@ -644,6 +647,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 carteChoisis = (String) nomCarte.getSelectedItem();
             }
             else if (evt.getActionCommand().equals("listeTerrains")) {
+                selectionMonument = false;
                 JComboBox<TypeTerrain> choixTerrain = (JComboBox<TypeTerrain>) evt.getSource();
                 Jeu.terrainChoisi = (TypeTerrain) choixTerrain.getSelectedItem();
                 FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem().toString());
@@ -682,25 +686,37 @@ public class Jeu extends MouseAdapter implements ActionListener {
             Hexagone clic = (Hexagone) e.getSource();
             switch (FenetreJeu.getPanelActuel()) {
                 case CHANGERSCENARIO:
-                    if (terrainChoisi != null) {
+                    if (terrainChoisi != null && selectionMonument == false) {
                         try {
                             clic.setTerrain(terrainChoisi);
-                            if (clic.getTypeBatimentVue() != null) {
-                                clic.setBatiment(clic.getTypeBatimentVue());
-                            }
                             cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                            if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment() != null) {
+                                clic.setBatiment(batimentModeleToVue(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment().getEstBase()));
+                            }
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
-                    } else {
+                    } else if (selectionMonument == true) {
                         try {
-                            if(panelChargerScenario.getNbMonumentsRestants() == 0){
-                                JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
-                            } else if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getHex().getTypeBatimentVue() != null) {
-                                JOptionPane.showMessageDialog(FenetreJeu, "Un batiment est déjà placé ici.");
+                            if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment() != null) {
+                                switch (batimentModeleToVue(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
+                                    case MONUMENT:
+                                        clic.setTerrain(terrainModeleToVue(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getTerrain()));
+                                        panelChargerScenario.setMonumentNb(false);
+                                        cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setBatiment(null);                              
+                                        break;
+                                    
+                                    default:
+                                        JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une base placé ici.");         
+                                        break;
+                                }
                             }
+                            else if(panelChargerScenario.getNbMonumentsRestants() == 0)
+                                JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
+                            else if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getUnite() != null)
+                                JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
                             else {
-                                panelChargerScenario.setMonumentNb();
+                                panelChargerScenario.setMonumentNb(true);
                                 clic.setMonument();
                                 cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
                             }
@@ -718,6 +734,24 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
     }
+
+    private TypeTerrain terrainModeleToVue(Terrain terrain) {
+        TypeTerrain typeTerrain = null;
+        if (terrain instanceof Plaine)
+            typeTerrain = TypeTerrain.PLAINE;
+        else if (terrain instanceof Desert)
+            typeTerrain = TypeTerrain.DESERT;
+        else if (terrain instanceof Foret)
+            typeTerrain = TypeTerrain.FORET;
+        else if (terrain instanceof Mer)
+            typeTerrain = TypeTerrain.MER;
+        else if (terrain instanceof Montagne)
+            typeTerrain = TypeTerrain.MONTAGNE;
+        else if (terrain instanceof ToundraNeige)
+            typeTerrain = TypeTerrain.NEIGE;
+        return typeTerrain;
+    }
+
 
     public Terrain terrainVueToModele(TypeTerrain ter) {
         Terrain terrain = null;
@@ -747,6 +781,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return terrain;
     }
     
+    public TypeBatimentVue batimentModeleToVue(TypeBatiment batiment) {
+        TypeBatimentVue typeBatimentVue = null;
+        switch (batiment) {
+            case MONUMENT:
+                typeBatimentVue = TypeBatimentVue.MONUMENT;
+                break;
+            case BASE:
+                typeBatimentVue = TypeBatimentVue.BASE_HAUT;
+                break;
+        
+            default:
+                break;
+        }
+        return typeBatimentVue;
+    }
+   
     public Unite unteVueToModele(TypeUnite typeUnite){
         Unite unite = null;
         switch (typeUnite) {
