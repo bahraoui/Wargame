@@ -1,11 +1,24 @@
+//package
 package modele.entite.unite;
 
+//import
 import modele.entite.Entite;
+
 /**
- * Unite
+ * La classe Unite représente les unités de guerre du jeu "Wargame"
+ * 
+ * La classe Unite hérite de la classe {@link Entite}
+ * Elle posède 6 champs :
+ * pointDeVieMax représente les points de vie maximum d'une unité
+ * deplacementMax représente les points de déplacement maximum d'une unité
+ * deplacementActuel représente les points de déplacement actuel d'une unité
+ * enRepos représente si une unité est en repos 
+ * aAttaque représente si une unité a attaqué sur ce tour
+ * cout représente le cout d'une unité
+ * Elle possede une methode d'affichage pour terminal
+ * Avec pour chaque champs des getters et des setters
  */
 public class Unite extends Entite{
-
     private int pointDeVieMax;
     private int deplacementMax;
     private int deplacementActuel;
@@ -13,16 +26,29 @@ public class Unite extends Entite{
     private boolean aAttaque;
     private int cout;
     
+    /**
+     * Constructeur de la classe
+     * @param parPointDeVieActuel point de vie actuel d'une entite
+     * @param parAttaque point d'attaque d'une entite
+     * @param parDefense point de défense d'une entite
+     * @param parVision champs de vision d'une entite
+     */
     public Unite(int parPointDeVieActuel, int parAttaque, int parDefense, int parVision) {
         super(parPointDeVieActuel,parAttaque,parDefense,parVision);
         this.enRepos = true;
         this.aAttaque = false;
     }
 
+    /**
+     * Affichage d'un batiment pour terminal
+     */
     public String toString(){
         return "L'unite a pv : "+super.getPointDeVieActuel()+", pa: "+super.getAttaque()+", pdef: "+super.getDefense()+", pdeplacementMax: "+this.deplacementMax+", vision: "+super.getVision()+", cout: "+this.cout;
     }
    
+    //
+    //Getters et Setters
+    //
     public int getDeplacementActuel() {
         return deplacementActuel;
     }

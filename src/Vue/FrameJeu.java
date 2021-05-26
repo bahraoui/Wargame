@@ -22,7 +22,7 @@ public class FrameJeu extends JFrame{
 	private static PanelActuel panelActuel;
 	//REGLES,CHARGERPARTIE,CHANGERSCENARIO
 
-	public FrameJeu(/*PanelJeu parPj*/) throws IOException, InterruptedException {
+	public FrameJeu() throws IOException, InterruptedException {
 		super("Wargame");		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

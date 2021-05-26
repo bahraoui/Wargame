@@ -13,8 +13,6 @@ public class Cellule {
     }
     
     // Getters et setters 
-
-
     public Hexagone getHex() {
         return this.hex;
     }
@@ -30,7 +28,5 @@ public class Cellule {
     public void setCase(Case caseModele) {
         this.caseModele = caseModele;
     }
-
-
     // fin Getters et setters 
 }

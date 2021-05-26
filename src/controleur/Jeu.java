@@ -60,20 +60,6 @@ import modele.terrain.ToundraNeige;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/*
-
-
-
-
-
-DEFINE TAILLE COLLONE 
-
-
-
-
-*/
-
-
 public class Jeu extends MouseAdapter implements ActionListener {
     private static Plateau plateau;
     private static ArrayList<ArrayList<Integer>> postionBaseJoueur;
@@ -90,6 +76,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static PanelJeu pj;
     private static TypeTerrain terrainChoisi;
     private static PanelChargerScenario panelChargerScenario;
+
+    private static final int cote = 16;
 
 
     
@@ -154,6 +142,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 else if (plateau.get(i).get(j).getUnite() instanceof Mage)
                     unite = TypeUnite.MAGE;
                 
+                
+                if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.BASE){
+                    batiment = TypeBatimentVue.BASE_HAUT;
+                }
+                else if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT)
+                    batiment = TypeBatimentVue.MONUMENT;
 
                 Cellule cell = new Cellule(new Hexagone(sol, unite, batiment,new Point(i, j)), plateau.get(i).get(j));
                 cellulesCarte[i][j] = cell;
@@ -254,9 +248,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         Batiment base = new Batiment(TypeBatiment.BASE);
         joueur.setBase(base);
         plateau.get(coordY).get(coordX).setBatiment(base);
-        plateau.get(coordY+1).get(coordX).setBatiment(base);
-        plateau.get(coordY+1).get(coordX+1).setBatiment(base);
-        plateau.get(coordY+2).get(coordX).setBatiment(base);
         ArrayList<Integer> baseJ1 = new ArrayList<Integer>();
         baseJ1.add(0,coordY);
         baseJ1.add(1,coordX);

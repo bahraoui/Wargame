@@ -1,42 +1,39 @@
+//package
 package modele.plateau;
 
+//import
 import java.util.ArrayList;
-
-import modele.terrain.Plaine;
 import modele.terrain.Terrain;
-import modele.entite.batiment.Batiment;
-import modele.entite.batiment.TypeBatiment;
-import modele.entite.unite.Archer;
-import modele.entite.unite.Unite;
-import modele.terrain.Desert;
-import modele.terrain.Montagne;
 
+/**
+ * La classe Plateau représente le plateau du jeu "Wargame"
+ * 
+ * La classe Plateau hérite de la classe {@link ArrayList}
+ * Elle posède un champs : cote, la taille du cote du plateau
+ * Elle possede une methode d'affichage pour terminal
+ */
 public class Plateau extends ArrayList<ArrayList<Case>> {
     private int cote = 16;
     
+    /**
+     * Constructeur de la classe plateau
+     */
     public Plateau() {
         for (int i = 0; i <cote; i++) {
             ArrayList<Case> ligne = new ArrayList<Case>();
             for (int j = 0; j < cote ; j++) {
-                if (j%2 == 0) {
-                    Plaine caseTerrainP = new Plaine();
-                    Case cellule = new Case(caseTerrainP);
-                    ligne.add(cellule);
-                    cellule.setBatiment(null);
-                    cellule.setUnite(null);
-                }
-                else {
-                    Montagne caseTerrainD = new Montagne();
-                    Case cellule = new Case(caseTerrainD);
-                    ligne.add(cellule);
-                    cellule.setBatiment(null);
-                    cellule.setUnite(null);
-                }
+                Case cellule = new Case(null);
+                ligne.add(new Case(null));
+                cellule.setBatiment(null);
+                cellule.setUnite(null);
             }
             this.add(ligne);
         }
     }
 
+    /**
+     * Affichage du plateau pour terminal
+     */
     public String toString(){
         String chaine = "";
         for (int i = 0; i <cote; i++) {
@@ -48,18 +45,25 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
         return chaine;
     }
 
+    /**
+     * Affichage du plateau pour terminal
+     */
     public String affichage(){
         String chaine = "";
         for (int i = 0; i <cote; i++) {
             chaine +="[";
             for (int j = 0; j < cote ; j++) {
-                chaine += this.get(i).get(j).affichage()+" ";
+                chaine += this.get(i).get(j).afficher()+" ";
             }
             chaine+="]\n";
         }
         return chaine;
     }
 
+    /**
+     * Change tout les types de terrain de chaque case du plateau par un terrain donné en paramètre
+     * @param terrain nouveau type de terrain pour le plateau
+     */
     public void replace(Terrain terrain){
         for (int i = 0; i < cote; i++) {
             for (int j = 0; j < cote; j++) {
@@ -67,16 +71,4 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
             }
         }
     }
-    /*
-    recuperer un terrain predefini
-        Exemple :
-        - Fichier 1 : desert + plaine
-        - Fichier 2 : mer + montagne
-            - Recupere le fichier
-            - Creer les cases
-            - Creer le plateau
-            - Connaitre le nombre de base par carte.
-    
-    sauvegarder un terrain
-    */
 }
