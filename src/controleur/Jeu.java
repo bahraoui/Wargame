@@ -635,6 +635,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             else 
                                 listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
                         }
+                        chargerCarte(new FileInputStream("src\\data\\cartes\\default\\"+carteChoisis+".txt"));
+                        setCellulesMap();
                         panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
                         FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                         panelChargerScenario.enregistreEcouteur(this);
@@ -944,6 +946,19 @@ public class Jeu extends MouseAdapter implements ActionListener {
 		}
 
     }
+
+    public void chargerCarte(FileInputStream file){
+        String line = new String();
+        Scanner scanner = new Scanner(file); 
+        String [] strValues1;
+        int[][] listeUnite = new int[50][50];
+        for (int i = 0; i < plateau.size(); i++) {
+            line = scanner.nextLine();
+            strValues1 = line.split(",");
+            chargeLineMap(line,i,listeUnite);
+        }
+    }
+
 
     public static void chargePartie(FileInputStream file) {
         
