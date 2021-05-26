@@ -253,7 +253,6 @@ public class Hexagone extends JLabel {
                         break;
                     case PLAINE:
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
-                        this.setBackground(new Color(255,0,0));
                         break;
                     case NEIGE:
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
