@@ -35,6 +35,7 @@ public class PanelJeu extends JPanel {
 	private JLabel labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage;
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
 	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
+	private JLabel labelBonusTerrain;
 
 	
 
@@ -111,12 +112,15 @@ public class PanelJeu extends JPanel {
 		panelInfoPartie.add(labelTitreInfoCase);
 
 		// type de terrain
-		labelTypeTerrain = new JLabel("MONTAGNE (exemple)");
+		labelTypeTerrain = new JLabel("");
 		panelInfoPartie.add(labelTypeTerrain);
-		// unite batiment
+		// bonus terrain
+		labelBonusTerrain = new JLabel("");
+		panelInfoPartie.add(labelBonusTerrain);
 
-		// if(batiment ou unite)
-		labelBatimentUnite = new JLabel("Archer (exemple)");
+				
+		// unite batiment
+		labelBatimentUnite = new JLabel("");
 		panelInfoPartie.add(labelBatimentUnite);
 
 		panelGaucheInfos.add(panelInfoPartie);
@@ -305,6 +309,14 @@ public class PanelJeu extends JPanel {
 
 	public void setLabelTypeTerrain(JLabel labelTypeTerrain) {
 		this.labelTypeTerrain = labelTypeTerrain;
+	}
+	
+	public JLabel getLabelBonusTerrain() {
+		return this.labelBonusTerrain;
+	}
+
+	public void setLabelBonusTerrain(JLabel labelBonusTerrain) {
+		this.labelBonusTerrain = labelBonusTerrain;
 	}
 
 	public JLabel getLabelBatimentUnite() {

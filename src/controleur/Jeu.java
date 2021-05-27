@@ -142,8 +142,20 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
     }
-    
-    public static void placerBaseJoueur(Joueur joueur, int coordY, int coordX){
+
+    public static void placerBasesJoueurs() {
+        int nbJoueurs = listeJoueur.size();
+        if (nbJoueurs >=4) 
+            placerBase(listeJoueur.get(3),15,0);
+        if (nbJoueurs >=3) 
+            placerBase(listeJoueur.get(2),0,15);
+        if (nbJoueurs >=2) {
+            placerBase(listeJoueur.get(1),15,14);
+            placerBase(listeJoueur.get(0),0,0);
+        }
+    }
+
+    public static void placerBase(Joueur joueur, int coordY, int coordX){
         Batiment base = new Batiment(TypeBatiment.BASE);
         joueur.setBase(base);
         plateau.get(coordY).get(coordX).setBatiment(base);
@@ -245,6 +257,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
             System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
         }
         
+    }
+
+    public static void effacerDonnes() {
+        listeJoueur.removeAll(listeJoueur);
+        plateau.removeAll(plateau);
+        plateau = new Plateau();
     }
 
     //
@@ -449,8 +467,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     }
                     break;
                 case JEU:
-                    System.out.println(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase());
+                    Case caseSelectionne = cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase();
+                    System.out.println(caseSelectionne);
                     System.out.println(clic.getCoord().getX()+" - "+clic.getCoord().getY());
+                    FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
+                    FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
+                    //FenetreJeu.getPanelJeu().getLabelBatimentUnite().setText(caseSelectionne.getCase().estOccupe().toString());
                     break;
                 default:
                     break;
@@ -611,7 +633,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public static void sauvegardePartie() {
         try {
 			
-			File file = new File("src\\data\\partie\\savePartie1.txt");
+			File file = new File("src"+File.separator+"data"+File.separator+"partie"+File.separator+"savePartie1.txt");
 			
 			if (!file.exists()) {
 			    file.createNewFile();
@@ -725,7 +747,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 strValues1[i] = strValues1[i].replace("[", "");  
                 strValues1[i] = strValues1[i].replace("]", "");
                 strValues2 = strValues1[i].split(",");
-                placerBaseJoueur(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
+                placerBase(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
                 
             }
 
@@ -735,42 +757,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
 	        scanner.close();    
     }
 
-    public static void sauvegardeMap(){
-        
+    public static void sauvegardeMap(String fichier){
         try {
-            System.out.println("Tapez la map a sauvegarder");
-            Scanner sc = new Scanner(System.in);
-            int saisie = sc.nextInt();
-            String fichier;
-
-            switch (saisie) {
-                case 1:
-                fichier = "Desert";
-                plateau.replace(new Desert());
-                    break;
-                case 2:
-                fichier = "Foret";
-                plateau.replace(new Foret());
-                    break;
-                case 3:
-                fichier = "Mer";
-                plateau.replace(new Mer());
-                    break;
-                case 4:
-                fichier = "Montagne";
-                plateau.replace(new Montagne());
-                    break;
-                case 5:
-                fichier = "ToundraNeige";
-                plateau.replace(new ToundraNeige());
-                    break;
-                default:
-                fichier = "Plaine";
-                plateau.replace(new Plaine());
-                    break;
-            }
-            sc.close();
-            File file = new File("src\\data\\cartes\\default\\"+fichier+".txt");
+            File file = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"saves"+File.separator+""+fichier+".txt");
 			
 			if (!file.exists()) {
 			    file.createNewFile();
@@ -782,7 +771,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             fw.write(chaine);
             fw.close();
         } catch (Exception e) {
-            //TODO: handle exception
         }
     }
 
@@ -830,6 +818,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         return chaine;
     }
+
 
     public static void chargeLineMap(String line,int iline,int [][] listeUnite) {
         
@@ -945,18 +934,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
                     else {
                         try {
-                            chargerCarte(new FileInputStream("src\\data\\cartes\\default\\"+carteChoisis+".txt"));
+                            chargerCarte(new FileInputStream("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"default"+File.separator+""+carteChoisis+".txt"));
                             for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
                                 if (i < nbJoueursH)
                                     listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
                                 else 
                                     listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
-                                //TEST
-                                int coordX = ((i+1)*3);
-                                int coordY = ((i+1)*3);
-                                placerBaseJoueur(listeJoueur.get(i), coordX, coordY);
-                                //FIN TEST
                             }
+                            placerBasesJoueurs();
                             //REGROUPER ?
                             setCellulesMap();
                             panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
@@ -1044,6 +1029,25 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         e.printStackTrace();
                     }  
                     break;
+                /**
+                 * Bouton "Sauvrgarder carte"
+                 */
+                case "sauvegarderCarte" :
+                    String nomMap = FenetreJeu.getPanelChangerScenario().getNomCarte().getText();
+                    nomMap = nomMap.replace(""+File.separator+"", "");
+                    nomMap = nomMap.replace("/", "");
+                    nomMap = nomMap.replace(".", "");
+                    nomMap = nomMap.replace(";", "");
+                    nomMap = nomMap.replace("*", "");
+                    nomMap = nomMap.replace("?", "");
+                    nomMap = nomMap.replace("!", "");
+                    nomMap = nomMap.replace("\"", "");
+                    nomMap = nomMap.replace(" ", "");
+                    if (nomMap.equals(""))
+                        JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer un nom de fichier ! ");                   
+                    else 
+                        sauvegardeMap(nomMap);
+                    break;
                 //
                 //FIN FENETRE CHANGER SCENARIO
                 //
@@ -1126,6 +1130,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Retour" 
                  */
                 case "retourMenu":
+                    effacerDonnes();
                     FenetreJeu.changePanel(PanelActuel.MENU);
                     break;
                 default:

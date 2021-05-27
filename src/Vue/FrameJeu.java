@@ -127,6 +127,10 @@ public class FrameJeu extends JFrame{
 		return FrameJeu.panelActuel;
 	}
 
+	public PanelChargerScenario getPanelChangerScenario() {
+		return FrameJeu.panelChargerScenario;
+	}
+
 	public void setPanelChangerScenario(PanelChargerScenario parPanelChargerScenario) {
 		FrameJeu.panelChargerScenario = parPanelChargerScenario;
 	}

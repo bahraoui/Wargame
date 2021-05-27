@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -24,6 +25,8 @@ public class PanelChargerScenario extends JPanel{
     private JLabel terrainChoisi, monumentChoisi, nbMonumentLabel;
     private JButton btnChoixMonument, btnLancerPartie, btnQuitter;
     private Integer nbMonumentsRestants;
+    private JButton btnSauvegarderPartie;
+    private JTextField nomSauvergardeCarte;
 	
 	public PanelChargerScenario(Hexagone[][] parHexs) throws IOException {
         super(new BorderLayout());
@@ -36,6 +39,8 @@ public class PanelChargerScenario extends JPanel{
         JPanel panelActions = new JPanel();
         btnChoixMonument = new JButton("Monument");
         btnLancerPartie = new JButton("Lancer la partie");
+        nomSauvergardeCarte = new JTextField(10);
+        btnSauvegarderPartie = new JButton("Sauvegarder la carte");
         btnQuitter = new JButton("Quitter");
 
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
@@ -70,8 +75,11 @@ public class PanelChargerScenario extends JPanel{
 
 
         btnLancerPartie.setActionCommand("lancerPartieApresScenario");
+        btnSauvegarderPartie.setActionCommand("sauvegarderCarte");
         btnQuitter.setActionCommand("retourMenu");
         panelActions.add(btnLancerPartie);
+        panelActions.add(nomSauvergardeCarte);
+        panelActions.add(btnSauvegarderPartie);
         panelActions.add(btnQuitter);
         
         panelGauche.add(panelTerrains);
@@ -86,6 +94,7 @@ public class PanelChargerScenario extends JPanel{
         listeTerrains.addActionListener(controleur);
         btnChoixMonument.addActionListener(controleur);
         btnLancerPartie.addActionListener(controleur);
+        btnSauvegarderPartie.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
     }
 
@@ -109,5 +118,9 @@ public class PanelChargerScenario extends JPanel{
 
     public Integer getNbMonumentsRestants(){
         return this.nbMonumentsRestants;
+    }
+
+    public JTextField getNomCarte(){
+        return this.nomSauvergardeCarte;
     }
 }

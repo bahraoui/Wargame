@@ -10,6 +10,8 @@ import javax.swing.JTextField;
 import controleur.Jeu;
 
 import java.awt.*;
+import java.io.File;
+import java.util.ArrayList;
 
 public class PanelNouvellePartie extends JPanel{
     private JComboBox<String> choixMap;
@@ -23,10 +25,11 @@ public class PanelNouvellePartie extends JPanel{
     public PanelNouvellePartie() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
-        String[] nomMap = {"","Desert","Foret","Mer","Montagne","Plaine","ToundraNeige"};
+        ArrayList<String> nomMap = new ArrayList<String>();
+        initListeCartes(nomMap);
         Integer[] nbJoueursH = {0,1,2,3,4};
         Integer[] nbJoueursIAInteger= {0,1,2,3,4};
-        choixMap = new JComboBox<String>(nomMap);
+        choixMap = new JComboBox<String>((String[])nomMap.toArray(new String[0]));
         nbJoueursHumain = new JComboBox<Integer>(nbJoueursH);
         nbJoueursIA = new JComboBox<Integer>(nbJoueursIAInteger);
         nomJoueur = new JLabel[4];
@@ -83,6 +86,25 @@ public class PanelNouvellePartie extends JPanel{
         }
         return true;
     }
+
+    public void initListeCartes(ArrayList<String> nomMap){
+        File dossierDefault = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"default"+File.separator);
+        File dossierSaves = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"saves"+File.separator);
+        File[] listeNomCartesDefault = dossierDefault.listFiles();
+        File[] listeNomCartesSaves = dossierSaves.listFiles();
+
+        for (int i = 0; i < listeNomCartesDefault.length; i++) {
+            if (listeNomCartesDefault[i].isFile()) {
+                nomMap.add(listeNomCartesDefault[i].getName().replace(".txt", ""));
+            }
+        }
+        for (int i = 0; i < listeNomCartesSaves.length; i++) {
+            if (listeNomCartesSaves[i].isFile()) {
+                nomMap.add(listeNomCartesSaves[i].getName().replace(".txt", ""));
+            }
+        }
+    }
+
 
     public void enregistreEcouteur(Jeu controleur) {
         btnContinuer.addActionListener(controleur);

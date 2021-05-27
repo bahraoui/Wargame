@@ -25,7 +25,33 @@ public class Terrain {
      * Affichage du plateau pour terminal
      */
     public String toString(){
-        return "Point de placement " + this.ptsDeplacement+ " Point de defense  " + this.bonusDefense ;
+        return "Point de déplacement " + this.ptsDeplacement+ " Bonus de défense  " + this.bonusDefense ;
+    }
+
+    public String afficherBonus(){
+        return "Point de déplacement " + this.ptsDeplacement+ " Bonus de défense  " + this.bonusDefense ;
+    }
+
+    public String afficherTypeTerrain(){
+        if (this instanceof Desert) {
+            return "Desert";
+        }
+        if (this instanceof Foret) {
+            return "Foret";
+        }
+        if (this instanceof Mer) {
+            return "Mer";
+        }
+        if (this instanceof Montagne) {
+            return "Montagne";
+        }
+        if (this instanceof Plaine) {
+            return "Plaine";
+        }
+        if (this instanceof ToundraNeige) {
+            return "ToundraNeige";
+        }
+        return "";
     }
 
     //
