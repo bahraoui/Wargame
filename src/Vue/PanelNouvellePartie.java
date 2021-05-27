@@ -89,19 +89,12 @@ public class PanelNouvellePartie extends JPanel{
 
     public void initListeCartes(ArrayList<String> nomMap){
         nomMap.add("");
-        File dossierDefault = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"default"+File.separator);
-        File dossierSaves = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"saves"+File.separator);
-        File[] listeNomCartesDefault = dossierDefault.listFiles();
-        File[] listeNomCartesSaves = dossierSaves.listFiles();
+        File dossierCartes = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator);
+        File[] listeNomCartes = dossierCartes.listFiles();
 
-        for (int i = 0; i < listeNomCartesDefault.length; i++) {
-            if (listeNomCartesDefault[i].isFile()) {
-                nomMap.add(listeNomCartesDefault[i].getName().replace(".txt", ""));
-            }
-        }
-        for (int i = 0; i < listeNomCartesSaves.length; i++) {
-            if (listeNomCartesSaves[i].isFile()) {
-                nomMap.add(listeNomCartesSaves[i].getName().replace(".txt", ""));
+        for (int i = 0; i < listeNomCartes.length; i++) {
+            if (listeNomCartes[i].isFile()) {
+                nomMap.add(listeNomCartes[i].getName().replace(".txt", ""));
             }
         }
     }

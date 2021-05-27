@@ -181,6 +181,29 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return false;
     }
 
+    public static boolean estDeplacementPossible(int coordXinitial, int coordYinitial,int coordXfinale, int coordYfinale) {
+        if (plateau.get(coordXinitial).get(coordYinitial).getUnite() != null) {
+            int comptDeplacement = plateau.get(coordXinitial).get(coordYinitial).getUnite().getDeplacementActuel();
+            int deplacementUnite = comptDeplacement;
+            while (coordXinitial != coordXfinale && coordYinitial != coordYfinale) {
+                if (coordXinitial>coordXfinale)
+                    comptDeplacement--;
+                else 
+                    comptDeplacement++;
+                
+                if (coordYinitial>coordYfinale)
+                    comptDeplacement--;
+                else 
+                    comptDeplacement++;
+            }
+            if (comptDeplacement >= 0){
+                plateau.get(coordXinitial).get(coordYinitial).getUnite().setDeplacementActuel(deplacementUnite-comptDeplacement);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean conditionVictoire(){
         /*if (conditionBase() || conditionPiece()) {
             return true;
@@ -989,7 +1012,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
                     else {
                         try {
-                            chargerCarte(new FileInputStream("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"default"+File.separator+""+carteChoisis+".txt"));
+                            chargerCarte(new FileInputStream("src"+File.separator+"data"+File.separator+"cartes"+File.separator+""+carteChoisis+".txt"));
                             for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
                                 if (i < nbJoueursH)
                                     listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
