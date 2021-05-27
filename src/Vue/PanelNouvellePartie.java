@@ -88,6 +88,7 @@ public class PanelNouvellePartie extends JPanel{
     }
 
     public void initListeCartes(ArrayList<String> nomMap){
+        nomMap.add("");
         File dossierDefault = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"default"+File.separator);
         File dossierSaves = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"saves"+File.separator);
         File[] listeNomCartesDefault = dossierDefault.listFiles();

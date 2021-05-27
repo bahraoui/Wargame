@@ -865,27 +865,61 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     if (uniteAchete != null){
                         switch (uniteAchete) {
                             case ARCHER:
-                            break;
+                                System.out.println("Achat archer");
+                                Archer archer = new Archer();
+                                if (placerUniteJoueur(joueurActuel, archer, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
+                                break;
                             case CAVALERIE:
+                                Cavalerie cavalerie = new Cavalerie(); 
+                                if (placerUniteJoueur(joueurActuel, cavalerie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
                                 break;
                             case INFANTERIE:
+                                Infanterie infanterie = new Infanterie(); 
+                                if (placerUniteJoueur(joueurActuel, infanterie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
                                 break;
                             case INFANTERIELOURDE:
+                                InfanterieLourde infanterieLourde = new InfanterieLourde(); 
+                                if (placerUniteJoueur(joueurActuel, infanterieLourde, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
                                 break;
                             case MAGE:
+                                Mage mage = new Mage(); 
+                                if (placerUniteJoueur(joueurActuel, mage, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
                                 break;
                             default:
                                 break;
-                        }
-                        hexClic.setUnite(uniteAchete);
-                        uniteAchete = null;
+                        }  
+                        uniteAchete = null;                        
                     }
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                     System.out.println(caseSelectionne);
                     System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
                     FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
                     FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
-                    //FenetreJeu.getPanelJeu().getLabelBatimentUnite().setText(caseSelectionne.getCase().estOccupe().toString());
                     break;
                 default:
                     break;
@@ -1082,36 +1116,15 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     break;
                 case "achatCavalerie":
                     uniteAchete=TypeUnite.CAVALERIE;
-                    System.out.println("Achat calvalerie");
-                    Cavalerie cavalerieAchete = new Cavalerie();
-                    Joueur.achatUniteArmee(joueurActuel, cavalerieAchete);
-                    placementUnite(joueurActuel,cavalerieAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
                     break;
                case "achatInfanterie":
-                    System.out.println("Achat infanterie");
-                    Infanterie infanterieAchete = new Infanterie();
-                    Joueur.achatUniteArmee(joueurActuel, infanterieAchete);
-                    placementUnite(joueurActuel,infanterieAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.INFANTERIE;
                     break;
                 case "achatInfanterieLourde":
-                    System.out.println("Achat infanterie lourde");
-                    InfanterieLourde infanterieLourdeAchete = new InfanterieLourde();
-                    Joueur.achatUniteArmee(joueurActuel, infanterieLourdeAchete);
-                    placementUnite(joueurActuel,infanterieLourdeAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.INFANTERIELOURDE;
                     break;
                 case "achatMage":
-                    System.out.println("Achat mage");
-                    Mage archerMage = new Mage();
-                    Joueur.achatUniteArmee(joueurActuel, archerMage);
-                    placementUnite(joueurActuel,archerMage);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.MAGE;
                     break;
                 /*
                 * FIN ACHAT
