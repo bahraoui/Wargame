@@ -70,9 +70,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static PanelChargerScenario panelChargerScenario;
 
     private static final int cote = 16;
-
-
     
+    //
+    //MAIN
+    //
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Jeu controleur = new Jeu();
@@ -93,58 +94,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     }
 
-    public static void setCellulesMap() throws IOException {
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
-                TypeTerrain sol = null;
-                TypeUnite unite = null;
-                TypeBatimentVue batiment = null;
-                if (plateau.get(i).get(j).getTerrain() instanceof Plaine)
-                    sol = TypeTerrain.PLAINE;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Desert)
-                    sol = TypeTerrain.DESERT;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
-                    sol = TypeTerrain.FORET;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Mer)
-                    sol = TypeTerrain.MER;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Montagne)
-                    sol = TypeTerrain.MONTAGNE;
-                else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
-                    sol = TypeTerrain.NEIGE;
+    //
+    //FONCTION
+    //
 
-                if (plateau.get(i).get(j).getUnite() instanceof Archer)
-                    unite = TypeUnite.ARCHER;
-                else if (plateau.get(i).get(j).getUnite() instanceof Cavalerie)
-                    unite = TypeUnite.CAVALERIE;
-                else if (plateau.get(i).get(j).getUnite() instanceof Infanterie)
-                    unite = TypeUnite.INFANTERIE;
-                else if (plateau.get(i).get(j).getUnite() instanceof InfanterieLourde)
-                    unite = TypeUnite.INFANTERIELOURDE;
-                else if (plateau.get(i).get(j).getUnite() instanceof Mage)
-                    unite = TypeUnite.MAGE;
-                
-                
-                if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.BASE){
-                    batiment = TypeBatimentVue.BASE_HAUT;
-                }
-                else if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT)
-                    batiment = TypeBatimentVue.MONUMENT;
-
-                Cellule cell = new Cellule(new Hexagone(sol, unite, batiment,new Point(i, j)), plateau.get(i).get(j));
-                cellulesCarte[i][j] = cell;
-            }
-        }
-    }
-
-    public static Hexagone[][] cellulesToHexagones() throws IOException {
-        Hexagone[][] hexs = new Hexagone[16][16];
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
-                hexs[i][j] = cellulesCarte[i][j].getHex();
-            }
-        }
-        return hexs;
-    }
+    //
+    //DONNES
+    //
 
     //donne en parametre uniquement une case pas null
     public static void combat(Case attaquant, Case defenseur) {
@@ -187,7 +143,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
     
-
     public static void placerBaseJoueur(Joueur joueur, int coordY, int coordX){
         Batiment base = new Batiment(TypeBatiment.BASE);
         joueur.setBase(base);
@@ -211,13 +166,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         return false;
     }
-
-    
-    public static Case coordToCase(int coordY, int coordX){
-        return plateau.get(coordY).get(coordX);
-    }
-    
-    //DebutTour    
 
     public static boolean conditionVictoire(){
         /*if (conditionBase() || conditionPiece()) {
@@ -279,11 +227,33 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
-    /*
-    
-    PARTIE IA
-    
-    */
+    private static void nouveauTour() throws InterruptedException {
+        if (true) { //condition de victoire
+            if (tour != 0) {
+                do {
+                    joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
+                }while(joueurActuel.getEnJeu() == false);
+            }
+            tour++;
+            FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
+            FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : "+tour);;
+            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            if (joueurActuel.getEstIa()){
+                tourIA();
+                Thread.sleep(1000);
+            }
+            System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+        }
+        
+    }
+
+    //
+    // FIN DONNEES
+    //
+
+    //
+    //PARTIE IA
+    //
 
     public static void joueurAAttaquerIA() {
         
@@ -365,318 +335,71 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
 
-    /*
-    
-    FIN PARTIE IA
-    
-    */
+    //    
+    //FIN PARTIE IA
+    //
 
+    //
+    //AFFICHAGE
+    //
 
-    /**
-     * 
-     */
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        /**
-         * Clic sur un bouton
-         */
-        if (evt.getSource() instanceof JButton) {
-            /**
-             * Bouton "Quitter"
-             */
-            if (evt.getActionCommand().equals("quit")) {
-                int reponse = JOptionPane.showConfirmDialog(FenetreJeu, "Voulez-vous quitter l'application ?", "Êtes-vous sur ?",0, 0);
-                if (reponse == 0) {
-                    FenetreJeu.dispose();
-                    System.exit(0);
-                }
-            }
-            /**
-             * Bouton "Nouvelle Partie"
-             */
-            else if (evt.getActionCommand().equals("nouvellePartie")) {
-                //System.out.println("Nouvelle partie !");
-                FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);                
-            }
-            /**
-             * Bouton "Choix Monument"
-             */
-            else if (evt.getActionCommand().equals("choixMonument")) {
-                selectionMonument=true;
-                FenetreJeu.setChoixMonumentTxt("Monument selctionne");
-            }
-            /**
-             * Bouton "Charger Partie"
-             */
-            else if (evt.getActionCommand().equals("chargerPartie")) {
-                System.out.println("Charger partie !");
-                FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
-            }
-            /**
-             * Bouton "Charger une partie sauvegardée"
-             */
-            else if (evt.getActionCommand().equals("chercherSauvegarde")) {
-                System.out.println("Récupere le fichier de sauvegarde !");
-                JFileChooser choose = new JFileChooser(
-                    FileSystemView
-                    .getFileSystemView()
-                    .getHomeDirectory()
-                );
-                choose.setDialogTitle("Selectionnez une fichier de sauvegarde");
-                choose.setAcceptAllFileFilterUsed(false);
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Documents de type TXT", "txt");
-                choose.addChoosableFileFilter(filter);
-                // Ouvrez le fichier
-                int res = choose.showOpenDialog(null);
-                // Enregistrez le fichier
-                if (res == JFileChooser.APPROVE_OPTION) {
-                  sauvegardeChoisis = choose.getSelectedFile();
-                  ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
-                  System.out.println(sauvegardeChoisis.getAbsolutePath());
-                }
-            }
-            /**
-             * Bouton "Lancer la partie sauvegardée"
-             */
-            else if (evt.getActionCommand().equals("lancerPartieChargee")) {
-                if (sauvegardeChoisis != null) {
-                    try {
-                        // Generer un action pane si fichier pas bon
-                        chargePartie(new FileInputStream(sauvegardeChoisis));
-                        System.out.println("File bien chargee");
-                        System.out.println(plateau.affichage());
-                        setCellulesMap();
-                        pj = new PanelJeu(cellulesToHexagones());
-                        FenetreJeu.setPanelJeu(pj);
-                        pj.enregistreEcouteur(this);
-                        FenetreJeu.changePanel(PanelActuel.JEU);  
-                    } catch (IOException e) {
-                        e.printStackTrace();                   
-                    }
-                }
-                else {
-                    JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");
-                }
+    public static void setCellulesMap() throws IOException {
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                TypeTerrain sol = null;
+                TypeUnite unite = null;
+                TypeBatimentVue batiment = null;
+                if (plateau.get(i).get(j).getTerrain() instanceof Plaine)
+                    sol = TypeTerrain.PLAINE;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Desert)
+                    sol = TypeTerrain.DESERT;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
+                    sol = TypeTerrain.FORET;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Mer)
+                    sol = TypeTerrain.MER;
+                else if (plateau.get(i).get(j).getTerrain() instanceof Montagne)
+                    sol = TypeTerrain.MONTAGNE;
+                else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
+                    sol = TypeTerrain.NEIGE;
+
+                if (plateau.get(i).get(j).getUnite() instanceof Archer)
+                    unite = TypeUnite.ARCHER;
+                else if (plateau.get(i).get(j).getUnite() instanceof Cavalerie)
+                    unite = TypeUnite.CAVALERIE;
+                else if (plateau.get(i).get(j).getUnite() instanceof Infanterie)
+                    unite = TypeUnite.INFANTERIE;
+                else if (plateau.get(i).get(j).getUnite() instanceof InfanterieLourde)
+                    unite = TypeUnite.INFANTERIELOURDE;
+                else if (plateau.get(i).get(j).getUnite() instanceof Mage)
+                    unite = TypeUnite.MAGE;
                 
-            }
-            else if (evt.getActionCommand().equals("retourMenuSauvegarde")) {
-                System.out.println("Retour Menu Sauvegarde ");
-                FenetreJeu.changePanel(PanelActuel.MENU);
-            }
-            /**
-             * Bouton "Règles"
-             */
-            else if (evt.getActionCommand().equals("afficherRegles")) {
-                System.out.println("Voici les regles : Il n'y a pas de regles !");
-                FenetreJeu.changePanel(PanelActuel.REGLES);
-            }
-            /**
-             * Bouton "Continuer" -- Fenetre nouvelle partie
-             */
-            else if (evt.getActionCommand().equals("nouvellePartieContinuer")) {
-                if (carteChoisis.equals("")){
-                    JOptionPane.showMessageDialog(FenetreJeu, "Veuillez choisir une carte ! ");
+                
+                if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.BASE){
+                    batiment = TypeBatimentVue.BASE_HAUT;
                 }
-                else if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
-                    JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
-                else if (!FenetreJeu.getPanelNouvellePartie().setAllNames(nbJoueursH+nbJoueursIA))
-                    JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
-                else {
-                    try {
-                        System.out.println(nbJoueursH+nbJoueursIA);
-                        chargerCarte(new FileInputStream("src\\data\\cartes\\default\\"+carteChoisis+".txt"));
-                        for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
-                            if (i < nbJoueursH)
-                                listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
-                            else 
-                                listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
-                            int coordX = ((i+1)*3);
-                            int coordY = ((i+1)*3);
-                            System.out.println("COORDONNEES BASE : "+coordX + " - "+ coordY);
-                            placerBaseJoueur(listeJoueur.get(i), coordX, coordY);
-                            System.out.println(plateau.affichage());
-                        }
-                        setCellulesMap();
-                        panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
-                        FenetreJeu.setPanelChangerScenario(panelChargerScenario);
-                        panelChargerScenario.enregistreEcouteur(this);
-                        terrainChoisi = TypeTerrain.NEIGE;
-                        tour = 0;
-                        joueurActuel = listeJoueur.get(0);
-                        System.out.println(listeJoueur);
-                        FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }  
-                }
-            }
-            /**
-             * Bouton "Lancer Partie" -- Fenetre nouvelle partie apres scénario
-             */
-            else if (evt.getActionCommand().equals("lancerPartieApresScenario")) {
-                try {
-                    //charger
-                    pj = new PanelJeu(cellulesToHexagones());
-                    FenetreJeu.setPanelJeu(pj);
-                    pj.enregistreEcouteur(this);
-                    nouveauTour();
-                    FenetreJeu.changePanel(PanelActuel.JEU);  
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }  
-            }
-            /**
-             * 
-             * ACHAT UNITE
-             * 
-             */
-            else if (evt.getActionCommand().equals("achatArcher")) {
-                System.out.println("Achat archer");
-                Archer archerAchete = new Archer();
-                Joueur.achatUniteArmee(joueurActuel, archerAchete);
-                placementUnite(joueurActuel,archerAchete);
-                System.out.println(plateau.affichage());
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            }
-            else if (evt.getActionCommand().equals("achatCavalerie")) {
-                System.out.println("Achat calvalerie");
-                Cavalerie cavalerieAchete = new Cavalerie();
-                Joueur.achatUniteArmee(joueurActuel, cavalerieAchete);
-                placementUnite(joueurActuel,cavalerieAchete);
-                System.out.println(plateau.affichage());
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            }
-            else if (evt.getActionCommand().equals("achatInfanterie")) {
-                System.out.println("Achat infanterie");
-                Infanterie infanterieAchete = new Infanterie();
-                Joueur.achatUniteArmee(joueurActuel, infanterieAchete);
-                placementUnite(joueurActuel,infanterieAchete);
-                System.out.println(plateau.affichage());
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            }
-            else if (evt.getActionCommand().equals("achatInfanterieLourde")) {
-                System.out.println("Achat infanterie lourde");
-                InfanterieLourde infanterieLourdeAchete = new InfanterieLourde();
-                Joueur.achatUniteArmee(joueurActuel, infanterieLourdeAchete);
-                placementUnite(joueurActuel,infanterieLourdeAchete);
-                System.out.println(plateau.affichage());
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            }
-            else if (evt.getActionCommand().equals("achatMage")) {
-                System.out.println("Achat mage");
-                Mage archerMage = new Mage();
-                Joueur.achatUniteArmee(joueurActuel, archerMage);
-                placementUnite(joueurActuel,archerMage);
-                System.out.println(plateau.affichage());
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            }
+                else if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT)
+                    batiment = TypeBatimentVue.MONUMENT;
 
-            /**
-             * Bouton "Fin de tour" -- Fenetre en jeu
-             */
-            else if (evt.getActionCommand().equals("finTour")) {
-                try {
-                    nouveauTour();
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            /**
-             * Bouton "Abandonner" -- Fenetre en jeu
-             */
-            else if (evt.getActionCommand().equals("abandonner")) {
-                try {
-                    joueurActuel.setEnJeu(false);
-                    nouveauTour();
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            /**
-             * Bouton "Retour"
-             */
-            else if (evt.getActionCommand().equals("retourMenu")) {
-                System.out.println("Retour Menu!");
-                FenetreJeu.changePanel(PanelActuel.MENU);
+                Cellule cell = new Cellule(new Hexagone(sol, unite, batiment,new Point(i, j)), plateau.get(i).get(j));
+                cellulesCarte[i][j] = cell;
             }
         }
-        /**
-         * Clic sur une liste
-         */
-        else if (evt.getSource() instanceof JComboBox<?>) {
-            if (evt.getActionCommand().equals("nbJoueursH")) {
-                JComboBox<Integer> nbH = (JComboBox<Integer>) evt.getSource();
-                nbJoueursH = (Integer) nbH.getSelectedItem();
-                int nomJ = nbJoueursH + nbJoueursIA;
-                if (nomJ > 4)
-                    nomJ = 4;
-                for (int i = 0; i < 4; i++) {
-                    if(i < nomJ) {
-                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(true);
-                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(true);
-                    }
-                    else {
-                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(false);
-                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(false);
-                    }
-                }
-            } 
-            else if (evt.getActionCommand().equals("nbJoueursIA")) {
-                JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
-                nbJoueursIA = (Integer) nbIA.getSelectedItem();
-                int nomJ = nbJoueursH + nbJoueursIA;
-                if (nomJ > 4)
-                    nomJ = 4;
-                for (int i = 0; i < 4; i++) {
-                    if(i < nomJ) {
-                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(true);
-                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(true);
-                    }
-                    else {
-                        FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(false);
-                        FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(false);
-                    }
-                }
-            }
-            else if (evt.getActionCommand().equals("choixMap")) {
-                JComboBox<String> nomCarte = (JComboBox<String>) evt.getSource();
-                carteChoisis = (String) nomCarte.getSelectedItem();
-            }
-            else if (evt.getActionCommand().equals("listeTerrains")) {
-                selectionMonument = false;
-                JComboBox<TypeTerrain> choixTerrain = (JComboBox<TypeTerrain>) evt.getSource();
-                Jeu.terrainChoisi = (TypeTerrain) choixTerrain.getSelectedItem();
-                FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem().toString());
+    }
+
+    public static Hexagone[][] cellulesToHexagones() throws IOException {
+        Hexagone[][] hexs = new Hexagone[16][16];
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                hexs[i][j] = cellulesCarte[i][j].getHex();
             }
         }
-        
+        return hexs;
     }
 
     
-
-
-    private static void nouveauTour() throws InterruptedException {
-        if (true) { //condition de victoire
-            if (tour != 0) {
-                do {
-                    joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
-                }while(joueurActuel.getEnJeu() == false);
-            }
-            tour++;
-            FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
-            FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : "+tour);;
-            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            if (joueurActuel.getEstIa()){
-                tourIA();
-                Thread.sleep(1000);
-            }
-            System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
-        }
-        
+    
+    public static Case coordToCase(int coordY, int coordX){
+        return plateau.get(coordY).get(coordX);
     }
 
 
@@ -881,7 +604,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         return null;
     }
-    
+
+    //
+    //GESTION SAUVEGARDE CHARGER
+    //
     public static void sauvegardePartie() {
         try {
 			
@@ -1144,6 +870,320 @@ public class Jeu extends MouseAdapter implements ActionListener {
             } 
             else if (spl2.length == 3){
                 plateau.get(iline).get(i).setBatiment(analyseSplBatiment(spl2[2]));
+            }
+        }
+    }
+
+    //
+    // FIN SAUVEGARDE CHARGER PARTIE
+    //
+       
+
+    //
+    // ACTION PERFORMED
+    //
+
+    /**
+     * 
+     */
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        /*
+         * Clic sur un bouton
+         */
+        if (evt.getSource() instanceof JButton) {
+
+            switch (evt.getActionCommand()) {
+                //
+                //FENETRE MENU PRINCIPALE
+                //
+                /*
+                 * Bouton "Nouvelle Partie"
+                 */
+                case "nouvellePartie":
+                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);                
+                    break;
+                /*
+                 * Bouton "Charger Partie"
+                 */
+                case "chargerPartie":
+                    FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
+                    break;
+                /*
+                 * Bouton "Règles"
+                 */
+                case "afficherRegles":
+                    FenetreJeu.changePanel(PanelActuel.REGLES);
+                    break;
+                /*
+                * Bouton "Quitter"
+                */
+                case "quit":
+                    int reponse = JOptionPane.showConfirmDialog(FenetreJeu, "Voulez-vous quitter l'application ?", "Êtes-vous sur ?",0, 0);
+                    if (reponse == 0) {
+                        FenetreJeu.dispose();
+                        System.exit(0);
+                    }
+                    break;
+                //
+                //FIN FENETRE MENU PRINCIPALE
+                //
+
+                //
+                //FENETRE NOUVELLE PARTIE
+                //
+                /*
+                 * Bouton "Continuer"
+                 */
+                case "nouvellePartieContinuer":
+                    if (carteChoisis.equals("")){
+                        JOptionPane.showMessageDialog(FenetreJeu, "Veuillez choisir une carte ! ");
+                    }
+                    else if (nbJoueursH + nbJoueursIA < 2  || nbJoueursH + nbJoueursIA > 4 )
+                        JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir entre 2 et 4 joueurs en tout ! ");
+                    else if (!FenetreJeu.getPanelNouvellePartie().setAllNames(nbJoueursH+nbJoueursIA))
+                        JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
+                    else {
+                        try {
+                            chargerCarte(new FileInputStream("src\\data\\cartes\\default\\"+carteChoisis+".txt"));
+                            for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
+                                if (i < nbJoueursH)
+                                    listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
+                                else 
+                                    listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),true));
+                                //TEST
+                                int coordX = ((i+1)*3);
+                                int coordY = ((i+1)*3);
+                                placerBaseJoueur(listeJoueur.get(i), coordX, coordY);
+                                //FIN TEST
+                            }
+                            //REGROUPER ?
+                            setCellulesMap();
+                            panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
+                            FenetreJeu.setPanelChangerScenario(panelChargerScenario);
+                            panelChargerScenario.enregistreEcouteur(this);
+                            //REGROUPER
+                            terrainChoisi = TypeTerrain.NEIGE; tour = 0; joueurActuel = listeJoueur.get(0);
+                            FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);  
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }  
+                    }
+                    break;
+                //
+                //FIN NOUVELLE PARTIE
+                //
+                //
+                //FENETRE CHARGER PARTIE
+                //
+                /**
+                 * Bouton "Charger une partie sauvegardée"
+                 */
+                case "chercherSauvegarde":
+                    JFileChooser choose = new JFileChooser(
+                        FileSystemView
+                        .getFileSystemView()
+                        .getHomeDirectory()
+                    );
+                    choose.setAcceptAllFileFilterUsed(false);
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter("Documents de type TXT", "txt");
+                    choose.addChoosableFileFilter(filter);
+                    int res = choose.showOpenDialog(null);
+                    if (res == JFileChooser.APPROVE_OPTION) {
+                        sauvegardeChoisis = choose.getSelectedFile();
+                        ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
+                    }
+                    break;
+                /**
+                 * Bouton "Lancer la partie sauvegardée"
+                 */
+                case "lancerPartieChargee":
+                    if (sauvegardeChoisis != null) {
+                        try {
+                            // Generer un action pane si fichier pas bon
+                            chargePartie(new FileInputStream(sauvegardeChoisis));
+                            setCellulesMap();
+                            pj = new PanelJeu(cellulesToHexagones());
+                            FenetreJeu.setPanelJeu(pj);
+                            pj.enregistreEcouteur(this);
+                            FenetreJeu.changePanel(PanelActuel.JEU);  
+                        } catch (IOException e) {
+                            e.printStackTrace();                   
+                        }
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");
+                    }
+                    break;          
+                //
+                //FIN FENETRE CHARGER PARTIE
+                //
+                //
+                //FENETRE CHANGER SCENARIO
+                //
+                /**
+                 * Bouton "Choix Monument"
+                 */
+                case "choixMonument" :
+                    selectionMonument=true;
+                    FenetreJeu.setChoixMonumentTxt("Monument selctionne");
+                    break;
+                /**
+                 * Bouton "Lancer Partie" -- Fenetre nouvelle partie apres scénario
+                 */
+                case "lancerPartieApresScenario":
+                    try {
+                        pj = new PanelJeu(cellulesToHexagones());
+                        FenetreJeu.setPanelJeu(pj);
+                        pj.enregistreEcouteur(this);
+                        nouveauTour();
+                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }  
+                    break;
+                //
+                //FIN FENETRE CHANGER SCENARIO
+                //
+                //FENETRE EN PARTIE
+                //
+                /**
+                 * ACHAT
+                 */
+                case "achatArcher":
+                    System.out.println("Achat archer");
+                    Archer archerAchete = new Archer();
+                    Joueur.achatUniteArmee(joueurActuel, archerAchete);
+                    placementUnite(joueurActuel,archerAchete);
+                    System.out.println(plateau.affichage());
+                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    break;
+                case "achatCavalerie":
+                    System.out.println("Achat calvalerie");
+                    Cavalerie cavalerieAchete = new Cavalerie();
+                    Joueur.achatUniteArmee(joueurActuel, cavalerieAchete);
+                    placementUnite(joueurActuel,cavalerieAchete);
+                    System.out.println(plateau.affichage());
+                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    break;
+               case "achatInfanterie":
+                    System.out.println("Achat infanterie");
+                    Infanterie infanterieAchete = new Infanterie();
+                    Joueur.achatUniteArmee(joueurActuel, infanterieAchete);
+                    placementUnite(joueurActuel,infanterieAchete);
+                    System.out.println(plateau.affichage());
+                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    break;
+                case "achatInfanterieLourde":
+                    System.out.println("Achat infanterie lourde");
+                    InfanterieLourde infanterieLourdeAchete = new InfanterieLourde();
+                    Joueur.achatUniteArmee(joueurActuel, infanterieLourdeAchete);
+                    placementUnite(joueurActuel,infanterieLourdeAchete);
+                    System.out.println(plateau.affichage());
+                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    break;
+                case "achatMage":
+                    System.out.println("Achat mage");
+                    Mage archerMage = new Mage();
+                    Joueur.achatUniteArmee(joueurActuel, archerMage);
+                    placementUnite(joueurActuel,archerMage);
+                    System.out.println(plateau.affichage());
+                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    break;
+                /*
+                * FIN ACHAT
+                */
+                /**
+                 * Bouton "Fin de tour" -- Fenetre en jeu
+                 */
+                case "finTour":
+                    try {
+                        nouveauTour();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                /**
+                 * Bouton "Abandonner" -- Fenetre en jeu
+                 */
+                case "abandonner":
+                    try {
+                        joueurActuel.setEnJeu(false);
+                        nouveauTour();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                //
+                //FIN FENETRE EN PARTIE
+                //
+                //
+                //TOUTES LES FENETRES
+                //
+                /**
+                 * Bouton "Retour" 
+                 */
+                case "retourMenu":
+                    FenetreJeu.changePanel(PanelActuel.MENU);
+                    break;
+                default:
+                    break;
+            }
+        }
+        /**
+         * Clic sur une liste
+         */
+        else if (evt.getSource() instanceof JComboBox<?>) {
+            int nomJ;
+            switch (evt.getActionCommand()) {
+                case "nbJoueursH":
+                    JComboBox<Integer> nbH = (JComboBox<Integer>) evt.getSource();
+                    nbJoueursH = (Integer) nbH.getSelectedItem();
+                    nomJ = nbJoueursH + nbJoueursIA;
+                    if (nomJ > 4)
+                        nomJ = 4;
+                    for (int i = 0; i < 4; i++) {
+                        if(i < nomJ) {
+                            FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(true);
+                            FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(true);
+                        }
+                        else {
+                            FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(false);
+                            FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(false);
+                        }
+                    }
+                    break;
+                case "nbJoueursIA":
+                    JComboBox<Integer> nbIA = (JComboBox<Integer>) evt.getSource();
+                    nbJoueursIA = (Integer) nbIA.getSelectedItem();
+                    nomJ = nbJoueursH + nbJoueursIA;
+                    if (nomJ > 4)
+                        nomJ = 4;
+                    for (int i = 0; i < 4; i++) {
+                        if(i < nomJ) {
+                            FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(true);
+                            FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(true);
+                        }
+                        else {
+                            FenetreJeu.getPanelNouvellePartie().getNomJoueur()[i].setVisible(false);
+                            FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].setVisible(false);
+                        }
+                    }
+                    break;
+                case "choixMap":
+                    JComboBox<String> nomCarte = (JComboBox<String>) evt.getSource();
+                    carteChoisis = (String) nomCarte.getSelectedItem();
+                    break;
+                case "listeTerrains":
+                    selectionMonument = false;
+                    JComboBox<TypeTerrain> choixTerrain = (JComboBox<TypeTerrain>) evt.getSource();
+                    Jeu.terrainChoisi = (TypeTerrain) choixTerrain.getSelectedItem();
+                    FenetreJeu.setChoixTerrainTxt((String) choixTerrain.getSelectedItem().toString());
+                    break;
+                default:
+                    break;
             }
         }
     }

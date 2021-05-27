@@ -204,7 +204,7 @@ public class PanelJeu extends JPanel {
 		boutonAbandonner = new JButton("Abandonner");
 		boutonQuitter = new JButton("Quitter");
 		boutonFinDeTour.setActionCommand("finTour");
-		boutonQuitter.setActionCommand("retourMenuSauvegarde");
+		boutonQuitter.setActionCommand("retourMenu");
 		boutonAbandonner.setActionCommand("abandonner");
 
 		panelBasBoutons.add(boutonFinDeTour);
