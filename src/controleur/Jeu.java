@@ -772,27 +772,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return unite;
     }
 
-    /*public static boolean conditionBase(){
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
-                return false;
-            }
-        }
-        //System.out.println("BASE CONDITION");
-        return true;
-    }
-
-    public static boolean conditionPiece(){
-        for (int i = 0; i < listeJoueur.size(); i++) {
-            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && (listeJoueur.get(i).getArmee().size() > 0 || listeJoueur.get(i).getPieces() > 10)){
-                return false;
-            }
-        }
-        //System.out.println("PIECE CONDITION");
-        return true;
-    }
-
-*/
     
     public static Batiment analyseSplBatiment(String spl) {
 
@@ -875,7 +854,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     }
                 }
                 chaine +="}";
-                //chaine += listeJoueur.get(i).getBase().getIdentifiant();
                 if (i<listeJoueur.size()-1) {
                     chaine+="];";
                 }
@@ -898,7 +876,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
 			fw.close();
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 			System.out.println("Erreur ecriture");
 		}
 
@@ -980,10 +957,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             finpartie = Boolean.parseBoolean(line);
 
 	        scanner.close();    
-        //} catch (Exception e) {
-            //TODO: handle exception
-            //System.out.println("Erreur lecture");
-        //}
     }
 
     public static void sauvegardeMap(){
@@ -1124,103 +1097,5 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
     }
-/*
-            Debut Jeu
-
-                Plateau
-                Joueur (2 ou 4)
-
-                A- Debut Jeu
-
-                    1- Choix base joueur
-                        Pour chaque joueur place la base
-                    
-                B- Deroulement Tour - Boucle partie : (tant que fin partie ou conditionVictoire())
-
-                Si joueur.getEnJeu() == true
-
-                    1- Regeneration Unite Armee + gain banque joueur
-
-                    2- Achat unité
-
-                        2.a- Boucle de choix : (tant que fin d'achat)
-                                Choix unité
-                        
-                    3- Deplacement / Combat
-
-                        3.a- Boucle d'action : (tant que fin de tour)
-                                Selection 2 case : 
-
-                                    Test choix case initial
-                                    Test choix case final
-
-                                        Selon choix : 
-                                                - Deplacement (1er : case par case ; 2eme : algo plus cours chemin entre 2 case + verifie si libre)
-                                                    Si la case initial est une unité
-                                                    Si la case final est vide
-
-                                                - Combat (+ fin combat verifier conditionVictoire() -> finpartie)
-                                                    Si la case initial est une unité ou la base
-                                                    Si la case final est une unité ou un batiment           
-
-                                        Retour debut boucle 3.a
-                    
-                Retour debut boucle B (avec changement joueur)
-
-    Fonction 
-
-
-
-    Joueur
-        * placer la base 
-        * placer l'armee + conditions de placement en fonction de la base
-        * Acheter des unites
-
-    Tour de jeu
-        * deplacement des unite
-        * combat
-        * attaque batiment
-        * calcul regeneration unite => Debut de tour
-            - si tu ne te deplace pas
-            - si tu n'attaque pas
-            - si tu n'a pas defendu
-         condition de victoire
-            - * destruction de l'armee
-            - nombre de tours //while
-            - * destruction de base
-        
-        
-        sauvegarde les resultats
-        tour ia #analyse
-    
-    Outil
-        * Coord to Case
-        //Case to Coord
-
-    Extentions facultatives
-        - Mode de jeu campagne - Editeur de scenario => Lucas
-        - Evenement exterieur => Reda
-        - Action d'opportunité => Triomphante 1
-        - Ligne de tir calcul de case et de l'occupation des cases => Reda
-        - timer : X secondes de jeu a chaque tour => Triomphante 2
-
-    Sauvegarde
-        Partie:
-        - Plateau
-            - Case
-                - Terrain
-                - Unite/Batiment
-        -Joueur
-            - Armee
-            - Piece
-        
-        JSON FILE      
-
-    Main
-        Deroulement du jeu
-        Menu
-        Tour de joueur 
-    */
-
 }
 
