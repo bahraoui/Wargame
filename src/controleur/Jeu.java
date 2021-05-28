@@ -298,7 +298,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
-            Thread.sleep(1000);
+            Thread.sleep(300);
             System.out.println(plateau.affichage());
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
@@ -1087,19 +1087,23 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             System.out.println("Deuxieme clic recup");
 
                             if (caseClic2.estOccupe() == null) {
-                                if (caseClic1.estOccupe() instanceof Unite && ((Unite) caseClic1.estOccupe()).getDeplacementActuel() > 0) {
-                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
-                                    int[][] matricePlateau = new int[cote][cote];
-                                    plateauToMatice(matricePlateau);
-                                    Node chemin = trouverChemin(matricePlateau,hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
-                                    ArrayList<Node> cheminComplet = new ArrayList<Node>();
-                                    Node.nodeToArray(cheminComplet,chemin);
-                                    try {
-                                        faireDeplacement((Unite)caseClic1.estOccupe(),cheminComplet);
-                                        JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
-                                    } catch (InterruptedException e1) {
-                                        e1.printStackTrace();
+                                if (caseClic1.estOccupe() instanceof Unite) {
+                                    if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() > 0) {
+                                        JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
+                                        int[][] matricePlateau = new int[cote][cote];
+                                        plateauToMatice(matricePlateau);
+                                        Node chemin = trouverChemin(matricePlateau,hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                        ArrayList<Node> cheminComplet = new ArrayList<Node>();
+                                        Node.nodeToArray(cheminComplet,chemin);
+                                        try {
+                                            faireDeplacement((Unite)caseClic1.estOccupe(),cheminComplet);
+                                            JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
+                                        } catch (InterruptedException e1) {
+                                            e1.printStackTrace();
+                                        }
                                     }
+                                    else 
+                                        JOptionPane.showMessageDialog(FenetreJeu, "Unité n'a plus de point déplacement");
                                 }
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
@@ -1339,6 +1343,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 case "finTour":
                     try {
                         nouveauTour();
+                        joueurActuel.regenerationUniteArmee();
+                        joueurActuel.gainTourJoueur(tour);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
