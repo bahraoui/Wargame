@@ -72,6 +72,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static TypeUnite uniteAchete;
     private static Case caseClic1, caseClic2;
     private static Hexagone hexCaseClic;
+    private static Joueur joueurGagnant;
 
     private static int cmpt=0;
 
@@ -91,6 +92,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         uniteAchete=null;
         caseClic1 = null;
         caseClic2 = null;
+        joueurGagnant = null;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
@@ -110,11 +112,31 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
 
     //donne en parametre uniquement une case pas null
-    public static void combat(Case attaquant, Case defenseur) {
-        Case.attaquer(attaquant,defenseur);
-        if (((Entite) defenseur.estOccupe()).getPointDeVieActuel() <= 0){
-            mortEntite(defenseur);
+    public static boolean combat(Hexagone attaquant, Hexagone defenseur, int distanceCases) {
+        int rangeAttaque;
+        Case attaquantCase = plateau.get(attaquant.getCoord().getX()).get(attaquant.getCoord().getY());
+        Case defenseCase = plateau.get(defenseur.getCoord().getX()).get(defenseur.getCoord().getY());
+        if (attaquantCase.getBatiment() != null) {
+            rangeAttaque = attaquantCase.getBatiment().getVision();
         }
+        else {
+            rangeAttaque = attaquantCase.getUnite().getVision();
+        }
+        if (rangeAttaque > distanceCases){
+            Case.attaquer(attaquantCase,defenseCase);
+            if (((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
+                mortEntite(defenseCase);
+                try {
+                    defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                calculVitoire();
+            }
+            return true;
+        }
+        return false;
     }
 
     //revoir
@@ -146,7 +168,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurActuel.setPieces(joueurActuel.getPieces() + defenseur.getBatiment().getTresor());
                 defenseur.setBatiment(null); //plateau
-            }
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }   
         }
     }
 
@@ -255,7 +278,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         Queue<Node> q = new LinkedList<>();
 
-        Node s = new Node(srcY, srcX, null);
+        Node s = new Node(srcY, srcX, 0, null);
         q.add(s);
 
         while (!q.isEmpty()) {
@@ -275,12 +298,57 @@ public class Jeu extends MouseAdapter implements ActionListener {
             int col = ptY + colNum[i];
             if (estValide(row, col) && mat[row][col] !=0 && !visited[row][col]) {
                 visited[row][col] = true;
-                Node Adjcell = new Node(col,row, curr);
+                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
                 q.add(Adjcell);
             }
             }
         }
         return null;
+    }
+
+    public static boolean estValideAttaque(int row, int col) {
+        return (row >= 0) && (row < cote) && (col >= 0) && (col < cote);
+      }
+
+    public static int calculDistanceAttaque(int mat[][], int srcX, int srcY, int destX, int destY) {
+        int rowNum[] = { -1, 0, 0, 1 };
+        int colNum[] = { 0, -1, 1, 0 };
+
+        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
+            return -1;
+
+        boolean[][] visited = new boolean[cote][cote];
+
+        visited[srcY][srcX] = true;
+
+        Queue<Node> q = new LinkedList<>();
+
+        Node s = new Node(srcY, srcX, 0, null);
+        q.add(s);
+
+        while (!q.isEmpty()) {
+            Node curr = q.peek();
+            int ptX = curr.getX();
+            int ptY = curr.getY();
+
+            if (ptX == destX && ptY == destY){
+            return curr.getDist();
+            }
+
+            q.remove();
+
+            
+            for (int i = 0; i < 4; i++) {
+            int row = ptX + rowNum[i];
+            int col = ptY + colNum[i];
+            if (estValideAttaque(row, col) && mat[row][col] !=0 && !visited[row][col]) {
+                visited[row][col] = true;
+                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
+                q.add(Adjcell);
+            }
+            }
+        }
+        return -1;
     }
 
     private static void faireDeplacement(Unite unite, ArrayList<Node> deplacement) throws InterruptedException
@@ -298,7 +366,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
-            Thread.sleep(300);
+            Thread.sleep(150);
             System.out.println(plateau.affichage());
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
@@ -306,18 +374,56 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
   
 
-    public static boolean conditionVictoire(){
-        /*if (conditionBase() || conditionPiece()) {
+    public static boolean conditionTourEnJeu(){
+        if (tour == 30){
             return true;
         }
-        return false;*/
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
                 return false;
             }
         }
+        System.out.println("tout le monde joue");
         return true;
     }
+
+    public static void estEnJeu(Joueur joueurAttaque){
+        if ((joueurAttaque.getArmee().size() == 0 && joueurAttaque.getPieces() < 6) || joueurAttaque.getBase() == null){
+            joueurAttaque.setEnJeu(false);
+        }
+    }
+
+    public static void calculVitoire(){
+        if (conditionTourEnJeu()){
+            if (tour == 30){
+                int[] value = new int[listeJoueur.size()];
+                for (int i = 0; i < value.length; i++) {
+                    if (listeJoueur.get(i).getEnJeu()) {
+                        value[i] = joueurActuel.getPieces();
+                        for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++)
+                            value[i]=value[i]+listeJoueur.get(i).getArmee().get(j).getCout();
+                    }
+                    else 
+                        value[i] = -1;
+                }
+                int max = 0;
+                int indice = 0;
+                for (int i = 0; i < value.length; i++) {
+                    if (max < value[i]) {
+                        max = value[i];
+                        indice = i;
+                    }
+                }
+                joueurGagnant = listeJoueur.get(indice);
+            }
+            else {
+                joueurGagnant = joueurActuel;
+            }
+        }
+        System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+    }        
+
+
 
     public static void chronometre() {
     	Timer chrono =  new Timer();
@@ -392,7 +498,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void nouveauTour() throws InterruptedException {
-        if (true) { //condition de victoire
+        if (!conditionTourEnJeu()) { //condition de victoire
             if (tour != 0) {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
@@ -407,6 +513,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Thread.sleep(1000);
             }
             System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+        }
+        else {
+            effacerDonnes();
+            System.out.println("Changer panneau");
         }
         
     }
@@ -1107,7 +1217,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 }
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
-                                JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                                int[][] matricePlateau = new int[cote][cote];
+                                plateauToMatice(matricePlateau);
+                                int distanceCase = calculDistanceAttaque(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                if (combat(hexCaseClic, hexClic, distanceCase)){
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                                }
                             }
                             caseClic1 = null;
                             caseClic2 = null;
