@@ -82,6 +82,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
     public static void main(String[] args) throws IOException, InterruptedException {
 
+        chronometre();
+
         Jeu controleur = new Jeu();
         carteChoisis = "";
         finpartie = false;
@@ -338,7 +340,32 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 } 
 
 			}
-    	}, 120000 , 120000);
+    	}, 2000 , 2000);
+        
+    }
+
+    public static void chrono() {
+    	Timer chrono =  new Timer();
+    	chrono.schedule(new TimerTask(){
+            int index = 0,  i = 0;
+			@Override
+			public void run() {
+                while(finpartie == false){
+                    i++;
+                    if(i == listeJoueur.size()){
+                        i = 0;
+                    }else if(index == listeJoueur.size()-1){
+                        index = 0;
+                    }else if(index < listeJoueur.size() && i < listeJoueur.size()){   
+                        System.out.println(joueurActuel);
+                        joueurActuel = listeJoueur.get(index+1);
+                        System.out.println(joueurActuel);
+                        index += 1; 
+                    }       
+                } 
+
+			}
+    	}, 2000 , 2000);
     }
 
     public static void actionDopportunite(Joueur joueur, int coordYFinalJoueur, int coordXFinalJoueur, int coordYOpportunite, int coordXOpportunite, Case caseAttaque) {
@@ -364,7 +391,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
-    private static void nouveauTour() throws InterruptedException {
+    public static void nouveauTour() throws InterruptedException {
         if (true) { //condition de victoire
             if (tour != 0) {
                 do {

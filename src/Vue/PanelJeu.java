@@ -27,7 +27,7 @@ public class PanelJeu extends JPanel {
 	private JPanel panelInfoPartie;
 	private JLabel labelNbTours;
 	private JLabel labelNomJoueur;
-	private static int minute=0,seconde=0;
+	private static int minute=2,seconde=0;
 	private JLabel labelTypeTerrain;
 	private JLabel labelBatimentUnite;
 	private JPanel panelBoutique;
@@ -36,8 +36,7 @@ public class PanelJeu extends JPanel {
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
 	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
 	private JLabel labelBonusTerrain;
-
-	
+	public static String str = new String("00:00");
 
 	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
@@ -48,8 +47,7 @@ public class PanelJeu extends JPanel {
 		this.panelGaucheInfos = new JPanel();
 		panelGaucheInfos.setPreferredSize(new Dimension(200,500));
 		//panelGaucheInfos.setLayout(new BoxLayout(panelGaucheInfos, BoxLayout.Y_AXIS));
-		
-		
+
 
 		/////////////////////
 		// PANEL INFO TOUR //
@@ -69,33 +67,50 @@ public class PanelJeu extends JPanel {
 		labelNomJoueur = new JLabel("Tour de : ");
 		panelInfoTour.add(labelNomJoueur);
 
+				
 		// Chrono
-		int delais=1000;
-		ActionListener tache_timer;
-		JLabel Label1 = new JLabel("00:00");
-		tache_timer= new ActionListener()
+		JLabel Label1 = new JLabel("02:00");
+		ActionListener tacheTimerHorloge = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e1)
 			{
-				seconde++;
-				if(seconde==60)
+				if(seconde==0 && minute!=0)
 				{
-					seconde=0;
-					minute++;
+					seconde=59;
+					minute--;
 				}
-				String str = new String();
-				if(minute<10)
-					str+=("0");
-				str+=minute+":";
+				seconde--;
+				str=minute+":";
 				if(seconde<10)
 					str+=("0");
 				str+=seconde;
 				Label1.setText(str);/* rafraichir le label */
+
 			}
 		};
-		final Timer timer= new Timer(delais,tache_timer);
+		final Timer timerHorloge = new Timer(1000,tacheTimerHorloge);
+
+		ActionListener tacheTimerTour = new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e1)
+			{	
+				System.out.println("Changement de tour");
+				str = "02:00";
+				seconde = 0;
+				minute = 2;
+				Label1.setText(str);
+				try {
+					Jeu.nouveauTour();
+				} catch (Exception e) {
+					//TODO: handle exception
+				}
+			}
+		};
+		final Timer timerTour = new Timer(120000,tacheTimerTour);
+		timerTour.start();
+		timerHorloge.start();
+
 		panelInfoTour.add(Label1);
-		timer.start();
 		panelGaucheInfos.add(panelInfoTour);
 
 		///////////////////////
