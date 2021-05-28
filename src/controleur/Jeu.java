@@ -516,12 +516,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         else {
             effacerDonnes();
+            FenetreJeu.getPanelJeu().getTimerHorloge().stop();
+            FenetreJeu.getPanelJeu().getTimerTour().stop();
             System.out.println("Changer panneau");
         }
         
     }
 
+    public static void resetChrono() {
+        FenetreJeu.getPanelJeu().setSeconde(0);
+        FenetreJeu.getPanelJeu().setMinute(2);
+        FenetreJeu.getPanelJeu().getTimerTour().restart();
+        FenetreJeu.getPanelJeu().getTimerHorloge().restart();
+    }
+
     public static void effacerDonnes() {
+        resetChrono();
         listeJoueur.removeAll(listeJoueur);
         plateau.removeAll(plateau);
         plateau = new Plateau();
@@ -547,18 +557,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public static void placementUnite(Joueur ia, Unite unite) {
         int coordX = postionBaseJoueur.get(ia.getNumeroJoueur()).get(0);
         int coordY = postionBaseJoueur.get(ia.getNumeroJoueur()).get(1);
-        for (int i = coordX - 1 ; i < coordX + 3; i++) {
-            for (int j = coordY - 2; j < coordY + 3; j++) {
-                //Hors quatre coins
-                if (placerUniteJoueur(ia, unite, i,j)){
-                    return;
-                }
-            }
+        if (placerUniteJoueur(ia, unite, 0,0)){
+            return;
         }
     }
 
     public static void achatTroupesIA(Joueur ia) throws InterruptedException{
-        int depense = new Random().nextInt(ia.getPieces()/2);
+        int depense = new Random().nextInt(ia.getPieces());
         System.out.println("Initial : "+depense);
         while (depense >= new Archer().getCout()) {
             System.out.println("Nouvelle : "+depense);
@@ -655,7 +660,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 
                 
                 if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.BASE){
-                    batiment = TypeBatimentVue.BASE_HAUT;
+                    batiment = TypeBatimentVue.BASE;
                 }
                 else if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT)
                     batiment = TypeBatimentVue.MONUMENT;
@@ -737,7 +742,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 typeBatimentVue = TypeBatimentVue.MONUMENT;
                 break;
             case BASE:
-                typeBatimentVue = TypeBatimentVue.BASE_HAUT;
+                typeBatimentVue = TypeBatimentVue.BASE;
                 break;
         
             default:
@@ -978,7 +983,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static void sauvegardeMap(String fichier){
         try {
-            File file = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"saves"+File.separator+""+fichier+".txt");
+            File file = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+fichier+".txt");
 			
 			if (!file.exists()) {
 			    file.createNewFile();
@@ -1369,7 +1374,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             pj = new PanelJeu(cellulesToHexagones());
                             FenetreJeu.setPanelJeu(pj);
                             pj.enregistreEcouteur(this);
-                            FenetreJeu.changePanel(PanelActuel.JEU);  
+                            FenetreJeu.changePanel(PanelActuel.JEU);
+                            resetChrono();
                         } catch (IOException e) {
                             e.printStackTrace();                   
                         }
@@ -1400,7 +1406,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         FenetreJeu.setPanelJeu(pj);
                         pj.enregistreEcouteur(this);
                         nouveauTour();
-                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                        FenetreJeu.changePanel(PanelActuel.JEU); 
+                        resetChrono(); 
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -1457,6 +1464,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "finTour":
                     try {
+                        resetChrono();
                         nouveauTour();
                         joueurActuel.regenerationUniteArmee();
                         joueurActuel.gainTourJoueur(tour);
@@ -1488,6 +1496,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 case "retourMenu":
                     effacerDonnes();
                     FenetreJeu.changePanel(PanelActuel.MENU);
+                    FenetreJeu.getPanelJeu().getTimerHorloge().stop();
+                    FenetreJeu.getPanelJeu().getTimerTour().stop();
                     break;
                 default:
                     break;

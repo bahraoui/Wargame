@@ -28,7 +28,7 @@ public class PanelJeu extends JPanel {
 	private JPanel panelInfoPartie;
 	private JLabel labelNbTours;
 	private JLabel labelNomJoueur;
-	private static int minute=2,seconde=0;
+	private int minute=2,seconde=0;
 	private JLabel labelTypeTerrain;
 	private JLabel labelBatimentUnite;
 	private JPanel panelBoutique;
@@ -38,6 +38,8 @@ public class PanelJeu extends JPanel {
 	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
 	private JLabel labelBonusTerrain;
 	public static String str = new String("00:00");
+	private Timer timerTour;
+	private Timer timerHorloge;
 
 	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
@@ -77,7 +79,7 @@ public class PanelJeu extends JPanel {
 			{
 				if(seconde==0 && minute!=0)
 				{
-					seconde=59;
+					seconde=60;
 					minute--;
 				}
 				seconde--;
@@ -89,7 +91,7 @@ public class PanelJeu extends JPanel {
 
 			}
 		};
-		final Timer timerHorloge = new Timer(1000,tacheTimerHorloge);
+		timerHorloge = new Timer(1000,tacheTimerHorloge);
 
 		ActionListener tacheTimerTour = new ActionListener()
 		{
@@ -107,7 +109,7 @@ public class PanelJeu extends JPanel {
 				}
 			}
 		};
-		final Timer timerTour = new Timer(120000,tacheTimerTour);
+		timerTour = new Timer(120000,tacheTimerTour);
 		timerTour.start();
 		timerHorloge.start();
 
@@ -333,6 +335,39 @@ public class PanelJeu extends JPanel {
 
 	public void setLabelNomJoueur(JLabel labelNomJoueur) {
 		this.labelNomJoueur = labelNomJoueur;
+	}
+
+	public Timer getTimerTour() {
+		return this.timerTour;
+	}
+
+	public void setTimerTour(Timer timerTour) {
+		this.timerTour = timerTour;
+	}
+
+	public Timer getTimerHorloge() {
+		return this.timerHorloge;
+	}
+
+	public void setTimerHorloge(Timer timerHorloge) {
+		this.timerHorloge = timerHorloge;
+	}
+
+
+	public int getMinute() {
+		return this.minute;
+	}
+
+	public void setMinute(int minute) {
+		this.minute = minute;
+	}
+
+	public int getSeconde() {
+		return this.seconde;
+	}
+
+	public void setSeconde(int seconde) {
+		this.seconde = seconde;
 	}
 
 	public JLabel getLabelTypeTerrain() {
