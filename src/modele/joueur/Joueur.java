@@ -3,8 +3,12 @@ package modele.joueur;
 
 //import
 import java.util.ArrayList;
+
+import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
+import modele.entite.batiment.TypeBatiment;
 import modele.entite.unite.Unite;
+import modele.plateau.Case;
 
 /**
  * La classe Joueur représente les joueurs du jeu "Wargame"
@@ -80,6 +84,23 @@ public class Joueur {
         joueur.setPieces(joueur.getPieces()+pieceGain);
     }
 
+
+    public boolean estMonUnite(Case caseClic1) {
+        Entite entite = (Entite) caseClic1.estOccupe();
+        if (entite instanceof Unite){
+            for (int i = 0; i < this.armee.size(); i++) {
+                if (entite.getIdentifiant() == armee.get(i).getIdentifiant())
+                    return true;
+            }
+        }
+        else if (entite instanceof Batiment){
+            if (((Batiment) entite).getEstBase() == TypeBatiment.BASE && this.getBase().getIdentifiant() == entite.getIdentifiant()){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //
     //Getters & Setters
     //
@@ -123,4 +144,5 @@ public class Joueur {
     public void setPseudo(String pseudo){
         this.pseudo=pseudo;
     }
+
 }

@@ -8,7 +8,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Timer;
@@ -69,6 +70,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static boolean selectionMonument;
     private static PanelChargerScenario panelChargerScenario;
     private static TypeUnite uniteAchete;
+    private static Case caseClic1, caseClic2;
+    private static Hexagone hexCaseClic;
+
+    private static int cmpt=0;
 
     private static final int cote = 16;
     
@@ -78,12 +83,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Jeu controleur = new Jeu();
-
         carteChoisis = "";
-
         finpartie = false;
         selectionMonument=false;
         uniteAchete=null;
+        caseClic1 = null;
+        caseClic2 = null;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
@@ -91,11 +96,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
         setCellulesMap();
-        FenetreJeu = new FrameJeu(/*pj*/);
+        FenetreJeu = new FrameJeu();
         FenetreJeu.enregistreEcouteur(controleur);
-
     }
-
     //
     //FONCTION
     //
@@ -147,13 +150,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static void placerBasesJoueurs() {
         int nbJoueurs = listeJoueur.size();
-        if (nbJoueurs >=4) 
-            placerBase(listeJoueur.get(3),15,0);
-        if (nbJoueurs >=3) 
-            placerBase(listeJoueur.get(2),0,15);
-        if (nbJoueurs >=2) {
-            placerBase(listeJoueur.get(1),15,14);
-            placerBase(listeJoueur.get(0),0,0);
+        placerBase(listeJoueur.get(0),0,0);
+        placerBase(listeJoueur.get(1),15,14);
+        if (nbJoueurs >=3) {
+            placerBase(listeJoueur.get(2),0,15);            
+        }
+        if (nbJoueurs ==4) {
+            placerBase(listeJoueur.get(3),15,0);            
         }
     }
 
@@ -182,27 +185,124 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static boolean estDeplacementPossible(int coordXinitial, int coordYinitial,int coordXfinale, int coordYfinale) {
-        if (plateau.get(coordXinitial).get(coordYinitial).getUnite() != null) {
+        if (plateau.get(coordXinitial).get(coordYinitial).getUnite() != null && plateau.get(coordXfinale).get(coordYfinale).estOccupe() == null) {
             int comptDeplacement = plateau.get(coordXinitial).get(coordYinitial).getUnite().getDeplacementActuel();
             int deplacementUnite = comptDeplacement;
+            int coordXDepart = coordXinitial; int coordYDepart = coordYinitial;
             while (coordXinitial != coordXfinale && coordYinitial != coordYfinale) {
-                if (coordXinitial>coordXfinale)
+                if (coordXinitial>coordXfinale){
                     comptDeplacement--;
-                else 
+                    coordXinitial--;
+                }
+                else {
+                    coordXinitial ++;
                     comptDeplacement++;
+                }
                 
-                if (coordYinitial>coordYfinale)
+                if (coordYinitial>coordYfinale){
                     comptDeplacement--;
-                else 
+                    coordYinitial--;
+                }
+                else {
+                    coordYinitial ++;
                     comptDeplacement++;
+                }
             }
             if (comptDeplacement >= 0){
-                plateau.get(coordXinitial).get(coordYinitial).getUnite().setDeplacementActuel(deplacementUnite-comptDeplacement);
+                plateau.get(coordXDepart).get(coordYDepart).getUnite().setDeplacementActuel(deplacementUnite-comptDeplacement);
                 return true;
             }
         }
         return false;
     }
+
+    public static void plateauToMatice(int[][] matrice){
+        boolean petiteLigne = false;
+        int totalCells = 248;
+        int col=0,ligne=0;
+        for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
+            matrice[ligne][col] = plateau.get(ligne).get(col).getTerrain().getPtsDeplacement();
+            col++;
+            if (col%cote==0 && !petiteLigne) {
+                col=0;
+                ligne++;
+                petiteLigne = !petiteLigne;
+            } 
+            else if (col%(cote-1)==0 && petiteLigne) {
+                col=0;
+                ligne++;
+                petiteLigne = !petiteLigne;
+            }
+        }
+    }
+
+    public static boolean estValide(int row, int col) {
+        return (row >= 0) && (row < cote) && (col >= 0) && (col < cote) && (plateau.get(row).get(col).estOccupe() == null);
+      }
+    
+    public static Node trouverChemin(int mat[][], int srcX, int srcY, int destX, int destY) {
+        int rowNum[] = { -1, 0, 0, 1 };
+        int colNum[] = { 0, -1, 1, 0 };
+
+        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
+            return null;
+
+        boolean[][] visited = new boolean[cote][cote];
+
+        visited[srcY][srcX] = true;
+
+        Queue<Node> q = new LinkedList<>();
+
+        Node s = new Node(srcY, srcX, null);
+        q.add(s);
+
+        while (!q.isEmpty()) {
+            Node curr = q.peek();
+            int ptX = curr.getX();
+            int ptY = curr.getY();
+
+            if (ptX == destX && ptY == destY){
+            return curr;
+            }
+
+            q.remove();
+
+            
+            for (int i = 0; i < 4; i++) {
+            int row = ptX + rowNum[i];
+            int col = ptY + colNum[i];
+            if (estValide(row, col) && mat[row][col] !=0 && !visited[row][col]) {
+                visited[row][col] = true;
+                Node Adjcell = new Node(col,row, curr);
+                q.add(Adjcell);
+            }
+            }
+        }
+        return null;
+    }
+
+    private static void faireDeplacement(Unite unite, ArrayList<Node> deplacement) throws InterruptedException
+    {
+        Deplacement:
+        for (int i = 1; i < deplacement.size(); i++) {
+            plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).setUnite(null);
+            plateau.get(deplacement.get(i).getX()).get(deplacement.get(i).getY()).setUnite(unite);
+            try {
+                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
+                cellulesCarte[deplacement.get(i).getX()][deplacement.get(i).getY()].getHex().setUnite(uniteModelToVue(unite));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
+            Thread.sleep(1000);
+            System.out.println(plateau.affichage());
+            if (unite.getDeplacementActuel() == 0)
+                break Deplacement;
+        }
+    }
+  
 
     public static boolean conditionVictoire(){
         /*if (conditionBase() || conditionPiece()) {
@@ -447,7 +547,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
 
 
-    private TypeTerrain terrainModeleToVue(Terrain terrain) {
+    private static TypeTerrain terrainModeleToVue(Terrain terrain) {
         TypeTerrain typeTerrain = null;
         if (terrain instanceof Plaine)
             typeTerrain = TypeTerrain.PLAINE;
@@ -532,6 +632,21 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 break;
         }
         return unite;
+    }
+
+    public static TypeUnite uniteModelToVue(Unite unite){
+        TypeUnite uniteVue = null;
+        if (unite instanceof Archer)
+            uniteVue = TypeUnite.ARCHER;
+        else if (unite instanceof Cavalerie)
+            uniteVue = TypeUnite.CAVALERIE;
+        else if (unite instanceof Infanterie)
+            uniteVue = TypeUnite.INFANTERIE;
+        else if (unite instanceof InfanterieLourde)
+            uniteVue = TypeUnite.INFANTERIELOURDE;
+        else if (unite instanceof Mage)
+            uniteVue = TypeUnite.MAGE;
+        return uniteVue;
     }
 
     
@@ -935,12 +1050,51 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 break;
                             default:
                                 break;
-                        }  
+                        }
+                        System.out.println(plateau.affichage());
                         uniteAchete = null;                        
                     }
+                    else {
+                        if (caseClic2 == null && caseClic1 != null) {
+                            caseClic2 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+                            System.out.println("Deuxieme clic recup");
+
+                            if (caseClic2.estOccupe() == null) {
+                                if (caseClic1.estOccupe() instanceof Unite) {
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
+                                    int[][] matricePlateau = new int[cote][cote];
+                                    plateauToMatice(matricePlateau);
+                                    Node chemin = trouverChemin(matricePlateau,hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                    ArrayList<Node> cheminComplet = new ArrayList<Node>();
+                                    Node.nodeToArray(cheminComplet,chemin);
+                                    try {
+                                        faireDeplacement((Unite)caseClic1.estOccupe(),cheminComplet);
+                                        JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
+                                    } catch (InterruptedException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            }
+                            else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
+                                JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                            }
+                            caseClic1 = null;
+                            caseClic2 = null;
+                            System.out.println("Reset");
+                        }
+                        else if (caseClic1 == null && caseClic2 == null){
+                           caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+                           System.out.println("Premier clic recup");
+                           hexCaseClic = hexClic;
+                           if (caseClic1.estOccupe() == null || !joueurActuel.estMonUnite(caseClic1)){
+                                caseClic1 = null;
+                                JOptionPane.showMessageDialog(FenetreJeu, "Mauvaise case");
+                           }
+                        }
+                    }
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
-                    System.out.println(caseSelectionne);
-                    System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
+                    //System.out.println(caseSelectionne);
+                    //System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
                     FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
                     FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
                     break;

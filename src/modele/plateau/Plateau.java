@@ -3,6 +3,8 @@ package modele.plateau;
 
 //import
 import java.util.ArrayList;
+
+import modele.terrain.Plaine;
 import modele.terrain.Terrain;
 
 /**
@@ -22,8 +24,8 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
         for (int i = 0; i <cote; i++) {
             ArrayList<Case> ligne = new ArrayList<Case>();
             for (int j = 0; j < cote ; j++) {
-                Case cellule = new Case(null);
-                ligne.add(new Case(null));
+                Case cellule = new Case(new Plaine());
+                ligne.add(cellule);
                 cellule.setBatiment(null);
                 cellule.setUnite(null);
             }
