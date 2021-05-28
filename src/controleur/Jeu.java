@@ -1345,6 +1345,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         nouveauTour();
                         joueurActuel.regenerationUniteArmee();
                         joueurActuel.gainTourJoueur(tour);
+                        JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
