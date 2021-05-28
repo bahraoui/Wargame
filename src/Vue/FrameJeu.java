@@ -23,6 +23,7 @@ public class FrameJeu extends JFrame{
 	private static PanelChargerPartie panelChargerPartie;
 	private static PanelChargerScenario panelChargerScenario;
 	private static PanelActuel panelActuel;
+	private static PanelVictoire panelVictoire;
 	//REGLES,CHARGERPARTIE,CHANGERSCENARIO
 
 	public FrameJeu() throws IOException, InterruptedException {
@@ -37,6 +38,7 @@ public class FrameJeu extends JFrame{
 		panelChargerPartie = new PanelChargerPartie();
 		//panelChargerScenario = new PanelChargerScenario();
 		panelRegles = new PanelRegles();
+		panelVictoire = new PanelVictoire();
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
 		this.setPreferredSize(new Dimension(1500,800));
@@ -65,6 +67,9 @@ public class FrameJeu extends JFrame{
 			case REGLES:
 				this.remove(panelRegles);
 				break;
+			case VICTOIRE:
+				this.remove(panelVictoire);
+				break;
 		
 			default:
 				break;
@@ -92,6 +97,9 @@ public class FrameJeu extends JFrame{
 			case REGLES:
 				this.add(panelRegles);
 				break;
+			case VICTOIRE:
+				this.add(panelVictoire);
+				break;
 		
 			default:
 				break;
@@ -108,6 +116,7 @@ public class FrameJeu extends JFrame{
 		panelChargerPartie.enregistreEcouteur(controleur);
 		//panelChargerScenario.enregistreEcouteur(controleur);
 		panelRegles.enregistreEcouteur(controleur);
+		panelVictoire.enregistreEcouteur(controleur);
 	}
 
 
