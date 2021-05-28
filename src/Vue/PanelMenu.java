@@ -1,5 +1,7 @@
 package Vue;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -7,6 +9,8 @@ import javax.swing.JPanel;
 import controleur.Jeu;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class PanelMenu extends JPanel{
     private JButton btnNvllePartie;
@@ -17,10 +21,15 @@ public class PanelMenu extends JPanel{
     public PanelMenu() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
-        btnNvllePartie = new JButton("Nouvelle Partie");
-        btnChargerPartie = new JButton("Charger Partie");
-        btnRegles = new JButton("Règles");
-        btnQuitter = new JButton("Quitter");
+        btnNvllePartie = new JButton();
+        btnRegles = new JButton();
+        btnChargerPartie = new JButton();
+        btnQuitter = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
+        //btnChargerPartie = new JButton("Charger Partie");
         btnNvllePartie.setActionCommand("nouvellePartie");
         btnChargerPartie.setActionCommand("chargerPartie");
         btnRegles.setActionCommand("afficherRegles");
@@ -37,7 +46,6 @@ public class PanelMenu extends JPanel{
         this.add(btnRegles,contrainte);
         contrainte.gridy++;
         this.add(btnQuitter,contrainte);
-
     }
 
     public void enregistreEcouteur(Jeu controleur) {
@@ -46,4 +54,25 @@ public class PanelMenu extends JPanel{
         btnQuitter.addActionListener(controleur);
         btnRegles.addActionListener(controleur);
     }
+
+    private void setImageBouton(String filePathName,JButton btnAModifier){
+        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
+        btnAModifier.setBorder(null);
+        try {
+            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"fondMedieval.jpg")), 0, 0, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
