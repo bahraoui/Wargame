@@ -1087,7 +1087,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             System.out.println("Deuxieme clic recup");
 
                             if (caseClic2.estOccupe() == null) {
-                                if (caseClic1.estOccupe() instanceof Unite) {
+                                if (caseClic1.estOccupe() instanceof Unite && ((Unite) caseClic1.estOccupe()).getDeplacementActuel() > 0) {
                                     JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
                                     int[][] matricePlateau = new int[cote][cote];
                                     plateauToMatice(matricePlateau);
