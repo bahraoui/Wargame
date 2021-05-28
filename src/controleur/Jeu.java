@@ -68,6 +68,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static TypeTerrain terrainChoisi;
     private static boolean selectionMonument;
     private static PanelChargerScenario panelChargerScenario;
+    private static TypeUnite uniteAchete;
 
     private static final int cote = 16;
     
@@ -84,6 +85,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         finpartie = false;
         selectionMonument=false;
+        uniteAchete=null;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
@@ -178,6 +180,29 @@ public class Jeu extends MouseAdapter implements ActionListener {
             joueur.getArmee().add(unite);
             plateau.get(coordY).get(coordX).setUnite(unite);
             return true;
+        }
+        return false;
+    }
+
+    public static boolean estDeplacementPossible(int coordXinitial, int coordYinitial,int coordXfinale, int coordYfinale) {
+        if (plateau.get(coordXinitial).get(coordYinitial).getUnite() != null) {
+            int comptDeplacement = plateau.get(coordXinitial).get(coordYinitial).getUnite().getDeplacementActuel();
+            int deplacementUnite = comptDeplacement;
+            while (coordXinitial != coordXfinale && coordYinitial != coordYfinale) {
+                if (coordXinitial>coordXfinale)
+                    comptDeplacement--;
+                else 
+                    comptDeplacement++;
+                
+                if (coordYinitial>coordYfinale)
+                    comptDeplacement--;
+                else 
+                    comptDeplacement++;
+            }
+            if (comptDeplacement >= 0){
+                plateau.get(coordXinitial).get(coordYinitial).getUnite().setDeplacementActuel(deplacementUnite-comptDeplacement);
+                return true;
+            }
         }
         return false;
     }
@@ -449,64 +474,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (e.getSource() instanceof Hexagone) {
-            Hexagone clic = (Hexagone) e.getSource();
-            switch (FenetreJeu.getPanelActuel()) {
-                case CHANGERSCENARIO:
-                    if (terrainChoisi != null && selectionMonument == false) {
-                        try {
-                            clic.setTerrain(terrainChoisi);
-                            cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
-                            if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment() != null) {
-                                clic.setBatiment(batimentModeleToVue(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment().getEstBase()));
-                            }
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    } else if (selectionMonument == true) {
-                        try {
-                            if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment() != null) {
-                                switch (batimentModeleToVue(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
-                                    case MONUMENT:
-                                        clic.setTerrain(terrainModeleToVue(cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getTerrain()));
-                                        panelChargerScenario.setMonumentNb(false);
-                                        cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setBatiment(null);                              
-                                        break;
-                                    
-                                    default:
-                                        JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une base placé ici.");         
-                                        break;
-                                }
-                            }
-                            else if(panelChargerScenario.getNbMonumentsRestants() == 0)
-                                JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
-                            else if (cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().getUnite() != null)
-                                JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
-                            else {
-                                panelChargerScenario.setMonumentNb(true);
-                                clic.setMonument();
-                                cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
-                            }
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                    break;
-                case JEU:
-                    Case caseSelectionne = cellulesCarte[clic.getCoord().getX()][clic.getCoord().getY()].getCase();
-                    System.out.println(caseSelectionne);
-                    System.out.println(clic.getCoord().getX()+" - "+clic.getCoord().getY());
-                    FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
-                    FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
-                    //FenetreJeu.getPanelJeu().getLabelBatimentUnite().setText(caseSelectionne.getCase().estOccupe().toString());
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 
     private TypeTerrain terrainModeleToVue(Terrain terrain) {
         TypeTerrain typeTerrain = null;
@@ -900,6 +867,117 @@ public class Jeu extends MouseAdapter implements ActionListener {
     // ACTION PERFORMED
     //
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource() instanceof Hexagone) {
+            Hexagone hexClic = (Hexagone) e.getSource();
+            switch (FenetreJeu.getPanelActuel()) {
+                case CHANGERSCENARIO:
+                    if (terrainChoisi != null && selectionMonument == false) {
+                        try {
+                            hexClic.setTerrain(terrainChoisi);
+                            cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                            if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
+                                hexClic.setBatiment(batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
+                            }
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else if (selectionMonument == true) {
+                        try {
+                            if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
+                                switch (batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
+                                    case MONUMENT:
+                                        hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
+                                        panelChargerScenario.setMonumentNb(false);
+                                        cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(null);                              
+                                        break;
+                                    
+                                    default:
+                                        JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une base placé ici.");         
+                                        break;
+                                }
+                            }
+                            else if(panelChargerScenario.getNbMonumentsRestants() == 0)
+                                JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
+                            else if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getUnite() != null)
+                                JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
+                            else {
+                                panelChargerScenario.setMonumentNb(true);
+                                hexClic.setMonument();
+                                cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
+                            }
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                    break;
+                case JEU:
+                    if (uniteAchete != null){
+                        switch (uniteAchete) {
+                            case ARCHER:
+                                System.out.println("Achat archer");
+                                Archer archer = new Archer();
+                                if (placerUniteJoueur(joueurActuel, archer, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
+                                break;
+                            case CAVALERIE:
+                                Cavalerie cavalerie = new Cavalerie(); 
+                                if (placerUniteJoueur(joueurActuel, cavalerie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
+                                break;
+                            case INFANTERIE:
+                                Infanterie infanterie = new Infanterie(); 
+                                if (placerUniteJoueur(joueurActuel, infanterie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
+                                break;
+                            case INFANTERIELOURDE:
+                                InfanterieLourde infanterieLourde = new InfanterieLourde(); 
+                                if (placerUniteJoueur(joueurActuel, infanterieLourde, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
+                                break;
+                            case MAGE:
+                                Mage mage = new Mage(); 
+                                if (placerUniteJoueur(joueurActuel, mage, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
+                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    hexClic.setUnite(uniteAchete);
+                                }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
+                                break;
+                            default:
+                                break;
+                        }  
+                        uniteAchete = null;                        
+                    }
+                    Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+                    System.out.println(caseSelectionne);
+                    System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
+                    FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
+                    FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     /**
      * 
      */
@@ -962,7 +1040,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         JOptionPane.showMessageDialog(FenetreJeu, "Vous devez entrer les noms des joueurs ! ");
                     else {
                         try {
-                            chargerCarte(new FileInputStream("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"default"+File.separator+""+carteChoisis+".txt"));
+                            chargerCarte(new FileInputStream("src"+File.separator+"data"+File.separator+"cartes"+File.separator+""+carteChoisis+".txt"));
                             for (int i = 0; i < nbJoueursH+nbJoueursIA; i++) {
                                 if (i < nbJoueursH)
                                     listeJoueur.add(new Joueur(FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(),false));
@@ -1085,44 +1163,19 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * ACHAT
                  */
                 case "achatArcher":
-                    System.out.println("Achat archer");
-                    Archer archerAchete = new Archer();
-                    Joueur.achatUniteArmee(joueurActuel, archerAchete);
-                    placementUnite(joueurActuel,archerAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.ARCHER;
                     break;
                 case "achatCavalerie":
-                    System.out.println("Achat calvalerie");
-                    Cavalerie cavalerieAchete = new Cavalerie();
-                    Joueur.achatUniteArmee(joueurActuel, cavalerieAchete);
-                    placementUnite(joueurActuel,cavalerieAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.CAVALERIE;
                     break;
                case "achatInfanterie":
-                    System.out.println("Achat infanterie");
-                    Infanterie infanterieAchete = new Infanterie();
-                    Joueur.achatUniteArmee(joueurActuel, infanterieAchete);
-                    placementUnite(joueurActuel,infanterieAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.INFANTERIE;
                     break;
                 case "achatInfanterieLourde":
-                    System.out.println("Achat infanterie lourde");
-                    InfanterieLourde infanterieLourdeAchete = new InfanterieLourde();
-                    Joueur.achatUniteArmee(joueurActuel, infanterieLourdeAchete);
-                    placementUnite(joueurActuel,infanterieLourdeAchete);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.INFANTERIELOURDE;
                     break;
                 case "achatMage":
-                    System.out.println("Achat mage");
-                    Mage archerMage = new Mage();
-                    Joueur.achatUniteArmee(joueurActuel, archerMage);
-                    placementUnite(joueurActuel,archerMage);
-                    System.out.println(plateau.affichage());
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    uniteAchete=TypeUnite.MAGE;
                     break;
                 /*
                 * FIN ACHAT

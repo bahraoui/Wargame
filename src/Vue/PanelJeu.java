@@ -166,7 +166,7 @@ public class PanelJeu extends JPanel {
 		labelArcher = new JLabel("Archer");
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
-		boutonArcher = new JButton("Golds");
+		boutonArcher = new JButton("5 Golds");
 		boutonArcher.setActionCommand("achatArcher");
 		panelListeAchat.add(boutonArcher,contrainte);
 
@@ -175,7 +175,7 @@ public class PanelJeu extends JPanel {
 		labelCavalerie = new JLabel("Cavalerie");
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
-		boutonCavalerie = new JButton("Golds");
+		boutonCavalerie = new JButton("12 Golds");
 		boutonCavalerie.setActionCommand("achatCavalerie");
 		panelListeAchat.add(boutonCavalerie,contrainte);
 
@@ -184,7 +184,7 @@ public class PanelJeu extends JPanel {
 		labelInfanterie = new JLabel("Infanterie");
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
-		boutonInfanterie = new JButton("Golds");
+		boutonInfanterie = new JButton("6 Golds");
 		boutonInfanterie.setActionCommand("achatInfanterie");
 		panelListeAchat.add(boutonInfanterie,contrainte);
 
@@ -193,7 +193,7 @@ public class PanelJeu extends JPanel {
 		labelInfanterieLourde = new JLabel("Infanterie Lourde");
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
-		boutonInfanterieLourde = new JButton("Golds");
+		boutonInfanterieLourde = new JButton("30 Golds");
 		boutonInfanterieLourde.setActionCommand("achatInfanterieLourde");
 		panelListeAchat.add(boutonInfanterieLourde,contrainte);
 
@@ -202,7 +202,7 @@ public class PanelJeu extends JPanel {
 		labelMage = new JLabel("Mage");
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
-		boutonMage = new JButton("Golds");
+		boutonMage = new JButton("20 Golds");
 		boutonMage.setActionCommand("achatMage");
 		panelListeAchat.add(boutonMage,contrainte);
 

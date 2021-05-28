@@ -1,6 +1,5 @@
 package Vue;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -149,7 +148,6 @@ public class Hexagone extends JLabel {
             default:
                 break;
         }
-        this.batiment = typeBatimentVue;
         this.paintChildren(g);
     }
 
@@ -328,7 +326,7 @@ public class Hexagone extends JLabel {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }        
+            }
         }
         else {
             try {
@@ -349,6 +347,37 @@ public class Hexagone extends JLabel {
     @Override
     protected void paintBorder(Graphics g) {
         // Does not print border
+    }
+
+
+    public void setUnite(TypeUnite parUnite) {
+        Graphics g = getGraphics();
+        g.setClip(hexagonalShape);
+        try {
+            switch (parUnite) {
+                case ARCHER:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
+                    break;
+                case CAVALERIE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
+                    break;
+                case INFANTERIE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
+                    break;
+                case INFANTERIELOURDE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
+                    break;
+                case MAGE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
+                    break;
+            
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.paintChildren(g);
     }
 
 

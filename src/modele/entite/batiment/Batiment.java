@@ -32,7 +32,7 @@ public class Batiment extends Entite{
             setPointDeVieActuel(500);
             setAttaque(20);
             setDefense(40);
-            setVision(4);
+            setVision(2);
             this.tresor = 0;
         }
     }
