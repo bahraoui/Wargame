@@ -110,11 +110,30 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
 
     //donne en parametre uniquement une case pas null
-    public static void combat(Case attaquant, Case defenseur) {
-        Case.attaquer(attaquant,defenseur);
-        if (((Entite) defenseur.estOccupe()).getPointDeVieActuel() <= 0){
-            mortEntite(defenseur);
+    public static boolean combat(Hexagone attaquant, Hexagone defenseur, int distanceCases) {
+        int rangeAttaque;
+        Case attaquantCase = plateau.get(attaquant.getCoord().getX()).get(attaquant.getCoord().getY());
+        Case defenseCase = plateau.get(defenseur.getCoord().getX()).get(defenseur.getCoord().getY());
+        if (attaquantCase.getBatiment() != null) {
+            rangeAttaque = attaquantCase.getBatiment().getVision();
         }
+        else {
+            rangeAttaque = attaquantCase.getUnite().getVision();
+        }
+        if (rangeAttaque > distanceCases){
+            Case.attaquer(attaquantCase,defenseCase);
+            if (((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
+                mortEntite(defenseCase);
+                try {
+                    defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     //revoir
@@ -146,7 +165,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurActuel.setPieces(joueurActuel.getPieces() + defenseur.getBatiment().getTresor());
                 defenseur.setBatiment(null); //plateau
-            }
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }   
         }
     }
 
@@ -255,7 +275,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         Queue<Node> q = new LinkedList<>();
 
-        Node s = new Node(srcY, srcX, null);
+        Node s = new Node(srcY, srcX, 0, null);
         q.add(s);
 
         while (!q.isEmpty()) {
@@ -275,12 +295,57 @@ public class Jeu extends MouseAdapter implements ActionListener {
             int col = ptY + colNum[i];
             if (estValide(row, col) && mat[row][col] !=0 && !visited[row][col]) {
                 visited[row][col] = true;
-                Node Adjcell = new Node(col,row, curr);
+                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
                 q.add(Adjcell);
             }
             }
         }
         return null;
+    }
+
+    public static boolean estValideAttaque(int row, int col) {
+        return (row >= 0) && (row < cote) && (col >= 0) && (col < cote);
+      }
+
+    public static int calculDistanceAttaque(int mat[][], int srcX, int srcY, int destX, int destY) {
+        int rowNum[] = { -1, 0, 0, 1 };
+        int colNum[] = { 0, -1, 1, 0 };
+
+        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
+            return -1;
+
+        boolean[][] visited = new boolean[cote][cote];
+
+        visited[srcY][srcX] = true;
+
+        Queue<Node> q = new LinkedList<>();
+
+        Node s = new Node(srcY, srcX, 0, null);
+        q.add(s);
+
+        while (!q.isEmpty()) {
+            Node curr = q.peek();
+            int ptX = curr.getX();
+            int ptY = curr.getY();
+
+            if (ptX == destX && ptY == destY){
+            return curr.getDist();
+            }
+
+            q.remove();
+
+            
+            for (int i = 0; i < 4; i++) {
+            int row = ptX + rowNum[i];
+            int col = ptY + colNum[i];
+            if (estValideAttaque(row, col) && mat[row][col] !=0 && !visited[row][col]) {
+                visited[row][col] = true;
+                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
+                q.add(Adjcell);
+            }
+            }
+        }
+        return -1;
     }
 
     private static void faireDeplacement(Unite unite, ArrayList<Node> deplacement) throws InterruptedException
@@ -1107,7 +1172,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 }
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
-                                JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                                int[][] matricePlateau = new int[cote][cote];
+                                plateauToMatice(matricePlateau);
+                                int distanceCase = calculDistanceAttaque(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                if (combat(hexCaseClic, hexClic, distanceCase)){
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                                }
                             }
                             caseClic1 = null;
                             caseClic2 = null;

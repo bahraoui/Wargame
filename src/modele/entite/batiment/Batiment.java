@@ -24,7 +24,7 @@ public class Batiment extends Entite{
      * @param parEstBase booleen qui définit si le batiment est une base ou non
      */
     public Batiment(TypeBatiment parEstBase) {
-        super(150,0,20,0);
+        super(150,0,5,0);
         this.estBase = parEstBase;
         if (parEstBase == TypeBatiment.MONUMENT)
             this.tresor = 50; //aleatoire
