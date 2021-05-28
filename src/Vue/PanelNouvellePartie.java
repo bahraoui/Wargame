@@ -25,13 +25,12 @@ public class PanelNouvellePartie extends JPanel{
     public PanelNouvellePartie() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
-        ArrayList<String> nomMap = new ArrayList<String>();
-        initListeCartes(nomMap);
         Integer[] nbJoueursH = {0,1,2,3,4};
         Integer[] nbJoueursIAInteger= {0,1,2,3,4};
-        choixMap = new JComboBox<String>((String[])nomMap.toArray(new String[0]));
+        
         nbJoueursHumain = new JComboBox<Integer>(nbJoueursH);
         nbJoueursIA = new JComboBox<Integer>(nbJoueursIAInteger);
+        choixMap = new JComboBox<String>();
         nomJoueur = new JLabel[4];
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton("Continuer");
@@ -114,4 +113,55 @@ public class PanelNouvellePartie extends JPanel{
     public JTextField[] getTxtNomJoueur() {
         return this.txtNomJoueur;
     }
+
+
+    public JComboBox<String> getChoixMap() {
+        return this.choixMap;
+    }
+
+    public void setChoixMap(ArrayList<String> listNomMap) {
+        this.choixMap.removeAllItems();
+        for (String nomMap : listNomMap) {
+            this.choixMap.addItem(nomMap); 
+        }
+    }
+
+    public JComboBox<Integer> getNbJoueursHumain() {
+        return this.nbJoueursHumain;
+    }
+
+    public void setNbJoueursHumain(JComboBox<Integer> nbJoueursHumain) {
+        this.nbJoueursHumain = nbJoueursHumain;
+    }
+
+    public JComboBox<Integer> getNbJoueursIA() {
+        return this.nbJoueursIA;
+    }
+
+    public void setNbJoueursIA(JComboBox<Integer> nbJoueursIA) {
+        this.nbJoueursIA = nbJoueursIA;
+    }
+
+    public JButton getBtnContinuer() {
+        return this.btnContinuer;
+    }
+
+    public void setBtnContinuer(JButton btnContinuer) {
+        this.btnContinuer = btnContinuer;
+    }
+
+    public JButton getBtnQuitter() {
+        return this.btnQuitter;
+    }
+
+    public void setBtnQuitter(JButton btnQuitter) {
+        this.btnQuitter = btnQuitter;
+    }
+    public void setNomJoueur(JLabel[] nomJoueur) {
+        this.nomJoueur = nomJoueur;
+    }
+    public void setTxtNomJoueur(JTextField[] txtNomJoueur) {
+        this.txtNomJoueur = txtNomJoueur;
+    }
+
 }

@@ -1273,7 +1273,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Nouvelle Partie"
                  */
                 case "nouvellePartie":
-                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);                
+                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                    ArrayList<String> listNomMap = new ArrayList<String>();
+                    FenetreJeu.getPanelNouvellePartie().initListeCartes(listNomMap);
+                    FenetreJeu.getPanelNouvellePartie().setChoixMap(listNomMap);
                     break;
                 /*
                  * Bouton "Charger Partie"
