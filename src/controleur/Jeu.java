@@ -72,6 +72,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static TypeUnite uniteAchete;
     private static Case caseClic1, caseClic2;
     private static Hexagone hexCaseClic;
+    private static Joueur joueurGagnant;
 
     private static int cmpt=0;
 
@@ -91,6 +92,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         uniteAchete=null;
         caseClic1 = null;
         caseClic2 = null;
+        joueurGagnant = null;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
@@ -130,6 +132,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+                calculVitoire();
             }
             return true;
         }
@@ -363,7 +366,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
-            Thread.sleep(300);
+            Thread.sleep(150);
             System.out.println(plateau.affichage());
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
@@ -371,18 +374,56 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
   
 
-    public static boolean conditionVictoire(){
-        /*if (conditionBase() || conditionPiece()) {
+    public static boolean conditionTourEnJeu(){
+        if (tour == 30){
             return true;
         }
-        return false;*/
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
                 return false;
             }
         }
+        System.out.println("tout le monde joue");
         return true;
     }
+
+    public static void estEnJeu(Joueur joueurAttaque){
+        if ((joueurAttaque.getArmee().size() == 0 && joueurAttaque.getPieces() < 6) || joueurAttaque.getBase() == null){
+            joueurAttaque.setEnJeu(false);
+        }
+    }
+
+    public static void calculVitoire(){
+        if (conditionTourEnJeu()){
+            if (tour == 30){
+                int[] value = new int[listeJoueur.size()];
+                for (int i = 0; i < value.length; i++) {
+                    if (listeJoueur.get(i).getEnJeu()) {
+                        value[i] = joueurActuel.getPieces();
+                        for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++)
+                            value[i]=value[i]+listeJoueur.get(i).getArmee().get(j).getCout();
+                    }
+                    else 
+                        value[i] = -1;
+                }
+                int max = 0;
+                int indice = 0;
+                for (int i = 0; i < value.length; i++) {
+                    if (max < value[i]) {
+                        max = value[i];
+                        indice = i;
+                    }
+                }
+                joueurGagnant = listeJoueur.get(indice);
+            }
+            else {
+                joueurGagnant = joueurActuel;
+            }
+        }
+        System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+    }        
+
+
 
     public static void chronometre() {
     	Timer chrono =  new Timer();
@@ -457,7 +498,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void nouveauTour() throws InterruptedException {
-        if (true) { //condition de victoire
+        if (!conditionTourEnJeu()) { //condition de victoire
             if (tour != 0) {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
@@ -472,6 +513,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Thread.sleep(1000);
             }
             System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+        }
+        else {
+            effacerDonnes();
+            System.out.println("Changer panneau");
         }
         
     }

@@ -15,10 +15,10 @@ public class Cavalerie extends Unite{
      * Attribue pour un archer ses points de vie, son attaque, sa defense,sa vision, son cout, ses deplacement
      */
     public Cavalerie() {
-        super(25,50,10,2);
+        super(25,50,20,2);
         setPointDeVieMax(50);
-        setDeplacementMax(10);
-        setDeplacementActuel(10);
+        setDeplacementMax(40);
+        setDeplacementActuel(40);
         setCout(12);
     }
     

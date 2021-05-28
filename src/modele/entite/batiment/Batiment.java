@@ -29,9 +29,9 @@ public class Batiment extends Entite{
         if (parEstBase == TypeBatiment.MONUMENT)
             this.tresor = 50; //aleatoire
         else {
-            setPointDeVieActuel(500);
+            setPointDeVieActuel(10);
             setAttaque(20);
-            setDefense(40);
+            setDefense(0);
             setVision(4);
             this.tresor = 0;
         }
