@@ -341,23 +341,24 @@ public class Jeu extends MouseAdapter implements ActionListener {
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
             Thread.sleep(150);
-            System.out.println(plateau.affichage());
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
         }
     }
   
 
-    public static boolean conditionTourEnJeu(){
+    public static boolean conditionFinPartie(){
         if (tour == 30){
+            System.out.println("PLus de tour");
             return true;
         }
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
+                System.out.println("Encore du monde en jeu");
                 return false;
             }
         }
-        System.out.println("tout le monde joue");
+        System.out.println("Gagant unanime");
         return true;
     }
 
@@ -368,7 +369,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void calculVitoire(){
-        if (conditionTourEnJeu()){
+        if (conditionFinPartie()){
             if (tour == 30){
                 int[] value = new int[listeJoueur.size()];
                 for (int i = 0; i < value.length; i++) {
@@ -393,8 +394,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurGagnant = joueurActuel;
             }
+            System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
         }
-        System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+        
     }        
 
 
@@ -472,7 +474,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void nouveauTour() throws InterruptedException {
-        if (!conditionTourEnJeu()) { //condition de victoire
+        if (!conditionFinPartie()) { //condition de victoire
             if (tour != 0) {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
@@ -526,18 +528,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //PARTIE IA
     //
 
-    /*public static void joueurAAttaquerIA() {
-        if (joueurActuel.getIdentifiantCible() == -1 || listeJoueur.get(joueurActuel.getIdentifiantCible()).getEnJeu() == false) {
-            ArrayList<Integer> quiAttaquer = new ArrayList<Integer>();
-            for (int i = 0; i < listeJoueur.size(); i++) {
-                if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(joueurActuel.getIdentifiantCible()).getEnJeu()){
-                    quiAttaquer.add(listeJoueur.get(i).getNumeroJoueur());
-                }
-            }
-            joueurActuel.setIdentifiantCible(quiAttaquer.get(new Random().nextInt(quiAttaquer.size())));
-        }
-    }*/
-
     //Par rapport à la base placé vers le centre de la map en prio
     public static boolean placementUnite(Unite unite) {
         int[][][] coordPossible = {{{0,1},{0,2},{1,0},{2,0},{2,1}},
@@ -570,38 +560,150 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (depense >= new Archer().getCout()) {
             troupeAchete = new Archer();
         }
-        if (placementUnite(troupeAchete)){
+        if (placementUnite(troupeAchete))
             joueurActuel.achatUniteArmee(troupeAchete);
-            joueurActuel.getArmee().add(troupeAchete);
-            System.out.println("ACHAT POSSIBLE");
-        }
         else {
             System.out.println("ACHAT IMPOSSIBLE");
         }
         return troupeAchete;
     }
 
-    public static void rechercheEntiteProche() {
+    
 
-
-    }
-
-    public static void estDeplacementPossible() {
-
-        //renvoie une pos
+    public static int[] estDeplacementPossible(int[] coord) {
+        int[][] coordTest = {{1,1},{1,0},{1,-1},{0,1},{0,-1},{-1,1},{-1,0},{-1,-1}};
+        int row,col;
+        for (int i = 0; i < coordTest.length; i++) {
+            row = coord[0]+coordTest[i][0];
+            col = coord[1]+coordTest[i][1];
+            if (estValide(row, col)){
+                int[] coordFinal = {row,col};
+                return coordFinal;
+            }
+        }
+        return coord;
     }
 
     public static void actionUniteIA(Unite unite) {
         //recherche Entite plus proche et deplacement vers elle/attaquer
+        int[] coordUnite = rechercheMonUniteDansPlateau(unite);
+        Entite cible = rechercheEntiteProche(coordUnite);
+        System.out.println("CIBLE CHOSIS :"+cible);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        int[] coordDeplacement = new int[2];
+        int[] coordCible = new int[2];
+        if (cible != null) {
+            coordCible = rechercheMonUniteDansPlateau(cible);
+            System.out.print("Coord Cible : ");
+            for (int i = 0; i < coordCible.length; i++) {
+                System.out.print(coordCible[i]+ " ");
+            }
+            System.out.println("");
+            coordDeplacement = estDeplacementPossible(coordCible);
+            System.out.print("Ou se deplacer : ");
+            for (int i = 0; i < coordDeplacement.length; i++) {
+                System.out.print(coordDeplacement[i]+ " ");
+            }
+            System.out.println("");
+            int[][] matricePlateau = new int[cote][cote];
+            plateauToMatice(matricePlateau);
+            Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], coordDeplacement[0], coordDeplacement[1]);
+            ArrayList<Node> cheminComplet = new ArrayList<Node>();
+            Node.nodeToArray(cheminComplet,chemin);
+            try { 
+                faireDeplacement(unite,cheminComplet);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        coordUnite= rechercheMonUniteDansPlateau(unite);
+        System.out.print("Coord APRES DEPLACEMENT : ");
+        for (int i = 0; i < coordUnite.length; i++) {
+            System.out.print(coordUnite[i]+ " ");
+        }
+        System.out.println("");
+        if (coordUnite[0] == coordDeplacement[0] && coordUnite[1] == coordDeplacement[1]){
+            System.out.println("DEDANS");
+            cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(uniteModelToVue(unite));
+            if (combat(cellulesCarte[coordUnite[0]][coordUnite[1]].getHex(), cellulesCarte[coordCible[0]][coordCible[1]].getHex(), 0)) {
+                System.out.println("Combat !");
+                if (plateau.get(coordCible[0]).get(coordCible[1]).estOccupe() instanceof Batiment)
+                    System.out.println("HP Cible : "+plateau.get(coordCible[0]).get(coordCible[1]).getBatiment().getPointDeVieActuel());
+                else if (plateau.get(coordCible[0]).get(coordCible[1]).estOccupe() instanceof Unite)
+                    System.out.println("HP Cible : "+plateau.get(coordCible[0]).get(coordCible[1]).getUnite().getPointDeVieActuel());
+            }
+        }
     }
 
-    public static void rechercheMonUniteDansPlateau(){
+    public static int[] rechercheMonUniteDansPlateau(Entite entite){
+        int [] coordUnite = new int[2];
+        for (int i = 0; i < plateau.size(); i++) {
+            for (int j = 0; j < plateau.size(); j++) {
+                if (plateau.get(i).get(j).estOccupe() instanceof Unite && entite.getIdentifiant() ==  plateau.get(i).get(j).getUnite().getIdentifiant()){
+                    coordUnite[0] = i;coordUnite[1] = j;
+                }
+                else if (plateau.get(i).get(j).estOccupe() instanceof Batiment && entite.getIdentifiant() ==  plateau.get(i).get(j).getBatiment().getIdentifiant()){
+                    coordUnite[0] = i;coordUnite[1] = j;
+                }
+            }
+        }
+        return coordUnite;
+    }
+
+    public static Entite rechercheEntiteProche(int[] coordUnite) {
+        Entite entiteAAttaquer = new Entite();
+        int[][] matriceEmplacement = new int[cote][cote];
+        int[][] matricePlateau = new int[cote][cote];
+        plateauToMatice(matricePlateau);
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j <  cote; j++) {
+                Case caseTest = plateau.get(i).get(j);
+                matriceEmplacement[i][j] = 99;
+                if (plateau.get(i).get(j).estOccupe() != null){
+                    int [] coord = {i,j};
+                    if (!joueurActuel.estMonEntite(caseTest) && coord != estDeplacementPossible(coord))
+                        matriceEmplacement[i][j] = calculDistanceAttaque(matricePlateau, coordUnite[0], coordUnite[1], i, j);                    
+                }                   
+            }
+        }
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
+                if (matriceEmplacement[i][j] != 99)
+                    System.out.print(matriceEmplacement[i][j] + "  ");
+                else 
+                    System.out.print("*  ");
+            }
+            System.out.println(" ");
+        }
+        int minValue = 99;
+        int[] coord = new int[2];
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
+               if (matriceEmplacement[i][j] < minValue){
+                    minValue = matriceEmplacement[i][j];
+                    coord[0] = i;coord[1]=j;
+               } 
+            }
+        }
+        if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Batiment)
+            entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getBatiment();
         
+        else if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Unite)
+            entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getBatiment();
+        
+        return entiteAAttaquer;
     }
 
     public static void tourIA(){
         //joueurAAttaquerIA();
-        int depense = new Random().nextInt(joueurActuel.getPieces());
+        int depense =  4 + (int)(Math.random() * joueurActuel.getPieces());
+        System.out.println("DEPENSE DU TOUR :"+depense);
         while(depense >= 5) {
             try {
                 Unite uniteachete = achatTroupesIA(depense);
@@ -615,6 +717,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 e.printStackTrace();
             }
         }
+        System.out.println("ARMEE JOUEUR : "+joueurActuel.getArmee().size());
         for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
             actionUniteIA(joueurActuel.getArmee().get(i));
         }
@@ -1224,7 +1327,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                         JOptionPane.showMessageDialog(FenetreJeu, "Unité n'a plus de point déplacement");
                                 }
                             }
-                            else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
+                            else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)){
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
                                 int distanceCase = calculDistanceAttaque(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
@@ -1240,7 +1343,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                            caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                            System.out.println("Premier clic recup");
                            hexCaseClic = hexClic;
-                           if (caseClic1.estOccupe() == null || !joueurActuel.estMonUnite(caseClic1)){
+                           if (caseClic1.estOccupe() == null || !joueurActuel.estMonEntite(caseClic1)){
                                 caseClic1 = null;
                                 JOptionPane.showMessageDialog(FenetreJeu, "Mauvaise case");
                            }
@@ -1249,6 +1352,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                     System.out.println(caseSelectionne);
                     System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
+                    System.out.println(hexClic.getAll());
                     FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
                     FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
                     break;
@@ -1414,7 +1518,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         pj.enregistreEcouteur(this);
                         FenetreJeu.changePanel(PanelActuel.JEU);
                         initPanelJeu = true;
-                        nouveauTour(); 
+                        //pj.repaint();
+                        nouveauTour();
+                        pj.repaint();
                         resetChrono(); 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -1472,11 +1578,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "finTour":
                     try {
+                        //JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
                         resetChrono();
                         nouveauTour();
                         joueurActuel.regenerationUniteArmee();
                         joueurActuel.gainTourJoueur(tour);
-                        JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

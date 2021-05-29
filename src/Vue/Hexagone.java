@@ -110,7 +110,10 @@ public class Hexagone extends JLabel {
                 break;
         }
         this.sol = sol;
+        this.unite=null;
+        this.batiment=null;
         this.paintChildren(g);
+        
     }
 
     
@@ -380,7 +383,13 @@ public class Hexagone extends JLabel {
         this.paintChildren(g);
     }
 
-
+    public String getAll(){
+        if (unite != null)
+            return "Hexagone : \n\tUnite : "+unite.toString();
+        if (batiment != null)
+            return "Hexagone :Batiment: "+batiment.toString();
+        return "Rien";
+    }
 
 
     
