@@ -24,15 +24,72 @@ public class PanelRegles  extends JPanel{
         JLabel txtRegles1 = new JLabel(html1+"600"+html2+regles1Jeu);
 
         JLabel titre2Plateau = new JLabel("2. Le plateau de jeu");
-        String regles2Plateau = new String("Le jeu se déroule sur un espace de jeu découpé en cases hexagonales (voir la figure 1). Un hexagone représente l'unité de lieu et est d'un certain type (plaine, colline, montagne, . . .). Le jeu devra comporter au minimum cinq types différents de terrain. Le type de terrain a un effet sur les unités qui s'y trouvent (bonus d'attaque ou de défense, points de déplacement, . . .) (voir par exemple le tableau 1). Vous êtes libre d'adapter les types de terrain et les effets à votre contexte. Les effets peuvent varier en fonction du type d'unité (le type d'unité « elfe » se déplacera par exemple plus vite dans la forêt). Chaque hexagone ne peut accueillir qu'une seule unité.");
+        String regles2Plateau = new String("Le jeu se déroule sur un espace de jeu découpé en cases hexagonales (voir la figure 1). Un hexagone représente l'unité de lieu et est d'un certain type (plaine, colline, montagne, . . .). Le jeu comporte au cinq types différents de terrain. Le type de terrain a un effet sur les unités qui s'y trouvent (bonus d'attaque ou de défense, points de déplacement, . . .). Vous êtes libre d'adapter les types de terrain et ajouter les monuments selon vos envies. Chaque hexagone ne peut accueillir qu'une seule entité.");
         JLabel txtRegles2 = new JLabel(html1+"600"+html2+regles2Plateau);
 
         JLabel titre3Unite = new JLabel("3. Les unites");
-        String regles3Unite = new String("##############################################");
-        JLabel txtRegles3 = new JLabel(html1+"600"+html2+regles3Unite);
+        String regles3Unite = new String("Il existe 5 type d'unite possibles : <br/><ol><li>Archer:<br/>Un archer possede</li><li>Cavalerie:<br/>ue cavalerie est</li><li>Infanterie:<br/></li><li>InfanterieLourde:<br/></li><li>Mage:<br/></li></ol>");
+        regles3Unite = new String("<table style='border-collapse: collapse;'> "+
+                                    "<tr style='border: 1px solid black;'>"+
+                                        "<td>Nom Unite</td>"+
+                                        "<td>ATK</td>"+
+                                        "<td>DEF</td>"+
+                                        "<td>PV</td>"+
+                                        "<td>Déplacement</td>"+
+                                        "<td>Vision</td>"+
+                                        "<td>Cout (en Golds)</td>"+
+                                    "</tr>"+
+                                    "<tr style='border: 1px solid black;'>"+
+                                        "<td>Archer</td>"+
+                                        "<td>40</td>"+
+                                        "<td>20</td>"+
+                                        "<td>20</td>"+
+                                        "<td>3</td>"+
+                                        "<td>4</td>"+
+                                        "<td>5</td>"+
+                                    "</tr>"+
+                                    "<tr style='border: 1px solid black;'>"+
+                                        "<td>Cavalerie</td>"+
+                                        "<td>50</td>"+
+                                        "<td>20</td>"+
+                                        "<td>25</td>"+
+                                        "<td>40</td>"+
+                                        "<td>2</td>"+
+                                        "<td>12</td>"+
+                                    "</tr>"+
+                                    "<tr style='border: 1px solid black;'>"+
+                                        "<td>Infanterie</td>"+
+                                        "<td>25</td>"+
+                                        "<td>35</td>"+
+                                        "<td>40</td>"+
+                                        "<td>2</td>"+
+                                        "<td>1</td>"+
+                                        "<td>6</td>"+
+                                    "</tr>"+
+                                    "<tr style='border: 1px solid black;'>"+
+                                        "<td>InfanterieLourde</td>"+
+                                        "<td>15</td>"+
+                                        "<td>45</td>"+
+                                        "<td>120</td>"+
+                                        "<td>2</td>"+
+                                        "<td>2</td>"+
+                                        "<td>30</td>"+
+                                    "</tr>"+
+                                    "<tr style='border: 1px solid black;'>"+
+                                        "<td>Mage</td>"+
+                                        "<td>65</td>"+
+                                        "<td>30</td>"+
+                                        "<td>35</td>"+
+                                        "<td>3</td>"+
+                                        "<td>3</td>"+
+                                        "<td>20</td>"+
+                                    "</tr>"+
+                                "</table>");
+        
+        JLabel txtRegles3 = new JLabel(html1+"600"+html2+regles3Unite+"</html>");
 
         JLabel titre4Combat = new JLabel("4. Système de combat");
-        String regles4Combat = new String("#############################################");
+        String regles4Combat = new String("Les entités de type \"unité\" comme vu ci-dessus peuvent attaquer toutes les autres entités. En effet, un unité peut en attaquer une autre, et dans ce cas l'unité attaquée reçoit (ATK unité attaquante - DEF unité attaqué) PV en moins.");
         JLabel txtRegles4 = new JLabel(html1+"600"+html2+regles4Combat);
 
         JLabel titre5Victoire = new JLabel("5. Comment gagner ?");
@@ -40,7 +97,7 @@ public class PanelRegles  extends JPanel{
         JLabel txtRegles5 = new JLabel(html1+"600"+html2+regles5Victoire);
 
         JLabel titre6Jouer = new JLabel("6. Lancer une partie");
-        String regles6Jouer  = new String("##############################################");
+        String regles6Jouer  = new String("Pour pouvoir lancer une partie, deux choix s'offrent à vous : reprendre une partie sauvegardée ou en créer une nouvelle.<br/>Lors de la création d'une nouvelle partie, il vous est possible de changer le scénario du jeu : placement de terrains & placement limité de monument. Après cela vous pouvez sauvegarder le scénario pour pouvoir le réutiliser comme bsae plus tard lors de la création d'un nouveau scénario. <br/>Puis, pour chargez une partie sauvegardée, il suffit de choisir le fichier contenant votre sauvegarde puis de lancer.");
         JLabel txtRegles6 = new JLabel(html1+"600"+html2+regles6Jouer);
         
         btnQuitter = new JButton("Quitter");
