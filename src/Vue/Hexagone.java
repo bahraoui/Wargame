@@ -117,13 +117,17 @@ public class Hexagone extends JLabel {
     }
 
     
-    public void setMonument() throws IOException{
-        Graphics g = getGraphics();
-        g.setClip(hexagonalShape);
-        setTerrain(sol);
-        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
-        this.batiment = TypeBatimentVue.MONUMENT;
-        this.paintChildren(g);
+    public void setMonument(boolean Monument) throws IOException{
+        if (Monument) {
+            Graphics g = getGraphics();
+            g.setClip(hexagonalShape);
+            setTerrain(sol);
+            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
+            this.batiment = TypeBatimentVue.MONUMENT;
+            this.paintChildren(g);
+        } else {
+            this.batiment = null;
+        }
     }
 
     
