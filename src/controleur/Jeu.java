@@ -74,6 +74,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Case caseClic1, caseClic2;
     private static Hexagone hexCaseClic;
     private static Joueur joueurGagnant;
+    private static boolean initPanelJeu;
 
     private static int cmpt=0;
 
@@ -92,6 +93,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         uniteAchete=null;
         caseClic1 = null;
         caseClic2 = null;
+        initPanelJeu = false;
         joueurGagnant = null;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
@@ -497,12 +499,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void resetChrono() {
-        FenetreJeu.getPanelJeu().setSeconde(0);
-        FenetreJeu.getPanelJeu().setMinute(2);
-        FenetreJeu.getPanelJeu().getTimerTour().restart();
-        FenetreJeu.getPanelJeu().getTimerHorloge().restart();
+        if (initPanelJeu) {
+            FenetreJeu.getPanelJeu().setSeconde(0);
+            FenetreJeu.getPanelJeu().setMinute(2);
+            FenetreJeu.getPanelJeu().getTimerTour().restart();
+            FenetreJeu.getPanelJeu().getTimerHorloge().restart();
+        }
     }
-
     public static void effacerDonnes() {
         resetChrono();
         int nbJoueurs = listeJoueur.size();
@@ -588,8 +591,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
         //renvoie une pos
     }
 
-    public static void actionUniteIA() {
+    public static void actionUniteIA(Unite unite) {
         //recherche Entite plus proche et deplacement vers elle/attaquer
+    }
+
+    public static void rechercheMonUniteDansPlateau(){
+        
     }
 
     public static void tourIA(){
@@ -602,14 +609,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     depense -= uniteachete.getCout();
                     System.err.println(plateau.affichage());
                     FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-                    //setCellulesMap();
-                    //FenetreJeu.getPanelJeu().getPanelCentrePlateau().setCells();
                     Thread.sleep(1000);
                 }
-                //actionUniteIA
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
+            actionUniteIA(joueurActuel.getArmee().get(i));
         }
 
     }
@@ -1374,6 +1381,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             FenetreJeu.setPanelJeu(pj);
                             pj.enregistreEcouteur(this);
                             FenetreJeu.changePanel(PanelActuel.JEU);
+                            initPanelJeu = true;
                             resetChrono();
                         } catch (IOException e) {
                             e.printStackTrace();                   
@@ -1405,6 +1413,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         FenetreJeu.setPanelJeu(pj);
                         pj.enregistreEcouteur(this);
                         FenetreJeu.changePanel(PanelActuel.JEU);
+                        initPanelJeu = true;
                         nouveauTour(); 
                         resetChrono(); 
                     } catch (IOException e) {
@@ -1495,8 +1504,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 case "retourMenu":
                     effacerDonnes();
                     FenetreJeu.changePanel(PanelActuel.MENU);
-                    FenetreJeu.getPanelJeu().getTimerHorloge().stop();
-                    FenetreJeu.getPanelJeu().getTimerTour().stop();
+                    if (initPanelJeu){
+                        FenetreJeu.getPanelJeu().getTimerHorloge().stop();
+                        FenetreJeu.getPanelJeu().getTimerTour().stop();
+                    }
+                    
                     break;
                 default:
                     break;
