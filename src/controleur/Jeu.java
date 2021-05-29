@@ -537,102 +537,15 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     //Par rapport à la base placé vers le centre de la map en prio
     public static boolean placementUnite(Unite unite) {
-        if (joueurActuel.getNumeroJoueur() == 0){
-            int [][] coordPossible = {{0,1},{0,2},{1,0},{2,1}};
-            if (placerUniteJoueur(joueurActuel, unite, 0,1)){
-                cellulesCarte[0][1].getHex().setUnite(uniteModelToVue(unite));
+        int[][][] coordPossible = {{{0,1},{0,2},{1,0},{2,0},{2,1}},
+                                {{13,14},{14,14},{14,15},{15,12},{15,13}},
+                                {{0,14},{1,14},{2,15},{0,13},{1,13}},
+                                {{12,0},{13,0},{14,0},{14,1},{15,1}}};
+        for (int i = 0; i < 5; i++) {
+            if (placerUniteJoueur(joueurActuel, unite, coordPossible[joueurActuel.getNumeroJoueur()][i][0],coordPossible[joueurActuel.getNumeroJoueur()][i][1])){
+                cellulesCarte[coordPossible[joueurActuel.getNumeroJoueur()][i][0]][coordPossible[joueurActuel.getNumeroJoueur()][i][1]].getHex().setUnite(uniteModelToVue(unite));
                 return true;
             }
-            else if (placerUniteJoueur(joueurActuel, unite, 0,2)){
-                cellulesCarte[0][2].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 1,0)){
-                cellulesCarte[1][0].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 2,0)){
-                cellulesCarte[2][0].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 2,1)){
-                cellulesCarte[2][1].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else 
-                return false;
-        }
-        else if (joueurActuel.getNumeroJoueur() == 1){
-            if (placerUniteJoueur(joueurActuel, unite, 13,14)){
-                cellulesCarte[13][14].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 14,14)){
-                cellulesCarte[14][14].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 14,15)){
-                cellulesCarte[14][15].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 15,12)){
-                cellulesCarte[15][12].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 15,13)){
-                cellulesCarte[15][13].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else 
-                return false;
-        }
-        else if (joueurActuel.getNumeroJoueur() == 2){
-            if (placerUniteJoueur(joueurActuel, unite, 0,14)){
-                cellulesCarte[0][14].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 1,14)){
-                cellulesCarte[1][14].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 2,15)){
-                cellulesCarte[2][15].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 0,13)){
-                cellulesCarte[0][13].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 1,13)){
-                cellulesCarte[1][13].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else 
-                return false;
-        }
-        else if (joueurActuel.getNumeroJoueur() == 3){
-            if (placerUniteJoueur(joueurActuel, unite, 12,0)){
-                cellulesCarte[12][0].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 13,0)){
-                cellulesCarte[13][0].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 14,0)){
-                cellulesCarte[14][0].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 14,1)){
-                cellulesCarte[14][1].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else if (placerUniteJoueur(joueurActuel, unite, 15,1)){
-                cellulesCarte[15][1].getHex().setUnite(uniteModelToVue(unite));
-                return true;
-            }
-            else 
-                return false;
         }
         return false;
     }
