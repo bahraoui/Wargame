@@ -1003,6 +1003,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 switch (batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
                                     case MONUMENT:
                                         hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
+                                        hexClic.setMonument(false);
                                         panelChargerScenario.setMonumentNb(false);
                                         cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(null);                              
                                         break;
@@ -1018,7 +1019,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
                             else {
                                 panelChargerScenario.setMonumentNb(true);
-                                hexClic.setMonument();
+                                hexClic.setMonument(true);
                                 cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
                             }
                         } catch (IOException e1) {
