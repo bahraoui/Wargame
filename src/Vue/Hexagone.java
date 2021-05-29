@@ -132,8 +132,8 @@ public class Hexagone extends JLabel {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         switch (batiment) {
-            case BASE_HAUT:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_HAUT.png")), 0, 0, null);
+            case BASE:
+                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 0, 0, null);
                 break;
             case BASE_BAS:
                 g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
@@ -275,8 +275,8 @@ public class Hexagone extends JLabel {
         if (batiment != null) {
             try {
                 switch (batiment) {
-                    case BASE_HAUT:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_HAUT.png")), 0, 0, null);
+                    case BASE:
+                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 0, 0, null);
                         break;
                     case BASE_BAS:
                         g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);

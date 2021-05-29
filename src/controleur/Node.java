@@ -5,12 +5,14 @@ import java.util.*;
 public class Node {
   private int x;
   private int y;
+  private int dist;
   private Node parent;
   private final static int taillePlateau = 16;
 
-  public Node(int y, int x, Node parent) {
+  public Node(int y, int x, int dist, Node parent) {
     this.x = x;
     this.y = y;
+    this.dist = dist;
     this.parent = parent;
   }
 
@@ -43,6 +45,15 @@ public class Node {
 
   public void setX(int x) {
     this.x = x;
+  }
+
+
+  public int getDist() {
+    return this.dist;
+  }
+
+  public void setDist(int dist) {
+    this.dist = dist;
   }
 
   public int getY() {

@@ -3,17 +3,18 @@ package Vue;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import controleur.Cellule;
 import controleur.Jeu;
 
 /**
@@ -27,7 +28,7 @@ public class PanelJeu extends JPanel {
 	private JPanel panelInfoPartie;
 	private JLabel labelNbTours;
 	private JLabel labelNomJoueur;
-	private static int minute=2,seconde=0;
+	private int minute=2,seconde=0;
 	private JLabel labelTypeTerrain;
 	private JLabel labelBatimentUnite;
 	private JPanel panelBoutique;
@@ -37,6 +38,8 @@ public class PanelJeu extends JPanel {
 	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
 	private JLabel labelBonusTerrain;
 	public static String str = new String("00:00");
+	private Timer timerTour;
+	private Timer timerHorloge;
 
 	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
@@ -76,7 +79,7 @@ public class PanelJeu extends JPanel {
 			{
 				if(seconde==0 && minute!=0)
 				{
-					seconde=59;
+					seconde=60;
 					minute--;
 				}
 				seconde--;
@@ -88,7 +91,7 @@ public class PanelJeu extends JPanel {
 
 			}
 		};
-		final Timer timerHorloge = new Timer(1000,tacheTimerHorloge);
+		timerHorloge = new Timer(1000,tacheTimerHorloge);
 
 		ActionListener tacheTimerTour = new ActionListener()
 		{
@@ -106,7 +109,7 @@ public class PanelJeu extends JPanel {
 				}
 			}
 		};
-		final Timer timerTour = new Timer(120000,tacheTimerTour);
+		timerTour = new Timer(120000,tacheTimerTour);
 		timerTour.start();
 		timerHorloge.start();
 
@@ -144,7 +147,7 @@ public class PanelJeu extends JPanel {
 		// PANEL BOUTIQUE //
 		////////////////////
 		this.panelBoutique = new JPanel();
-		panelBoutique.setPreferredSize(new Dimension(200,250));
+		panelBoutique.setPreferredSize(new Dimension(200,300));
 		panelBoutique.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		//panelBoutique.setLayout(new BoxLayout(panelBoutique, BoxLayout.Y_AXIS));
 
@@ -166,7 +169,8 @@ public class PanelJeu extends JPanel {
 		labelArcher = new JLabel("Archer");
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
-		boutonArcher = new JButton("5 Golds");
+		boutonArcher = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
 		boutonArcher.setActionCommand("achatArcher");
 		panelListeAchat.add(boutonArcher,contrainte);
 
@@ -175,7 +179,8 @@ public class PanelJeu extends JPanel {
 		labelCavalerie = new JLabel("Cavalerie");
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
-		boutonCavalerie = new JButton("12 Golds");
+		boutonCavalerie = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
 		boutonCavalerie.setActionCommand("achatCavalerie");
 		panelListeAchat.add(boutonCavalerie,contrainte);
 
@@ -184,7 +189,8 @@ public class PanelJeu extends JPanel {
 		labelInfanterie = new JLabel("Infanterie");
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
-		boutonInfanterie = new JButton("6 Golds");
+		boutonInfanterie = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
 		boutonInfanterie.setActionCommand("achatInfanterie");
 		panelListeAchat.add(boutonInfanterie,contrainte);
 
@@ -193,7 +199,8 @@ public class PanelJeu extends JPanel {
 		labelInfanterieLourde = new JLabel("Infanterie Lourde");
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
-		boutonInfanterieLourde = new JButton("30 Golds");
+		boutonInfanterieLourde = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
 		boutonInfanterieLourde.setActionCommand("achatInfanterieLourde");
 		panelListeAchat.add(boutonInfanterieLourde,contrainte);
 
@@ -202,7 +209,8 @@ public class PanelJeu extends JPanel {
 		labelMage = new JLabel("Mage");
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
-		boutonMage = new JButton("20 Golds");
+		boutonMage = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
 		boutonMage.setActionCommand("achatMage");
 		panelListeAchat.add(boutonMage,contrainte);
 
@@ -248,6 +256,17 @@ public class PanelJeu extends JPanel {
 		boutonMage.addActionListener(controleur);
 		boutonQuitter.addActionListener(controleur);
 	}
+
+
+	private void setImageBouton(String filePathName,JButton btnAModifier){
+        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
+        btnAModifier.setBorder(null);
+        try {
+            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	public void updateGoldJoueurAffichage(int nbGold) {
         labelGolds.setText(nbGold+" Golds");
@@ -316,6 +335,39 @@ public class PanelJeu extends JPanel {
 
 	public void setLabelNomJoueur(JLabel labelNomJoueur) {
 		this.labelNomJoueur = labelNomJoueur;
+	}
+
+	public Timer getTimerTour() {
+		return this.timerTour;
+	}
+
+	public void setTimerTour(Timer timerTour) {
+		this.timerTour = timerTour;
+	}
+
+	public Timer getTimerHorloge() {
+		return this.timerHorloge;
+	}
+
+	public void setTimerHorloge(Timer timerHorloge) {
+		this.timerHorloge = timerHorloge;
+	}
+
+
+	public int getMinute() {
+		return this.minute;
+	}
+
+	public void setMinute(int minute) {
+		this.minute = minute;
+	}
+
+	public int getSeconde() {
+		return this.seconde;
+	}
+
+	public void setSeconde(int seconde) {
+		this.seconde = seconde;
 	}
 
 	public JLabel getLabelTypeTerrain() {

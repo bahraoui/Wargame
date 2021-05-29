@@ -32,7 +32,7 @@ public class Joueur {
     private int numeroJoueur;
     private static int compteur = 0;
     private boolean estIa;
-    private int identifiantCible;
+    //private int identifiantCible;
     private boolean enJeu;
     private String pseudo;
 
@@ -48,12 +48,12 @@ public class Joueur {
         this.estIa = parEstIa;
         this.enJeu = true;
         this.armee = new ArrayList<Unite>();
-        this.identifiantCible = -1;
+        //this.identifiantCible = -1;
     }
 
-    public static boolean achatUniteArmee(Joueur joueur, Unite unite){
-        if (joueur.getPieces() >= unite.getCout()){
-            joueur.setPieces(joueur.getPieces()-unite.getCout());
+    public boolean achatUniteArmee(Unite unite){
+        if (this.getPieces() >= unite.getCout()){
+            this.setPieces(this.getPieces()-unite.getCout());
             return true;
         }
         else {
@@ -125,6 +125,26 @@ public class Joueur {
     }
     public String getPseudo() {
         return pseudo;
+    }
+
+    public void setNumeroJoueur(int numeroJoueur) {
+        this.numeroJoueur = numeroJoueur;
+    }
+
+    public boolean isEstIa() {
+        return this.estIa;
+    }
+
+    /*public int getIdentifiantCible() {
+        return this.identifiantCible;
+    }
+
+    public void setIdentifiantCible(int identifiantCible) {
+        this.identifiantCible = identifiantCible;
+    }*/
+
+    public boolean isEnJeu() {
+        return this.enJeu;
     }
 
     public void setEstIa(boolean estIa) {

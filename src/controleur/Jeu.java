@@ -28,6 +28,7 @@ import Vue.PanelActuel;
 import Vue.PanelChargerPartie;
 import Vue.PanelChargerScenario;
 import Vue.PanelJeu;
+import Vue.PanelMap;
 import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
@@ -72,6 +73,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static TypeUnite uniteAchete;
     private static Case caseClic1, caseClic2;
     private static Hexagone hexCaseClic;
+    private static Joueur joueurGagnant;
+    private static boolean initPanelJeu;
 
     private static int cmpt=0;
 
@@ -82,8 +85,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        chronometre();
-
+        chronometre();        
         Jeu controleur = new Jeu();
         carteChoisis = "";
         finpartie = false;
@@ -91,6 +93,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         uniteAchete=null;
         caseClic1 = null;
         caseClic2 = null;
+        initPanelJeu = false;
+        joueurGagnant = null;
         cellulesCarte = new Cellule[16][16];
         terrainChoisi = TypeTerrain.NEIGE;
         nbJoueursH = nbJoueursIA = 0;
@@ -110,11 +114,31 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
 
     //donne en parametre uniquement une case pas null
-    public static void combat(Case attaquant, Case defenseur) {
-        Case.attaquer(attaquant,defenseur);
-        if (((Entite) defenseur.estOccupe()).getPointDeVieActuel() <= 0){
-            mortEntite(defenseur);
+    public static boolean combat(Hexagone attaquant, Hexagone defenseur, int distanceCases) {
+        int rangeAttaque;
+        Case attaquantCase = plateau.get(attaquant.getCoord().getX()).get(attaquant.getCoord().getY());
+        Case defenseCase = plateau.get(defenseur.getCoord().getX()).get(defenseur.getCoord().getY());
+        if (attaquantCase.getBatiment() != null) {
+            rangeAttaque = attaquantCase.getBatiment().getVision();
         }
+        else {
+            rangeAttaque = attaquantCase.getUnite().getVision();
+        }
+        if (rangeAttaque > distanceCases){
+            Case.attaquer(attaquantCase,defenseCase);
+            if (((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
+                mortEntite(defenseCase);
+                try {
+                    defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                calculVitoire();
+            }
+            return true;
+        }
+        return false;
     }
 
     //revoir
@@ -146,18 +170,23 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurActuel.setPieces(joueurActuel.getPieces() + defenseur.getBatiment().getTresor());
                 defenseur.setBatiment(null); //plateau
-            }
+                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            }   
         }
     }
 
     public static void placerBasesJoueurs() {
         int nbJoueurs = listeJoueur.size();
+        System.out.println("NOMBRE JOUEUR : "+nbJoueurs);
+        for (int i = 0; i < listeJoueur.size(); i++) {
+            System.out.println(listeJoueur.get(i).getPseudo());
+        }
         placerBase(listeJoueur.get(0),0,0);
         placerBase(listeJoueur.get(1),15,14);
         if (nbJoueurs >=3) {
             placerBase(listeJoueur.get(2),0,15);            
         }
-        if (nbJoueurs ==4) {
+        if (nbJoueurs == 4) {
             placerBase(listeJoueur.get(3),15,0);            
         }
     }
@@ -178,42 +207,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
         int coordXBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(1);
         int calculVisionY = coordY - coordYBase;
         int calculVisionX = coordX - coordXBase;
-        if (caseUnite.getBatiment() == null && caseUnite.getUnite() == null && Math.abs(calculVisionY) <= joueur.getBase().getVision() && Math.abs(calculVisionX) <= joueur.getBase().getVision() && Joueur.achatUniteArmee(joueur,unite)) {
+        if (caseUnite.getBatiment() == null && caseUnite.getUnite() == null && Math.abs(calculVisionY) <= joueur.getBase().getVision() && Math.abs(calculVisionX) <= joueur.getBase().getVision() && joueur.achatUniteArmee(unite)) {
             joueur.getArmee().add(unite);
             plateau.get(coordY).get(coordX).setUnite(unite);
             return true;
-        }
-        return false;
-    }
-
-    public static boolean estDeplacementPossible(int coordXinitial, int coordYinitial,int coordXfinale, int coordYfinale) {
-        if (plateau.get(coordXinitial).get(coordYinitial).getUnite() != null && plateau.get(coordXfinale).get(coordYfinale).estOccupe() == null) {
-            int comptDeplacement = plateau.get(coordXinitial).get(coordYinitial).getUnite().getDeplacementActuel();
-            int deplacementUnite = comptDeplacement;
-            int coordXDepart = coordXinitial; int coordYDepart = coordYinitial;
-            while (coordXinitial != coordXfinale && coordYinitial != coordYfinale) {
-                if (coordXinitial>coordXfinale){
-                    comptDeplacement--;
-                    coordXinitial--;
-                }
-                else {
-                    coordXinitial ++;
-                    comptDeplacement++;
-                }
-                
-                if (coordYinitial>coordYfinale){
-                    comptDeplacement--;
-                    coordYinitial--;
-                }
-                else {
-                    coordYinitial ++;
-                    comptDeplacement++;
-                }
-            }
-            if (comptDeplacement >= 0){
-                plateau.get(coordXDepart).get(coordYDepart).getUnite().setDeplacementActuel(deplacementUnite-comptDeplacement);
-                return true;
-            }
         }
         return false;
     }
@@ -255,7 +252,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         Queue<Node> q = new LinkedList<>();
 
-        Node s = new Node(srcY, srcX, null);
+        Node s = new Node(srcY, srcX, 0, null);
         q.add(s);
 
         while (!q.isEmpty()) {
@@ -275,12 +272,57 @@ public class Jeu extends MouseAdapter implements ActionListener {
             int col = ptY + colNum[i];
             if (estValide(row, col) && mat[row][col] !=0 && !visited[row][col]) {
                 visited[row][col] = true;
-                Node Adjcell = new Node(col,row, curr);
+                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
                 q.add(Adjcell);
             }
             }
         }
         return null;
+    }
+
+    public static boolean estValideAttaque(int row, int col) {
+        return (row >= 0) && (row < cote) && (col >= 0) && (col < cote);
+      }
+
+    public static int calculDistanceAttaque(int mat[][], int srcX, int srcY, int destX, int destY) {
+        int rowNum[] = { -1, 0, 0, 1 };
+        int colNum[] = { 0, -1, 1, 0 };
+
+        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
+            return -1;
+
+        boolean[][] visited = new boolean[cote][cote];
+
+        visited[srcY][srcX] = true;
+
+        Queue<Node> q = new LinkedList<>();
+
+        Node s = new Node(srcY, srcX, 0, null);
+        q.add(s);
+
+        while (!q.isEmpty()) {
+            Node curr = q.peek();
+            int ptX = curr.getX();
+            int ptY = curr.getY();
+
+            if (ptX == destX && ptY == destY){
+            return curr.getDist();
+            }
+
+            q.remove();
+
+            
+            for (int i = 0; i < 4; i++) {
+            int row = ptX + rowNum[i];
+            int col = ptY + colNum[i];
+            if (estValideAttaque(row, col) && mat[row][col] !=0 && !visited[row][col]) {
+                visited[row][col] = true;
+                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
+                q.add(Adjcell);
+            }
+            }
+        }
+        return -1;
     }
 
     private static void faireDeplacement(Unite unite, ArrayList<Node> deplacement) throws InterruptedException
@@ -298,7 +340,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
-            Thread.sleep(300);
+            Thread.sleep(150);
             System.out.println(plateau.affichage());
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
@@ -306,18 +348,56 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
   
 
-    public static boolean conditionVictoire(){
-        /*if (conditionBase() || conditionPiece()) {
+    public static boolean conditionTourEnJeu(){
+        if (tour == 30){
             return true;
         }
-        return false;*/
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
                 return false;
             }
         }
+        System.out.println("tout le monde joue");
         return true;
     }
+
+    public static void estEnJeu(Joueur joueurAttaque){
+        if ((joueurAttaque.getArmee().size() == 0 && joueurAttaque.getPieces() < 6) || joueurAttaque.getBase() == null){
+            joueurAttaque.setEnJeu(false);
+        }
+    }
+
+    public static void calculVitoire(){
+        if (conditionTourEnJeu()){
+            if (tour == 30){
+                int[] value = new int[listeJoueur.size()];
+                for (int i = 0; i < value.length; i++) {
+                    if (listeJoueur.get(i).getEnJeu()) {
+                        value[i] = joueurActuel.getPieces();
+                        for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++)
+                            value[i]=value[i]+listeJoueur.get(i).getArmee().get(j).getCout();
+                    }
+                    else 
+                        value[i] = -1;
+                }
+                int max = 0;
+                int indice = 0;
+                for (int i = 0; i < value.length; i++) {
+                    if (max < value[i]) {
+                        max = value[i];
+                        indice = i;
+                    }
+                }
+                joueurGagnant = listeJoueur.get(indice);
+            }
+            else {
+                joueurGagnant = joueurActuel;
+            }
+        }
+        System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+    }        
+
+
 
     public static void chronometre() {
     	Timer chrono =  new Timer();
@@ -392,7 +472,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void nouveauTour() throws InterruptedException {
-        if (true) { //condition de victoire
+        if (!conditionTourEnJeu()) { //condition de victoire
             if (tour != 0) {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
@@ -405,16 +485,37 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (joueurActuel.getEstIa()){
                 tourIA();
                 Thread.sleep(1000);
+                //nouveauTour();
             }
             System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+        }
+        else {
+            effacerDonnes();
+            FenetreJeu.getPanelJeu().getTimerHorloge().stop();
+            FenetreJeu.getPanelJeu().getTimerTour().stop();
+            System.out.println("Changer panneau");
         }
         
     }
 
+    public static void resetChrono() {
+        if (initPanelJeu) {
+            FenetreJeu.getPanelJeu().setSeconde(0);
+            FenetreJeu.getPanelJeu().setMinute(2);
+            FenetreJeu.getPanelJeu().getTimerTour().restart();
+            FenetreJeu.getPanelJeu().getTimerHorloge().restart();
+        }
+    }
     public static void effacerDonnes() {
-        listeJoueur.removeAll(listeJoueur);
+        resetChrono();
+        int nbJoueurs = listeJoueur.size();
+        for (int i = nbJoueurs-1; i > 0 ; i--) {
+            listeJoueur.remove(i);
+        }
+        listeJoueur = new ArrayList<Joueur>();
         plateau.removeAll(plateau);
         plateau = new Plateau();
+        System.out.println("RESET HARD");
     }
 
     //
@@ -425,85 +526,100 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //PARTIE IA
     //
 
-    public static void joueurAAttaquerIA() {
-        
-        //verfie si encore in game
-        //sinon
-        //random
-        //assigner
-    }
-
-    //Par rapport à la base placé vers le centre de la map en prio
-    public static void placementUnite(Joueur ia, Unite unite) {
-        int coordX = postionBaseJoueur.get(ia.getNumeroJoueur()).get(0);
-        int coordY = postionBaseJoueur.get(ia.getNumeroJoueur()).get(1);
-        for (int i = coordX - 1 ; i < coordX + 3; i++) {
-            for (int j = coordY - 2; j < coordY + 3; j++) {
-                //Hors quatre coins
-                if (placerUniteJoueur(ia, unite, i,j)){
-                    return;
+    /*public static void joueurAAttaquerIA() {
+        if (joueurActuel.getIdentifiantCible() == -1 || listeJoueur.get(joueurActuel.getIdentifiantCible()).getEnJeu() == false) {
+            ArrayList<Integer> quiAttaquer = new ArrayList<Integer>();
+            for (int i = 0; i < listeJoueur.size(); i++) {
+                if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(joueurActuel.getIdentifiantCible()).getEnJeu()){
+                    quiAttaquer.add(listeJoueur.get(i).getNumeroJoueur());
                 }
             }
+            joueurActuel.setIdentifiantCible(quiAttaquer.get(new Random().nextInt(quiAttaquer.size())));
         }
+    }*/
+
+    //Par rapport à la base placé vers le centre de la map en prio
+    public static boolean placementUnite(Unite unite) {
+        int[][][] coordPossible = {{{0,1},{0,2},{1,0},{2,0},{2,1}},
+                                {{13,14},{14,14},{14,15},{15,12},{15,13}},
+                                {{0,14},{1,14},{2,15},{0,13},{1,13}},
+                                {{12,0},{13,0},{14,0},{14,1},{15,1}}};
+        for (int i = 0; i < 5; i++) {
+            if (placerUniteJoueur(joueurActuel, unite, coordPossible[joueurActuel.getNumeroJoueur()][i][0],coordPossible[joueurActuel.getNumeroJoueur()][i][1])){
+                cellulesCarte[coordPossible[joueurActuel.getNumeroJoueur()][i][0]][coordPossible[joueurActuel.getNumeroJoueur()][i][1]].getHex().setUnite(uniteModelToVue(unite));
+                return true;
+            }
+        }
+        return false;
     }
 
-    public static void achatTroupesIA(Joueur ia) throws InterruptedException{
-        int depense = new Random().nextInt(ia.getPieces()/2);
-        System.out.println("Initial : "+depense);
-        while (depense >= new Archer().getCout()) {
-            System.out.println("Nouvelle : "+depense);
-            if (depense >= new InfanterieLourde().getCout()) {
-                InfanterieLourde infanterieLourde = new InfanterieLourde();
-                placementUnite(ia,infanterieLourde);
-                depense -= infanterieLourde.getCout();
-                System.out.println("IF ACHETE");
-                //placerUniteJoueur(ia.getJoueurIA(), infanterieLourde, coordY, coordX);
-            }
-            else if (depense >= new Mage().getCout()) {
-                Mage mage = new Mage();
-                placementUnite(ia,mage);
-                System.out.println("Mage ACHETE");
-                depense -= mage.getCout();
-                //placerUniteJoueur(ia.getJoueurIA(), mage, coordY, coordX);
-            }
-            else if (depense >= new Cavalerie().getCout()) {
-                Cavalerie cavalerie = new Cavalerie();
-                placementUnite(ia,cavalerie);
-                System.out.println("Cavalerie ACHETE");
-                depense -= cavalerie.getCout();
-                //placerUniteJoueur(ia.getJoueurIA(), cavalerie, coordY, coordX);
-            }
-            else if (depense >= new Infanterie().getCout()) {
-                Infanterie infanterie = new Infanterie();
-                placementUnite(ia,infanterie);
-                System.out.println("Infanterie ACHETE");
-                depense -= infanterie.getCout();
-                //placerUniteJoueur(ia.getJoueurIA(), infanterie, coordY, coordX);
-            }
-            else if (depense >= new Archer().getCout()) {
-                Archer archer = new Archer();
-                placementUnite(ia,archer);
-                System.out.println("Archer ACHETE");
-                depense -= archer.getCout();
-                //placerUniteJoueur(ia.getJoueurIA(), archer, coordY, coordX);
-            }
-            //Thread.sleep(2000);
+    public static Unite achatTroupesIA(int depense) throws InterruptedException{
+        Unite troupeAchete = null;
+        if (depense >= new InfanterieLourde().getCout()) {
+            troupeAchete = new InfanterieLourde();
         }
-        System.out.println("Fin de depense");        
+        else if (depense >= new Mage().getCout()) {
+            troupeAchete = new Mage();
+        }
+        else if (depense >= new Cavalerie().getCout()) {
+            troupeAchete = new Cavalerie();
+        }
+        else if (depense >= new Infanterie().getCout()) {
+            troupeAchete = new Infanterie();
+        }
+        else if (depense >= new Archer().getCout()) {
+            troupeAchete = new Archer();
+        }
+        if (placementUnite(troupeAchete)){
+            joueurActuel.achatUniteArmee(troupeAchete);
+            joueurActuel.getArmee().add(troupeAchete);
+            System.out.println("ACHAT POSSIBLE");
+        }
+        else {
+            System.out.println("ACHAT IMPOSSIBLE");
+        }
+        return troupeAchete;
     }
 
-    public static void deplacementUniteIA() {
-        // rechercher plus court chemin entre troupe et base
-        // 
+    public static void rechercheEntiteProche() {
+
+
+    }
+
+    public static void estDeplacementPossible() {
+
+        //renvoie une pos
+    }
+
+    public static void actionUniteIA(Unite unite) {
+        //recherche Entite plus proche et deplacement vers elle/attaquer
+    }
+
+    public static void rechercheMonUniteDansPlateau(){
+        
     }
 
     public static void tourIA(){
-        //achat
-        //joueurAAttaquer
-        //pour chaque unite attaque
-            //trouver deplacement jusqua base
-    }
+        //joueurAAttaquerIA();
+        int depense = new Random().nextInt(joueurActuel.getPieces());
+        while(depense >= 5) {
+            try {
+                Unite uniteachete = achatTroupesIA(depense);
+                if (uniteachete != null){
+                    depense -= uniteachete.getCout();
+                    System.err.println(plateau.affichage());
+                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
+            actionUniteIA(joueurActuel.getArmee().get(i));
+        }
 
+    }
 
     //    
     //FIN PARTIE IA
@@ -545,7 +661,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 
                 
                 if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.BASE){
-                    batiment = TypeBatimentVue.BASE_HAUT;
+                    batiment = TypeBatimentVue.BASE;
                 }
                 else if (plateau.get(i).get(j).getBatiment() != null && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT)
                     batiment = TypeBatimentVue.MONUMENT;
@@ -627,7 +743,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 typeBatimentVue = TypeBatimentVue.MONUMENT;
                 break;
             case BASE:
-                typeBatimentVue = TypeBatimentVue.BASE_HAUT;
+                typeBatimentVue = TypeBatimentVue.BASE;
                 break;
         
             default:
@@ -868,7 +984,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static void sauvegardeMap(String fichier){
         try {
-            File file = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+"saves"+File.separator+""+fichier+".txt");
+            File file = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator+fichier+".txt");
 			
 			if (!file.exists()) {
 			    file.createNewFile();
@@ -1036,6 +1152,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 if (placerUniteJoueur(joueurActuel, archer, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
                                     FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
+                                    System.out.println(joueurActuel.getNumeroJoueur());
+                                    System.out.println(postionBaseJoueur.get(joueurActuel.getNumeroJoueur()).get(0));
+                                    System.out.println(postionBaseJoueur.get(joueurActuel.getNumeroJoueur()).get(1));
                                 }
                                 else 
                                     JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez pas acheter cette unité et la placer ici ! ");
@@ -1079,7 +1198,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             default:
                                 break;
                         }
-                        System.out.println(plateau.affichage());
                         uniteAchete = null;                        
                     }
                     else {
@@ -1108,7 +1226,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 }
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
-                                JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                                int[][] matricePlateau = new int[cote][cote];
+                                plateauToMatice(matricePlateau);
+                                int distanceCase = calculDistanceAttaque(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                if (combat(hexCaseClic, hexClic, distanceCase)){
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
+                                }
                             }
                             caseClic1 = null;
                             caseClic2 = null;
@@ -1125,8 +1248,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         }
                     }
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
-                    //System.out.println(caseSelectionne);
-                    //System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
+                    System.out.println(caseSelectionne);
+                    System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
                     FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
                     FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
                     break;
@@ -1154,7 +1277,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Nouvelle Partie"
                  */
                 case "nouvellePartie":
-                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);                
+                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                    ArrayList<String> listNomMap = new ArrayList<String>();
+                    FenetreJeu.getPanelNouvellePartie().initListeCartes(listNomMap);
+                    FenetreJeu.getPanelNouvellePartie().setChoixMap(listNomMap);
                     break;
                 /*
                  * Bouton "Charger Partie"
@@ -1255,7 +1381,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             pj = new PanelJeu(cellulesToHexagones());
                             FenetreJeu.setPanelJeu(pj);
                             pj.enregistreEcouteur(this);
-                            FenetreJeu.changePanel(PanelActuel.JEU);  
+                            FenetreJeu.changePanel(PanelActuel.JEU);
+                            initPanelJeu = true;
+                            resetChrono();
                         } catch (IOException e) {
                             e.printStackTrace();                   
                         }
@@ -1285,8 +1413,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         pj = new PanelJeu(cellulesToHexagones());
                         FenetreJeu.setPanelJeu(pj);
                         pj.enregistreEcouteur(this);
-                        nouveauTour();
-                        FenetreJeu.changePanel(PanelActuel.JEU);  
+                        FenetreJeu.changePanel(PanelActuel.JEU);
+                        initPanelJeu = true;
+                        nouveauTour(); 
+                        resetChrono(); 
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -1343,6 +1473,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "finTour":
                     try {
+                        resetChrono();
                         nouveauTour();
                         joueurActuel.regenerationUniteArmee();
                         joueurActuel.gainTourJoueur(tour);
@@ -1374,6 +1505,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 case "retourMenu":
                     effacerDonnes();
                     FenetreJeu.changePanel(PanelActuel.MENU);
+                    if (initPanelJeu){
+                        FenetreJeu.getPanelJeu().getTimerHorloge().stop();
+                        FenetreJeu.getPanelJeu().getTimerTour().stop();
+                    }
+                    
                     break;
                 default:
                     break;
