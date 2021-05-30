@@ -40,6 +40,7 @@ public class PanelJeu extends JPanel {
 	public static String str = new String("00:00");
 	private Timer timerTour;
 	private Timer timerHorloge;
+	private JButton boutonSauvegarder;
 
 	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
@@ -229,13 +230,16 @@ public class PanelJeu extends JPanel {
 		panelBasBoutons.setLayout(new BoxLayout(panelBasBoutons, BoxLayout.X_AXIS));
 		boutonFinDeTour = new JButton("Fin de Tour");
 		boutonAbandonner = new JButton("Abandonner");
+		boutonSauvegarder = new JButton("Sauvegarder la partie");
 		boutonQuitter = new JButton("Quitter");
 		boutonFinDeTour.setActionCommand("finTour");
 		boutonQuitter.setActionCommand("retourMenu");
+		boutonSauvegarder.setActionCommand("sauvegarderPartie");
 		boutonAbandonner.setActionCommand("abandonner");
 
 		panelBasBoutons.add(boutonFinDeTour);
 		panelBasBoutons.add(boutonAbandonner);
+		panelBasBoutons.add(boutonSauvegarder);
 		panelBasBoutons.add(boutonQuitter);
 
 		this.add(panelBasBoutons,BorderLayout.SOUTH);
@@ -249,6 +253,7 @@ public class PanelJeu extends JPanel {
 	public void enregistreEcouteur(Jeu controleur) {
         boutonFinDeTour.addActionListener(controleur);
 		boutonAbandonner.addActionListener(controleur);
+		boutonSauvegarder.addActionListener(controleur);
 		boutonArcher.addActionListener(controleur);
 		boutonCavalerie.addActionListener(controleur);
 		boutonInfanterie.addActionListener(controleur);

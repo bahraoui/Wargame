@@ -79,6 +79,10 @@ public class Entite {
         this.identifiant = identifiant;
     }
 
+    public static int getCompteur(){
+        return Entite.compteur ;
+    }
+
     public static void setCompteur(int compt){
         Entite.compteur = compt;
     }

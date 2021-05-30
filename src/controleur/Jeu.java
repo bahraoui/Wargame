@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -426,18 +428,18 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void evenementExterieur(){
-        int evenement = new Random().nextInt(100);
+        int evenement = 0;
         if (evenement >95 && evenement <100){
             if (joueurActuel.getArmee().size() > 1){
                 int uniteMalade = new Random().nextInt(joueurActuel.getArmee().size());
                 int[] coordUniteMalade = rechercheMonUniteDansPlateau(joueurActuel.getArmee().get(uniteMalade));
                 plateau.get(coordUniteMalade[0]).get(coordUniteMalade[1]).setUnite(null);
-                try {
-                    cellulesCarte[coordUniteMalade[1]][coordUniteMalade[0]].getHex().setTerrain(terrainModeleToVue(plateau.get(coordUniteMalade[1]).get(coordUniteMalade[0]).getTerrain()));
+                /*try {
+                    //cellulesCarte[coordUniteMalade[0]][coordUniteMalade[1]].getHex().setTerrain(coordUniteMalade[1]).get(coordUniteMalade[0]).getTerrain())));
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                }
+                }*/
                 JOptionPane.showMessageDialog(FenetreJeu, "Une de vos unités est tombé malade, cette dernière est morte de maladie...");         
             }
         }
@@ -579,6 +581,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             if (tour != 0) {
                 do {
+                    System.out.println("Nombre joueur : "+nbJoueursH + " - "+nbJoueursIA);
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
                 }while(joueurActuel.getEnJeu() == false);
             }
@@ -826,6 +829,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
         for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
             if (!calculVitoire())
                 actionUniteIA(joueurActuel.getArmee().get(i));
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
         }
 
         System.out.println(plateau.affichage());
@@ -1050,8 +1058,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             unite.setDeplacementActuel(Integer.parseInt(spl1[3]));
             unite.setAAttaque(Boolean.parseBoolean(spl1[4]));
             unite.setEnRepos(Boolean.parseBoolean(spl1[5]));
+            System.out.println("DEDANS SPLIT " + listeUnite.length);
             for (int i = 0; i < listeUnite.length; i++) {
-                for (int j = 0; j < listeUnite.length; j++) {
+                for (int j = 0; j < listeUnite[i].length; j++) {
+                    System.out.println("ARMEE JOUEUR : "+unite.getIdentifiant() + "  - liste : "+listeUnite[i][j]);
                     if (unite.getIdentifiant() == listeUnite[i][j]) {
                         listeJoueur.get(i).getArmee().add(unite);
                     }
@@ -1067,13 +1077,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
     public static void sauvegardePartie() {
         try {
-			
-			File file = new File("src"+File.separator+"data"+File.separator+"partie"+File.separator+"savePartie1.txt");
-			
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+            Date date = new Date();
+            String nomFichier = formatter.format(date).replace("_", "");
+            nomFichier = nomFichier.replace(":", "_");
+            nomFichier = nomFichier.replace("/", "_");
+			File file = new File("src"+File.separator+"data"+File.separator+"partie"+File.separator+nomFichier+".txt");
+
 			if (!file.exists()) {
 			    file.createNewFile();
 			   }
-		
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			
 			String chaine = new String();
@@ -1091,8 +1104,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     chaine+="];";
                 }
             }
+            
             chaine +="]\n";
-			chaine += sauvegardeStringMap(chaine);
+			chaine = sauvegardeStringMap(chaine);
             chaine += tour+"\n";
             chaine += joueurActuel.getNumeroJoueur()+"\n";
             for (int i = 0; i < postionBaseJoueur.size(); i++) {
@@ -1103,8 +1117,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 }
             }
             chaine +="]\n";
-            chaine += finpartie;
-			
+            chaine += finpartie+"\n";
+            chaine += Entite.getCompteur();
 			fw.write(chaine);
 			fw.close();
 			
@@ -1130,31 +1144,48 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public static void chargePartie(FileInputStream file) {
         
         //try {
-
+            
             String line = new String();
 		    String [] strValues1;
             String [] strValues2;
             String [] strValues3;
 			Scanner scanner = new Scanner(file);  
             
+            
 
             line = scanner.nextLine();
             strValues1 = line.split(";");
 
-            int[][] listeUnite = new int[50][50];
+            int[][] listeUnite = new int[4][10];
 
             for (int i = 0; i < strValues1.length; i++) {
                 strValues1[i] = strValues1[i].replace("[", "");
                 strValues1[i] = strValues1[i].replace("]", "");
                 strValues2 = strValues1[i].split(",");
                 Joueur joueur = new Joueur(strValues2[0],Boolean.parseBoolean(strValues2[1]));
+                if (joueur.isEstIa())
+                    nbJoueursIA++;
+                else
+                    nbJoueursH++;
                 listeJoueur.add(joueur);
                 joueur.setPieces(Integer.parseInt(strValues2[2]));
 
                 strValues2[3] = strValues2[3].replace("{", "");
                 strValues2[3] = strValues2[3].replace("}", "");
                 if(strValues2[3].length() > 0){
+                    if (strValues2[3].split(".").length == 0){
+                        strValues3 = new String[1];
+                        strValues3[0] = strValues2[3];
+                    }
+                    else 
+                        strValues3 = strValues2[3].split(".");
+                    
+                    for (int j = 0; j < strValues3.length; j++) {
+                        System.out.println("VALEUR : "+strValues3[i]);
+                    }
+                    
                     strValues3 = strValues2[3].split(".");
+                    System.out.println("AFFICHAGE : "+strValues2[3]);
                     for (int j = 0; j < strValues3.length; j++) {
                         listeUnite[i][j]=Integer.parseInt(strValues3[j]);
                     }
@@ -1167,6 +1198,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
             for (int i = 0; i < plateau.size(); i++) {
                 line = scanner.nextLine();
                 strValues1 = line.split(",");
+                System.out.println(" LISTE ARMME ");
+                /*for (int j = 0; j < listeUnite.length; j++) {
+                    for (int j2 = 0; j2 < listeUnite[j].length; j2++) {
+                        System.out.print(listeUnite[j][j2]+ " ");
+                    }
+                    System.out.println(" ");
+                }*/
                 chargeLineMap(line,i,listeUnite);
             }
             
@@ -1188,6 +1226,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
             line = scanner.nextLine();
             finpartie = Boolean.parseBoolean(line);
+            line = scanner.nextLine();
+            Entite.setCompteur(Integer.parseInt(line));
 
 	        scanner.close();    
     }
@@ -1210,6 +1250,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static String sauvegardeStringMap(String chaine) {
+        
         for (int i = 0; i < plateau.size(); i++) {
             for (int j = 0; j < plateau.size(); j++) {
                     /// Ajout du premier [ pour chaque case
@@ -1232,13 +1273,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     chaine += splStrings[0]+":";
 
                     /// Unite
-                    if (!(unite == null)) {
+                    if (unite != null) {
                         chaineUnite = unite.toString()+","+unite.getIdentifiant()+","+unite.getPointDeVieActuel()+","+unite.getDeplacementActuel()+","+unite.getAAttaque()+","+unite.getEnRepos();
                     }
                     chaine += chaineUnite+":";
 
                     /// Batiment
-                    if (!(batiment == null) && (batiment.getEstBase() != TypeBatiment.BASE)){
+                    if (batiment != null && (batiment.getEstBase() != TypeBatiment.BASE)){
                         chaineBatiment = batiment.toString()+","+batiment.getIdentifiant()+","+batiment.getPointDeVieActuel();
                     }
                     chaine += chaineBatiment;
@@ -1246,9 +1287,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     /// Ajout de fin
                     chaine+="]";
                     if (j<plateau.size()-1) {
-                    chaine+=";";
+                        chaine+=";";
+                    }
                 }
-            }
             chaine+="\n";
         }
         return chaine;
@@ -1295,6 +1336,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else if (spl2.length == 3){
                 plateau.get(iline).get(i).setBatiment(analyseSplBatiment(spl2[2]));
             }
+
         }
     }
 
@@ -1464,7 +1506,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                     System.out.println(caseSelectionne);
                     System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
-                    System.out.println(hexClic.getAll());
+                    //System.out.println(hexClic.getAll());
+                    System.out.println(plateau.affichage());
                     FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
                     FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
                     break;
@@ -1575,6 +1618,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         .getFileSystemView()
                         .getHomeDirectory()
                     );
+                    choose.setCurrentDirectory(new File("src"+File.separator+"data"+File.separator+"partie"));
                     choose.setAcceptAllFileFilterUsed(false);
                     FileNameExtensionFilter filter = new FileNameExtensionFilter("Documents de type TXT", "txt");
                     choose.addChoosableFileFilter(filter);
@@ -1596,11 +1640,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             pj = new PanelJeu(cellulesToHexagones());
                             FenetreJeu.setPanelJeu(pj);
                             pj.enregistreEcouteur(this);
+                            FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistreEcouteur(this);
                             FenetreJeu.changePanel(PanelActuel.JEU);
                             initPanelJeu = true;
+                            nouveauTour();
+                            pj.repaint();
                             resetChrono();
                         } catch (IOException e) {
                             e.printStackTrace();                   
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
                     }
                     else {
@@ -1698,6 +1748,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case "sauvegarderPartie":
+                    JOptionPane.showMessageDialog(FenetreJeu, "SAUVEGARDE PARTIE");
+                    sauvegardePartie();
                     break;
                 /**
                  * Bouton "Abandonner" -- Fenetre en jeu
