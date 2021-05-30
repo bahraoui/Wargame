@@ -1,6 +1,9 @@
 package Vue;
 
+/**
+ * Le type enumere TypeBatimentVue permet de definir les types de Batiments a afficher
+ */
 public enum TypeBatimentVue {
-    BASE, BASE_BAS, BASE_GAUCHE, BASE_DROITE, MONUMENT;
+    BASE, MONUMENT;
 }
 

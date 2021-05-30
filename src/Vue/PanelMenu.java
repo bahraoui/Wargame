@@ -12,12 +12,24 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+
+/**
+ * La classe PanelMenu herite de JPanel et permet d'afficher les boutons suivants :
+ * - bouton Start : début de partie
+ * - bouton Regles : afficher les regles 
+ * - bouton Charger : qui permet de reprendre une partie en cours
+ * - bouton Quitter : quitte la fenetre
+ */
 public class PanelMenu extends JPanel{
     private JButton btnNvllePartie;
     private JButton btnRegles;
     private JButton btnQuitter;
     private JButton btnChargerPartie;
 
+
+    /**
+     * Le constructeur PanelMenu permet d'instancier un JPanel avec les 4 boutons
+     */
     public PanelMenu() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
@@ -48,6 +60,10 @@ public class PanelMenu extends JPanel{
         this.add(btnQuitter,contrainte);
     }
 
+    /**
+	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
+	 */
     public void enregistreEcouteur(Jeu controleur) {
         btnNvllePartie.addActionListener(controleur);
         btnChargerPartie.addActionListener(controleur);
@@ -55,6 +71,11 @@ public class PanelMenu extends JPanel{
         btnRegles.addActionListener(controleur);
     }
 
+    /**
+     * setImageBouton permet d'afficher une image dans le bouton
+     * @param filePathName String
+     * @param btnAModifier JButton
+     */
     private void setImageBouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
