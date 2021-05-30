@@ -42,28 +42,6 @@ public class PanelMap extends JPanel {
 		return hexs;
 	}
 
-	public void setCells(Hexagone[][] parCells) throws IOException {
-		hexs = parCells;
-		this.removeAll();
-		int col=0,ligne=0;
-		for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
-			Hexagone cell = new Hexagone();
-			col++;
-			if (col%16==0 && !petiteLigne) {
-				col=0;
-				ligne++;
-				petiteLigne = !petiteLigne;
-			} else if (col%15==0 && petiteLigne) {
-				col=0;
-				ligne++;
-				petiteLigne = !petiteLigne;
-			}
-			hexs[ligne][col] = cell;
-			this.add(hexs[ligne][col]);
-		}
-		this.updateUI();
-	}
-
 	public void enregistreEcouteur(Jeu controleur) {
 		for (Hexagone[] hexagones : hexs) {
 			for (Hexagone hexagone : hexagones) {

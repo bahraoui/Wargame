@@ -7,28 +7,8 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 
 /**
-* A layoutmanager for interleaved hexagons. This layout is based on GridLayout. It
-* divides the parent component into equal parts and resizes the subcomponents to fit
-* these. Since every other row will hold one element less than than the one before
-* (or after), this LM only register how many columns the user wants, and then calculates
-* the number of rows needed to fit this need according to the number of gui elements
-* that needs to be allocated. The number of columns given by the user is the number of
-* elements in a big row:
-*
-* Example:
-*
-* *** *** *** *** *** ***    big row
-*   *** *** *** *** ***      small row
-* *** *** *** *** *** ***    big row
-*   *** *** *** *** ***      etc.
-* *** *** *** *** *** ***
-*
-* The user can also specify wether or not to begin the layout with a small row, and can
-* specify the insets between gui elements via a Insets object.
-*
-* @author Kristian Johansen
-*
-*/
+ * La classe HexagonalLayout heritant de LayoutManager permet de placer nos cases hexagonal 
+ */
 public class HexagonalLayout implements LayoutManager {
     
     private Insets insets;
@@ -40,6 +20,17 @@ public class HexagonalLayout implements LayoutManager {
     private Dimension minSize;
     private Dimension prefSize;
     
+    /**
+     * Le constructeur de HexagonalLayout permet d'intancier un HexagonalLayout avec :
+     * - le nombre de colonnes
+     * - l'ecart entre les cases
+     * - un boolean qui permet de savoir si l'on commence par une ligne longue ou courte
+     * - le nombre de cases total
+     * @param cols int
+     * @param i Insets
+     * @param beginWithSmallRow boolean
+     * @param nbComposants int
+     */
     public HexagonalLayout(int cols, Insets i, boolean beginWithSmallRow, int nbComposants) {
         checkColInput(cols);
         insets = i;
@@ -52,8 +43,8 @@ public class HexagonalLayout implements LayoutManager {
     }
     
     /**
-    * Checks that the column input is valid: Columns must be set to n > 0;
-    * @param cols
+    * checkColInput permet de savoir si le nombre de colonne est invalide : cols > 0 
+    * @param cols int
     */
     private void checkColInput(int cols) {
         if (cols <= 0) {
@@ -62,10 +53,9 @@ public class HexagonalLayout implements LayoutManager {
     }
     
     /**
-    * Calculates the numbers of rows needed for the components given the
-    * number of columns given.
-    * @param componentCount
-    * @return
+    * Calcul le nombre de lignes en fonctions du nombre de colonnes et du nombre total de cases
+    * @param componentCount int
+    * @return numberOfRows int
     */
     private int calculateRows(int componentCount) {
         int numberOfRows = 0;
@@ -101,7 +91,6 @@ public class HexagonalLayout implements LayoutManager {
             }
             
         }
-        //System.out.println(numberOfRows);
         return numberOfRows;
     }
     
@@ -189,10 +178,10 @@ public class HexagonalLayout implements LayoutManager {
     */
     @Override
     public void removeLayoutComponent(Component comp) {
-        // NOT IMPLEMENTED
-        
     }
     
+    // Getters et setters : 
+
     public Insets getInsets() {
         return insets;
     }
@@ -244,13 +233,11 @@ public class HexagonalLayout implements LayoutManager {
     public int getNbComposants() {
         return this.nbComposants;
     }
+
+    // FIN Getters et setters
     
     @Override
     public void addLayoutComponent(String arg0, Component arg1) {
         // TODO Auto-generated method stub
-        
     }
-    
-    
-    
 }

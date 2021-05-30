@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 
 
 /**
-* La classe HexagonalButton permet de créer un bouton avec une forme hexagonale
+* La classe Hexagone permet de créer une case avec une forme hexagonale et des images à l'interireur
 */
 public class Hexagone extends JLabel {
     private static final long serialVersionUID = -7142502695252118612L;
@@ -23,17 +23,19 @@ public class Hexagone extends JLabel {
     private TypeBatimentVue batiment;
     private Point coord;
 
-    public Hexagone() throws IOException {
-        super();
-        hexagonalShape = getHexPolygon();
-    }
 
-    public Hexagone(TypeTerrain sol) throws IOException {
-        super();
-        hexagonalShape = getHexPolygon();
-        this.sol = sol;
-    }
-
+    /**
+     * Le constructeur de Hexagone permet d'intancier un Hexagone avec :
+     * - le sol qu'il contient
+     * - une unite si la case en contient
+     * - un batiment si la case en contient
+     * - des coordonnees sur le plateau de jeu
+     * @param sol TypeTerrain
+     * @param unite TypeUnite
+     * @param batiment TypeBatimentVue
+     * @param coord Point
+     * @throws IOException
+     */
     public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord) throws IOException {
         super();
         hexagonalShape = getHexPolygon();
@@ -43,9 +45,8 @@ public class Hexagone extends JLabel {
         this.coord = coord;
     }
 
-    public TypeBatimentVue getTypeBatimentVue(){
-        return this.batiment;
-    }
+    
+    
 
     /**
     * Genere un bouton de forme hexagonale
@@ -68,72 +69,28 @@ public class Hexagone extends JLabel {
     }
 
     
-    // Getters and setters : 
+    // Getters et setters : 
     
     public Polygon getHexagonalShape() {
         return this.hexagonalShape;
     }
-    public void setCoord(Point coord){
-        this.coord = coord;
-    }
-
     public Point getCoord(){
         return this.coord;
     }
     
-    // END Getters and setters
+    // FIN Getters et setters
 
+    /**
+     * setTerrain permet d'afficher un sol sur la case
+     * @param sol TypeTerrain
+     * @throws IOException
+     */
     public void setTerrain(TypeTerrain sol) throws IOException{
-        // , , MER, , , ;
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
-        switch (sol) {
-            case MER:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
-                break;
-            case DESERT:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
-                break;
-            case FORET:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
-                break;
-            case MONTAGNE:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
-                break;
-            case PLAINE:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
-                break;
-            case NEIGE:
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
-                break;
-            default:
-                break;
-        }
+        placerSol(sol,g);
         if (batiment != null) {
-            try {
-                switch (batiment) {
-                    case BASE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 0, 0, null);
-                        break;
-                    case BASE_BAS:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
-                        break;
-                    case BASE_GAUCHE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 32, 0, null);
-                        break;
-                    case BASE_DROITE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 11, 33, null);
-                        break;
-                    case MONUMENT:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
-                        break;
-                
-                    default:
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }        
+            placerBatiment(batiment,g);      
         }
         else {
             try {
@@ -143,31 +100,9 @@ public class Hexagone extends JLabel {
             }
             this.batiment=null;
         }
+
         if (unite != null) {
-            try {
-                switch (unite) {
-                    case ARCHER:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
-                        break;
-                    case CAVALERIE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
-                        break;
-                    case INFANTERIE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
-                        break;
-                    case INFANTERIELOURDE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
-                        break;
-                    case MAGE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
-                        break;
-                
-                    default:
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            placerUnite(unite,g);
         }
         else {
             try {
@@ -184,7 +119,11 @@ public class Hexagone extends JLabel {
         
     }
 
-    
+    /**
+     * setMonument permet d'afficher un monument sur la case si le parametre est vrai
+     * @param Monument boolean
+     * @throws IOException
+     */
     public void setMonument(boolean Monument) throws IOException{
         if (Monument) {
             Graphics g = getGraphics();
@@ -198,31 +137,16 @@ public class Hexagone extends JLabel {
         }
     }
 
-    
+    /**
+     * setBatiment permet d'afficher un baiment sur la case
+     * @param typeBatimentVue
+     * @throws IOException
+     */
     public void setBatiment(TypeBatimentVue typeBatimentVue) throws IOException {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         if (typeBatimentVue != null) {
-            switch (typeBatimentVue) {
-                case BASE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 0, 0, null);
-                    break;
-                case BASE_BAS:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
-                    break;
-                case BASE_GAUCHE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 0, 0, null);
-                    break;
-                case BASE_DROITE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 0, 0, null);
-                    break;
-                case MONUMENT:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
-                    break;
-            
-                default:
-                    break;
-            }
+            placerBatiment(typeBatimentVue, g);
         }
         this.paintChildren(g);
     }
@@ -303,41 +227,9 @@ public class Hexagone extends JLabel {
     */
     @Override
     protected void paintComponent(Graphics g) {
-        //super.paintComponent(g);
-        //g.setColor(new Color(0.0f, 0.0f, 0.0f, 0.0f));
-        //g.fillRect(0, 0, getWidth(), getHeight());
-        //g.setColor(getBackground());
-        //g.drawPolygon(hexagonalShape);
         g.setClip(hexagonalShape);
-        // draw the image
         if (sol != null) {
-            try {
-                switch (sol) {
-                    case MER:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
-                        break;
-                    case DESERT:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
-                        break;
-                    case FORET:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
-                        break;
-                    case MONTAGNE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
-                        break;
-                    case PLAINE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
-                        break;
-                    case NEIGE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
-                        break;
-                
-                    default:
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }        
+            placerSol(sol, g);
         } else {
             try {
                 g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"VIDE.png")), 0, 0, null);
@@ -345,31 +237,9 @@ public class Hexagone extends JLabel {
                 e.printStackTrace();
             }
         }
+
         if (batiment != null) {
-            try {
-                switch (batiment) {
-                    case BASE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 0, 0, null);
-                        break;
-                    case BASE_BAS:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
-                        break;
-                    case BASE_GAUCHE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 32, 0, null);
-                        break;
-                    case BASE_DROITE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 11, 33, null);
-                        break;
-                    case MONUMENT:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
-                        break;
-                
-                    default:
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }        
+            placerBatiment(batiment, g);
         }
         else {
             try {
@@ -378,31 +248,9 @@ public class Hexagone extends JLabel {
                 e.printStackTrace();
             }
         }
+
         if (unite != null) {
-            try {
-                switch (unite) {
-                    case ARCHER:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
-                        break;
-                    case CAVALERIE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
-                        break;
-                    case INFANTERIE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
-                        break;
-                    case INFANTERIELOURDE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
-                        break;
-                    case MAGE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
-                        break;
-                
-                    default:
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            placerUnite(unite, g);
         }
         else {
             try {
@@ -411,8 +259,6 @@ public class Hexagone extends JLabel {
                 e.printStackTrace();
             }
         }
-        
-        //g.fillPolygon(hexagonalShape);
     }
     
 
@@ -422,43 +268,28 @@ public class Hexagone extends JLabel {
     */
     @Override
     protected void paintBorder(Graphics g) {
-        // Does not print border
+        // N'affiche pas de bordure
     }
 
 
+    /**
+     * setUnite permet d'afficher un unite sur la case si le parametre n'est pas vide
+     * @param parUnite TypeUnite
+     */
     public void setUnite(TypeUnite parUnite) {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
-        try {
-            if (parUnite != null) {
-                switch (parUnite) {
-                    case ARCHER:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
-                        break;
-                    case CAVALERIE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
-                        break;
-                    case INFANTERIE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
-                        break;
-                    case INFANTERIELOURDE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
-                        break;
-                    case MAGE:
-                        g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
-                        break;
-                    default:
-                        break;
-                }
-            }        
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (parUnite != null) {
+                placerUnite(parUnite, g);
         }
-        
         this.unite = parUnite;
         this.paintChildren(g);
     }
 
+    /**
+     * getAll est une methode de debugage qui renvoie une chaine de caractere qui donne les informations sur la case
+     * @return String
+     */
     public String getAll(){
         if (unite != null)
             return "Hexagone : \n\tUnite : "+unite.toString();
@@ -469,7 +300,103 @@ public class Hexagone extends JLabel {
         return "Rien";
     }
 
+    /**
+     * placerSol permet de dessiner le sol en fonction du type de terrain
+     * @param sol TypeTerrain
+     * @param g Graphics
+     */
+    private void placerSol(TypeTerrain sol, Graphics g){
+        try {
+            switch (sol) {
+                case MER:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
+                    break;
+                case DESERT:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
+                    break;
+                case FORET:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
+                    break;
+                case MONTAGNE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
+                    break;
+                case PLAINE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+                    break;
+                case NEIGE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
+                    break;
+            
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }  
+    }
 
-    
-    //public 
+    /**
+     * placerBatiment permet de dessiner le batiment en fonction du type de batiment si la case posede un batiment
+     * @param bat TypeBatimentVue
+     * @param g Graphics
+     */
+    private void placerBatiment(TypeBatimentVue bat, Graphics g){
+        try {
+            switch (batiment) {
+                case BASE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 10, 0, null);
+                    break;
+                case BASE_BAS:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
+                    break;
+                case BASE_GAUCHE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 32, 0, null);
+                    break;
+                case BASE_DROITE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 11, 33, null);
+                    break;
+                case MONUMENT:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
+                    break;
+            
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * placerUnite permet de dessiner une unite en fonction du type d'unite si la case posede une unite
+     * @param unite TypeUnite
+     * @param g Graphics
+     */
+    private void placerUnite(TypeUnite unite, Graphics g){
+        try {
+            switch (unite) {
+                case ARCHER:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
+                    break;
+                case CAVALERIE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
+                    break;
+                case INFANTERIE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
+                    break;
+                case INFANTERIELOURDE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
+                    break;
+                case MAGE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
 }
