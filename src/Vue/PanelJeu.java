@@ -18,7 +18,10 @@ import javax.swing.Timer;
 import controleur.Jeu;
 
 /**
- * La classe PanelJeu herite de JPanel et permet d'afficher toutes les informations relatives a la partie (a gauche), le plateau de jeu (au centre) et des boutons de commandes (en bas)
+ * La classe PanelJeu herite de JPanel et permet d'afficher :
+ * - a gauche : toutes les informations relatives a la partie :
+ * - au centre : le plateau de jeu 
+ * - en bas : des boutons de commandes
  */
 public class PanelJeu extends JPanel {
 	private BorderLayout bdl;
@@ -42,6 +45,11 @@ public class PanelJeu extends JPanel {
 	private Timer timerHorloge;
 	private JButton boutonSauvegarder;
 
+	/**
+	 * Le contructeur PanelJeu permet d'instancier le JPanel avec comme parametre le tableau contenant les cases du plateau
+	 * @param parHexs Hexagone[][]
+	 * @throws IOException
+	 */
 	public PanelJeu(Hexagone[][] parHexs) throws IOException {
 		super();
 		this.bdl = new BorderLayout();
@@ -50,8 +58,6 @@ public class PanelJeu extends JPanel {
 		/* PANEL GAUCHE : toutes les inforamtions sur la partie */
 		this.panelGaucheInfos = new JPanel();
 		panelGaucheInfos.setPreferredSize(new Dimension(200,500));
-		//panelGaucheInfos.setLayout(new BoxLayout(panelGaucheInfos, BoxLayout.Y_AXIS));
-
 
 		/////////////////////
 		// PANEL INFO TOUR //
@@ -247,7 +253,7 @@ public class PanelJeu extends JPanel {
 	}
 
 	/**
-	 * La methode enregistreEcouteur met a l'ecoute les elements du Panel pour le controleur
+	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
 	public void enregistreEcouteur(Jeu controleur) {
@@ -263,6 +269,11 @@ public class PanelJeu extends JPanel {
 	}
 
 
+	/**
+     * setImageBouton permet d'afficher une image dans le bouton
+     * @param filePathName String
+     * @param btnAModifier JButton
+     */
 	private void setImageBouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
@@ -273,18 +284,16 @@ public class PanelJeu extends JPanel {
         }
     }
 
+	/**
+	 * updateGoldJoueurAffichage permet de mettre a jour le nombre de golds du joueur sur le labelGolds
+	 * @param nbGold
+	 */
 	public void updateGoldJoueurAffichage(int nbGold) {
         labelGolds.setText(nbGold+" Golds");
     }
 
 
-	public BorderLayout getBdl() {
-		return this.bdl;
-	}
-
-	public void setBdl(BorderLayout bdl) {
-		this.bdl = bdl;
-	}
+	// Getters et setters
 
 	public PanelMap getPanelCentrePlateau() {
 		return this.PanelCentrePlateau;
@@ -292,38 +301,6 @@ public class PanelJeu extends JPanel {
 
 	public void setPanelCentrePlateau(PanelMap PanelCentrePlateau) {
 		this.PanelCentrePlateau = PanelCentrePlateau;
-	}
-
-	public JPanel getPanelGaucheInfos() {
-		return this.panelGaucheInfos;
-	}
-
-	public void setPanelGaucheInfos(JPanel panelGaucheInfos) {
-		this.panelGaucheInfos = panelGaucheInfos;
-	}
-
-	public JPanel getPanelBasBoutons() {
-		return this.panelBasBoutons;
-	}
-
-	public void setPanelBasBoutons(JPanel panelBasBoutons) {
-		this.panelBasBoutons = panelBasBoutons;
-	}
-
-	public JPanel getPanelInfoTour() {
-		return this.panelInfoTour;
-	}
-
-	public void setPanelInfoTour(JPanel panelInfoTour) {
-		this.panelInfoTour = panelInfoTour;
-	}
-
-	public JPanel getPanelInfoPartie() {
-		return this.panelInfoPartie;
-	}
-
-	public void setPanelInfoPartie(JPanel panelInfoPartie) {
-		this.panelInfoPartie = panelInfoPartie;
 	}
 
 	public JLabel getLabelNbTours() {
@@ -399,13 +376,7 @@ public class PanelJeu extends JPanel {
 		this.labelBatimentUnite = labelBatimentUnite;
 	}
 
-	public JPanel getPanelBoutique() {
-		return this.panelBoutique;
-	}
-
-	public void setPanelBoutique(JPanel panelBoutique) {
-		this.panelBoutique = panelBoutique;
-	}
+	
 
 	public JLabel getLabelGolds() {
 		return this.labelGolds;
@@ -415,108 +386,8 @@ public class PanelJeu extends JPanel {
 		this.labelGolds = labelGolds;
 	}
 
-	public JLabel getLabelArcher() {
-		return this.labelArcher;
-	}
 
-	public void setLabelArcher(JLabel labelArcher) {
-		this.labelArcher = labelArcher;
-	}
 
-	public JLabel getLabelCavalerie() {
-		return this.labelCavalerie;
-	}
-
-	public void setLabelCavalerie(JLabel labelCavalerie) {
-		this.labelCavalerie = labelCavalerie;
-	}
-
-	public JLabel getLabelInfanterie() {
-		return this.labelInfanterie;
-	}
-
-	public void setLabelInfanterie(JLabel labelInfanterie) {
-		this.labelInfanterie = labelInfanterie;
-	}
-
-	public JLabel getLabelInfanterieLourde() {
-		return this.labelInfanterieLourde;
-	}
-
-	public void setLabelInfanterieLourde(JLabel labelInfanterieLourde) {
-		this.labelInfanterieLourde = labelInfanterieLourde;
-	}
-
-	public JLabel getLabelMage() {
-		return this.labelMage;
-	}
-
-	public void setLabelMage(JLabel labelMage) {
-		this.labelMage = labelMage;
-	}
-
-	public JButton getBoutonArcher() {
-		return this.boutonArcher;
-	}
-
-	public void setBoutonArcher(JButton boutonArcher) {
-		this.boutonArcher = boutonArcher;
-	}
-
-	public JButton getBoutonCavalerie() {
-		return this.boutonCavalerie;
-	}
-
-	public void setBoutonCavalerie(JButton boutonCavalerie) {
-		this.boutonCavalerie = boutonCavalerie;
-	}
-
-	public JButton getBoutonInfanterie() {
-		return this.boutonInfanterie;
-	}
-
-	public void setBoutonInfanterie(JButton boutonInfanterie) {
-		this.boutonInfanterie = boutonInfanterie;
-	}
-
-	public JButton getBoutonInfanterieLourde() {
-		return this.boutonInfanterieLourde;
-	}
-
-	public void setBoutonInfanterieLourde(JButton boutonInfanterieLourde) {
-		this.boutonInfanterieLourde = boutonInfanterieLourde;
-	}
-
-	public JButton getBoutonMage() {
-		return this.boutonMage;
-	}
-
-	public void setBoutonMage(JButton boutonMage) {
-		this.boutonMage = boutonMage;
-	}
-
-	public JButton getBoutonFinDeTour() {
-		return this.boutonFinDeTour;
-	}
-
-	public void setBoutonFinDeTour(JButton boutonFinDeTour) {
-		this.boutonFinDeTour = boutonFinDeTour;
-	}
-
-	public JButton getBoutonAbandonner() {
-		return this.boutonAbandonner;
-	}
-
-	public void setBoutonAbandonner(JButton boutonAbandonner) {
-		this.boutonAbandonner = boutonAbandonner;
-	}
-
-	public JButton getBoutonQuitter() {
-		return this.boutonQuitter;
-	}
-
-	public void setBoutonQuitter(JButton boutonQuitter) {
-		this.boutonQuitter = boutonQuitter;
-	}
+	// FIN Getters et setters
 	
 }
