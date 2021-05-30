@@ -3,10 +3,14 @@ package Vue;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Insets;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -37,11 +41,16 @@ public class PanelChargerScenario extends JPanel{
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
         JPanel panelActions = new JPanel();
-        btnChoixMonument = new JButton("Monument");
-        btnLancerPartie = new JButton("Lancer la partie");
+        btnChoixMonument = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
+        btnLancerPartie = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
         nomSauvergardeCarte = new JTextField(10);
-        btnSauvegarderPartie = new JButton("Sauvegarder la carte");
-        btnQuitter = new JButton("Quitter");
+        btnSauvegarderPartie = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
+        btnQuitter = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+
 
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
@@ -88,6 +97,21 @@ public class PanelChargerScenario extends JPanel{
         this.add(panelMap,BorderLayout.CENTER);
         this.add(panelGauche,BorderLayout.WEST);
 	}
+
+    /**
+     * setImageBouton permet d'afficher une image dans le bouton
+     * @param filePathName String
+     * @param btnAModifier JButton
+     */
+	private void setImageBouton(String filePathName,JButton btnAModifier){
+        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
+        btnAModifier.setBorder(null);
+        try {
+            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void enregistreEcouteur(Jeu controleur) {
         panelMap.enregistreEcouteur(controleur);

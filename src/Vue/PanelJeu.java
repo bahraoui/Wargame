@@ -26,7 +26,7 @@ import controleur.Jeu;
 public class PanelJeu extends JPanel {
 	private BorderLayout bdl;
 	private PanelMap PanelCentrePlateau;
-	private JPanel panelGaucheInfos,panelBasBoutons;
+	private JPanel panelGaucheInfos,panelBoutons;
 	private JPanel panelInfoTour;
 	private JPanel panelInfoPartie;
 	private JLabel labelNbTours;
@@ -134,18 +134,26 @@ public class PanelJeu extends JPanel {
 		
 		// titre
 		JLabel labelTitreInfoCase = new JLabel("Infomartions de la case");
+		//labelTitreInfoCase.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
+        labelTitreInfoCase.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelTitreInfoCase);
 
 		// type de terrain
 		labelTypeTerrain = new JLabel("");
+		//labelTypeTerrain.setFont(new Font("Tempus Sans ITC", Font.BOLD, 12));
+        labelTypeTerrain.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelTypeTerrain);
 		// bonus terrain
 		labelBonusTerrain = new JLabel("");
+		//labelBonusTerrain.setFont(new Font("Tempus Sans ITC", Font.BOLD, 12));
+        labelBonusTerrain.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelBonusTerrain);
 
 				
 		// unite batiment
 		labelBatimentUnite = new JLabel("");
+		labelBatimentUnite.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
+        labelBatimentUnite.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelBatimentUnite);
 
 		panelGaucheInfos.add(panelInfoPartie);
@@ -225,31 +233,42 @@ public class PanelJeu extends JPanel {
 
 		panelGaucheInfos.add(panelBoutique);
 
+		////////////////////
+		// PANEL BOUTIQUE //
+		////////////////////
+		panelBoutons = new JPanel();
+		panelBoutons.setPreferredSize(new Dimension(200,300));		
+			// fin de tour
+		boutonFinDeTour = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
+		boutonFinDeTour.setActionCommand("finTour");
+		panelBoutons.add(boutonFinDeTour);
+
+			// abandonner
+		boutonAbandonner = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
+		boutonAbandonner.setActionCommand("abandonner");
+		panelBoutons.add(boutonAbandonner);
+
+			// sauvegarder
+		boutonSauvegarder = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
+		boutonSauvegarder.setActionCommand("sauvegarderPartie");
+		panelBoutons.add(boutonSauvegarder);
+		
+			// quitter
+		boutonQuitter = new JButton();
+		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
+		boutonQuitter.setActionCommand("retourMenu");
+		panelBoutons.add(boutonQuitter);
+
+		panelGaucheInfos.add(panelBoutons);
+
 		this.add(panelGaucheInfos,BorderLayout.WEST);
 
 		/* PANEL CENTRE : plateau de jeu */
 		this.PanelCentrePlateau = new PanelMap(parHexs);
 		this.add(PanelCentrePlateau,BorderLayout.CENTER);
-
-		/* PANEL BAS : boutons */
-		panelBasBoutons = new JPanel();
-		panelBasBoutons.setLayout(new BoxLayout(panelBasBoutons, BoxLayout.X_AXIS));
-		boutonFinDeTour = new JButton("Fin de Tour");
-		boutonAbandonner = new JButton("Abandonner");
-		boutonSauvegarder = new JButton("Sauvegarder la partie");
-		boutonQuitter = new JButton("Quitter");
-		boutonFinDeTour.setActionCommand("finTour");
-		boutonQuitter.setActionCommand("retourMenu");
-		boutonSauvegarder.setActionCommand("sauvegarderPartie");
-		boutonAbandonner.setActionCommand("abandonner");
-
-		panelBasBoutons.add(boutonFinDeTour);
-		panelBasBoutons.add(boutonAbandonner);
-		panelBasBoutons.add(boutonSauvegarder);
-		panelBasBoutons.add(boutonQuitter);
-
-		this.add(panelBasBoutons,BorderLayout.SOUTH);
-		
 	}
 
 	/**

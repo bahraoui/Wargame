@@ -1,14 +1,16 @@
 package Vue;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import controleur.Jeu;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class PanelRegles  extends JPanel{
 
@@ -100,7 +102,14 @@ public class PanelRegles  extends JPanel{
         String regles6Jouer  = new String("Pour pouvoir lancer une partie, deux choix s'offrent à vous : reprendre une partie sauvegardée ou en créer une nouvelle.<br/>Lors de la création d'une nouvelle partie, il vous est possible de changer le scénario du jeu : placement de terrains & placement limité de monument. Après cela vous pouvez sauvegarder le scénario pour pouvoir le réutiliser comme bsae plus tard lors de la création d'un nouveau scénario. <br/>Puis, pour chargez une partie sauvegardée, il suffit de choisir le fichier contenant votre sauvegarde puis de lancer.");
         JLabel txtRegles6 = new JLabel(html1+"600"+html2+regles6Jouer);
         
-        btnQuitter = new JButton("Quitter");
+        btnQuitter = new JButton();
+        btnQuitter.setMargin(new Insets(0, 0, 0, 0));
+        btnQuitter.setBorder(null);
+        try {
+            btnQuitter.setIcon(new ImageIcon(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         btnQuitter.setActionCommand("retourMenu");
         
 
@@ -142,7 +151,19 @@ public class PanelRegles  extends JPanel{
 
     }
 
+    
+
     public void enregistreEcouteur(Jeu controleur) {
         btnQuitter.addActionListener(controleur);;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"fond.jpg")), 0, 0, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

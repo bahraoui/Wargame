@@ -1,5 +1,7 @@
 package Vue;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -11,6 +13,7 @@ import controleur.Jeu;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PanelNouvellePartie extends JPanel{
@@ -33,8 +36,10 @@ public class PanelNouvellePartie extends JPanel{
         choixMap = new JComboBox<String>();
         nomJoueur = new JLabel[4];
         txtNomJoueur = new JTextField[4];
-        btnContinuer = new JButton("Continuer");
-        btnQuitter = new JButton("Quitter");
+        btnContinuer = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
+        btnQuitter = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
         nbJoueursIA.setActionCommand("nbJoueursIA");
@@ -99,6 +104,21 @@ public class PanelNouvellePartie extends JPanel{
     }
 
 
+    /**
+     * setImageBouton permet d'afficher une image dans le bouton
+     * @param filePathName String
+     * @param btnAModifier JButton
+     */
+	private void setImageBouton(String filePathName,JButton btnAModifier){
+        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
+        btnAModifier.setBorder(null);
+        try {
+            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void enregistreEcouteur(Jeu controleur) {
         btnContinuer.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
@@ -162,6 +182,16 @@ public class PanelNouvellePartie extends JPanel{
     }
     public void setTxtNomJoueur(JTextField[] txtNomJoueur) {
         this.txtNomJoueur = txtNomJoueur;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"fond.jpg")), 0, 0, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
