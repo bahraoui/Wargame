@@ -158,12 +158,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         else if (defenseur.getBatiment() != null) {
+            System.out.println("BATIMENT !!!");
             if (defenseur.getBatiment().getEstBase() == TypeBatiment.BASE) {
+                System.out.println("BASE !!!");
+                System.out.println(defenseur.getBatiment().getIdentifiant());
                 for (int i = 0; i < listeJoueur.size(); i++) {
-                    if (listeJoueur.get(i).getBase().getIdentifiant() == defenseur.getBatiment().getIdentifiant()) {
+                    if (listeJoueur.get(i).getBase().getIdentifiant() == defenseur.getBatiment().getIdentifiant()){
                         listeJoueur.get(i).setEnJeu(false);
+                        System.out.println("BASE DETRUITE");
                         ArrayList<Integer> coordBase = postionBaseJoueur.get(listeJoueur.get(i).getNumeroJoueur());
+                        System.out.print("Coord Base : ");
+                        for (int j = 0; j < coordBase.size(); j++) {
+                            System.out.print(coordBase.get(j)+ " ");
+                        }
+                        System.out.println("");
                         plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
+                        return;
                     }
                 }
             }
@@ -368,7 +378,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
-    public static void calculVitoire(){
+    public static boolean calculVitoire(){
         if (conditionFinPartie()){
             if (tour == 30){
                 int[] value = new int[listeJoueur.size()];
@@ -395,8 +405,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 joueurGagnant = joueurActuel;
             }
             System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+            FenetreJeu.changePanel(PanelActuel.VICTOIRE);
+            FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
+            FenetreJeu.getPanelVictoire().getLabelVictoire().setText("Victoire du joueur n°"+joueurGagnant.getNumeroJoueur());
+            effacerDonnes();
+            return true;
         }
-        
+        return false;
     }        
 
 
@@ -487,7 +502,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (joueurActuel.getEstIa()){
                 tourIA();
                 Thread.sleep(1000);
-                //nouveauTour();
+                nouveauTour();
             }
             System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
         }
@@ -510,11 +525,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
     public static void effacerDonnes() {
         resetChrono();
+        Joueur.setCompteur(0);
+        Entite.setCompteur(0);
         int nbJoueurs = listeJoueur.size();
         for (int i = nbJoueurs-1; i > 0 ; i--) {
             listeJoueur.remove(i);
         }
         listeJoueur = new ArrayList<Joueur>();
+        
         plateau.removeAll(plateau);
         plateau = new Plateau();
         System.out.println("RESET HARD");
@@ -530,11 +548,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     //Par rapport à la base placé vers le centre de la map en prio
     public static boolean placementUnite(Unite unite) {
+        System.out.println("NOMBRE DE JOUEUR : "+listeJoueur.size());
         int[][][] coordPossible = {{{0,1},{0,2},{1,0},{2,0},{2,1}},
                                 {{13,14},{14,14},{14,15},{15,12},{15,13}},
                                 {{0,14},{1,14},{2,15},{0,13},{1,13}},
                                 {{12,0},{13,0},{14,0},{14,1},{15,1}}};
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             if (placerUniteJoueur(joueurActuel, unite, coordPossible[joueurActuel.getNumeroJoueur()][i][0],coordPossible[joueurActuel.getNumeroJoueur()][i][1])){
                 cellulesCarte[coordPossible[joueurActuel.getNumeroJoueur()][i][0]][coordPossible[joueurActuel.getNumeroJoueur()][i][1]].getHex().setUnite(uniteModelToVue(unite));
                 return true;
@@ -647,8 +666,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
             for (int j = 0; j < plateau.size(); j++) {
                 if (plateau.get(i).get(j).estOccupe() instanceof Unite && entite.getIdentifiant() ==  plateau.get(i).get(j).getUnite().getIdentifiant()){
                     coordUnite[0] = i;coordUnite[1] = j;
+                    System.out.println("Unite trouvé dans le plateau, coord : "+i+" - "+j);
+                    
                 }
                 else if (plateau.get(i).get(j).estOccupe() instanceof Batiment && entite.getIdentifiant() ==  plateau.get(i).get(j).getBatiment().getIdentifiant()){
+                    System.out.println("Batiment trouvé dans le plateau, coord : "+i+" - "+j);
                     coordUnite[0] = i;coordUnite[1] = j;
                 }
             }
@@ -672,15 +694,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 }                   
             }
         }
-        for (int i = 0; i < cote; i++) {
-            for (int j = 0; j < cote; j++) {
-                if (matriceEmplacement[i][j] != 99)
-                    System.out.print(matriceEmplacement[i][j] + "  ");
-                else 
-                    System.out.print("*  ");
-            }
-            System.out.println(" ");
-        }
         int minValue = 99;
         int[] coord = new int[2];
         for (int i = 0; i < cote; i++) {
@@ -695,8 +708,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getBatiment();
         
         else if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Unite)
-            entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getBatiment();
-        
+            entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getUnite();
+        System.out.println("FINAL CIBLE COORD : "+coord[0]+" - "+coord[1]);
         return entiteAAttaquer;
     }
 
@@ -719,9 +732,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         System.out.println("ARMEE JOUEUR : "+joueurActuel.getArmee().size());
         for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
-            actionUniteIA(joueurActuel.getArmee().get(i));
+            if (!calculVitoire())
+                actionUniteIA(joueurActuel.getArmee().get(i));
         }
 
+        System.out.println(plateau.affichage());
     }
 
     //    

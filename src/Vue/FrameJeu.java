@@ -154,4 +154,8 @@ public class FrameJeu extends JFrame{
 		return FrameJeu.panelJeu;
 	}
 
+	public PanelVictoire getPanelVictoire() {
+        return FrameJeu.panelVictoire;
+    }
+
 }

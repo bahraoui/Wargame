@@ -166,4 +166,9 @@ public class Joueur {
         this.pseudo=pseudo;
     }
 
+    public static void setCompteur(int compt){
+        Joueur.compteur = compt;
+    }
+
+
 }
