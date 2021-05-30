@@ -3,17 +3,18 @@ package Vue;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import controleur.Jeu;
 
-
+/**
+ * Fenêtre principale du jeu.
+ * 
+ * Cette classe est une fenêtre contient tous les menus ainsi que la carte du jeu.
+ */
 public class FrameJeu extends JFrame{
 
 	private static PanelJeu panelJeu;
@@ -24,8 +25,23 @@ public class FrameJeu extends JFrame{
 	private static PanelChargerScenario panelChargerScenario;
 	private static PanelActuel panelActuel;
 	private static PanelVictoire panelVictoire;
-	//REGLES,CHARGERPARTIE,CHANGERSCENARIO
 
+	/**
+	 * Crée la fenêtre principale du jeu.
+	 * 
+	 * Instancie tous les panels necessaires au bon deroulement de l'interface graphique : <br/>
+	 * <ul>
+	 * <li> {@link PanelJeu} </li>
+	 * <li> {@link PanelMenu} </li>
+	 * <li> {@link PanelNouvellePartie} </li>
+	 * <li> {@link PanelRegles} </li>
+	 * <li> {@link PanelChargerPartie} </li>
+	 * <li> {@link PanelChargerScenario} </li>
+	 * <li> {@link PanelVictoire} </li>
+	 * </ul>
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public FrameJeu() throws IOException, InterruptedException {
 		super("Wargame");		
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -36,7 +52,6 @@ public class FrameJeu extends JFrame{
 		panelMenu = new PanelMenu();
 		panelNouvellePartie = new PanelNouvellePartie();
 		panelChargerPartie = new PanelChargerPartie();
-		//panelChargerScenario = new PanelChargerScenario();
 		panelRegles = new PanelRegles();
 		panelVictoire = new PanelVictoire();
 		this.getContentPane().setBackground(Color.cyan);
@@ -47,7 +62,11 @@ public class FrameJeu extends JFrame{
 		
 	}
 
-	public void enleverPanel(PanelActuel panelVoulu) {		
+	/**
+	 * Enleve le panel donné en paramètre de la fenêtre.
+	 * @param panelVoulu Le panel à enlever.
+	 */
+	private void enleverPanel(PanelActuel panelVoulu) {		
 		switch (panelVoulu) {
 			case MENU:
 				this.remove(panelMenu);
@@ -76,6 +95,10 @@ public class FrameJeu extends JFrame{
 		}
 	}
 
+	/**
+	 * Ajoute le panel donnée en paramètre à la fenêtre.
+	 * @param panelVoulu Le panel à ajouter.
+	 */
 	public void changePanel(PanelActuel panelVoulu) {
 		enleverPanel(panelActuel);
 		switch (panelVoulu) {
@@ -110,15 +133,19 @@ public class FrameJeu extends JFrame{
 		
 	}
 
+	/**
+	 * enregistreEcouteur met à l'écoute tous les panels de la fenêtre.
+	 * @param controleur Jeu
+	 */
 	public void enregistreEcouteur(Jeu controleur) {
 		panelMenu.enregistreEcouteur(controleur);
 		panelNouvellePartie.enregistreEcouteur(controleur);
 		panelChargerPartie.enregistreEcouteur(controleur);
-		//panelChargerScenario.enregistreEcouteur(controleur);
 		panelRegles.enregistreEcouteur(controleur);
 		panelVictoire.enregistreEcouteur(controleur);
 	}
 
+	// Getters and setters :
 
 	public void setChoixTerrainTxt(String txt) {
         panelChargerScenario.setChoixTerrainTxt(txt);
@@ -154,4 +181,5 @@ public class FrameJeu extends JFrame{
 		return FrameJeu.panelJeu;
 	}
 
+	// FIN Getters and setters
 }
