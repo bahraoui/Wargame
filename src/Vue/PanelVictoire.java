@@ -19,6 +19,9 @@ import java.awt.*;
 
 import controleur.Jeu;
 
+/**
+ * La classe PanelVictoire herite de la classe JPanel permet d'afficher le victoire d'un joueur
+ */
 public class PanelVictoire extends JPanel{
 
     private BorderLayout bdl;
@@ -27,6 +30,9 @@ public class PanelVictoire extends JPanel{
     private JLabel labelNomVainqueur;
     private JButton boutonQuitter;
 
+    /**
+     * Le constructeur de PanelVictoire permet d'intancier ce JPanel
+     */
     public PanelVictoire() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -61,10 +67,14 @@ public class PanelVictoire extends JPanel{
         this.add(panelBas/*,BorderLayout.SOUTH*/);
     }
 
+    /**
+     * enregistreEcouteur permet de mettre a l'ecoute le boutonQuitter
+     * @param controleur Jeu
+     * */
     public void enregistreEcouteur(Jeu controleur) {
         boutonQuitter.addActionListener(controleur);
     }
-
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -75,6 +85,11 @@ public class PanelVictoire extends JPanel{
         }
     }
 
+    /**
+     * setImageBouton permet d'afficher une image dans le bouton
+     * @param filePathName String
+     * @param btnAModifier JButton
+     */
     private void setImageBouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
@@ -85,6 +100,8 @@ public class PanelVictoire extends JPanel{
         }
     }
 
+    // Getters et setters
+    
     public BorderLayout getBdl() {
         return this.bdl;
     }
@@ -125,6 +142,6 @@ public class PanelVictoire extends JPanel{
         this.boutonQuitter = boutonQuitter;
     }
     
-
+    // FIN Getters et setterss
     
 }
