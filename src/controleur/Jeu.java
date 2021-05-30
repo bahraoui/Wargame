@@ -149,7 +149,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     if (defenseur.getUnite().getIdentifiant() == listeJoueur.get(i).getArmee().get(j).getIdentifiant()){
                         listeJoueur.get(i).getArmee().remove(j); //armee
                         defenseur.setUnite(null); //plateau
-                        if (listeJoueur.get(i).getArmee().size() > 0 || listeJoueur.get(i).getPieces() > 10){
+                        if (listeJoueur.get(i).getArmee().size() == 0 && listeJoueur.get(i).getPieces() < 6){
                             listeJoueur.get(i).setEnJeu(false);
                         }
                         return;
@@ -342,8 +342,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
             plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).setUnite(null);
             plateau.get(deplacement.get(i).getX()).get(deplacement.get(i).getY()).setUnite(unite);
             try {
-                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
                 cellulesCarte[deplacement.get(i).getX()][deplacement.get(i).getY()].getHex().setUnite(uniteModelToVue(unite));
+                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setUnite(null);
+                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -465,6 +466,130 @@ public class Jeu extends MouseAdapter implements ActionListener {
     	}, 2000 , 2000);
     }
 
+    public static void evenementExterieur(){
+        int evenement = new Random().nextInt(100);
+        if (evenement >95 && evenement <100){
+            if (joueurActuel.getArmee().size() > 1){
+                int uniteMalade = new Random().nextInt(joueurActuel.getArmee().size());
+                int[] coordUniteMalade = rechercheMonUniteDansPlateau(joueurActuel.getArmee().get(uniteMalade));
+                plateau.get(coordUniteMalade[0]).get(coordUniteMalade[1]).setUnite(null);
+                try {
+                    cellulesCarte[coordUniteMalade[1]][coordUniteMalade[0]].getHex().setTerrain(terrainModeleToVue(plateau.get(coordUniteMalade[1]).get(coordUniteMalade[0]).getTerrain()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(FenetreJeu, "Une de vos unités est tombé malade, cette dernière est morte de maladie...");         
+            }
+        }
+        else if (evenement >90 && evenement <95){
+            int gainGold =  4 + (int)(Math.random() * joueurActuel.getPieces()/2);
+            JOptionPane.showMessageDialog(FenetreJeu, "L'Etat a décidé de vous aider dans cette guerre elle vous ajoute "+gainGold+" a votre banque !");
+            joueurActuel.setPieces(joueurActuel.getPieces()+gainGold);
+            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+        }
+        else if (evenement >85 && evenement <90){
+            for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
+                int gainPointDeVie = joueurActuel.getArmee().get(i).getPointDeVieActuel() + 10;
+                if (gainPointDeVie > joueurActuel.getArmee().get(i).getDeplacementMax())
+                    gainPointDeVie = joueurActuel.getArmee().get(i).getPointDeVieMax();
+                joueurActuel.getArmee().get(i).setPointDeVieActuel(gainPointDeVie);
+            }
+            JOptionPane.showMessageDialog(FenetreJeu, "Un voile de magie eclaire le champ de bataille... Toutes vos unités régénère 10 point de vie");
+        }
+        else if (evenement >80 && evenement <85){
+            int inmpots = (int) (joueurActuel.getPieces()*0.1);
+            JOptionPane.showMessageDialog(FenetreJeu, "Les impots touchent tout le monde, vous n'y échapperez pas ! L'Etat récupère 10% de votre banque..."); 
+            joueurActuel.setPieces(joueurActuel.getPieces()-inmpots);
+            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+        }
+        else if (evenement >75 && evenement <80){
+            boolean presenceMonument = false;
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size(); j++) {
+                    Entite entiteSelectionne = (Entite) plateau.get(i).get(j).estOccupe();
+                    if (entiteSelectionne != null && entiteSelectionne instanceof Batiment && ((Batiment) entiteSelectionne).getEstBase() == TypeBatiment.MONUMENT) {
+                        presenceMonument = true;
+                        ((Batiment) entiteSelectionne).setTresor((int)(((Batiment) entiteSelectionne).getTresor()*1.2));
+                    }
+                }
+            }
+            if (presenceMonument)
+                JOptionPane.showMessageDialog(FenetreJeu, "D'après quelques sources, les monuments présents sur le champ de batille possèderait plus de pièces..."); 
+        }
+        else if (evenement >70 && evenement <75){
+            boolean presenceMonument = false;
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size(); j++) {
+                    Entite entiteSelectionne = (Entite) plateau.get(i).get(j).estOccupe();
+                    if (entiteSelectionne != null && entiteSelectionne instanceof Batiment && ((Batiment) entiteSelectionne).getEstBase() == TypeBatiment.MONUMENT) {
+                        presenceMonument = true;
+                        ((Batiment) entiteSelectionne).setTresor((int)(((Batiment) entiteSelectionne).getTresor()*0.8));
+                    }
+                }
+            }
+            if (presenceMonument)
+                JOptionPane.showMessageDialog(FenetreJeu, "Des pillards sont arrivés avant nous sur le champ de bataille et ils ont volé une partie des trésor des monuments"); 
+        }
+        
+        else if (evenement >65 && evenement <70){
+            JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de sable est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size()-1; j++) {
+                    int changerTypeTerrain = new Random().nextInt(4);
+                    if (changerTypeTerrain == 2){
+                        plateau.get(i).get(j).setTerrain(new Desert());
+                        try {
+                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Desert()));
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+           
+        }
+        else if (evenement >60 && evenement <65){
+            JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de neige est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size() - 1; j++) {
+                    System.out.println("Coord : "+i+ " - "+j);
+                    int changerTypeTerrain = new Random().nextInt(4);
+                    if (changerTypeTerrain == 2){
+                        plateau.get(i).get(j).setTerrain(new ToundraNeige());
+                        try {
+                            System.out.println(cellulesCarte[i][j].getHex().getAll());
+                            System.out.println("Coord Aleatoire : "+i+ " - "+j);
+                            cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new ToundraNeige()));
+                
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        else if (evenement >55 && evenement <60){
+            JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size()-1; j++) {
+                    int changerTypeTerrain = new Random().nextInt(4);
+                    if (changerTypeTerrain == 2){
+                        plateau.get(i).get(j).setTerrain(new Mer());
+                        try {
+                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static void actionDopportunite(Joueur joueur, int coordYFinalJoueur, int coordXFinalJoueur, int coordYOpportunite, int coordXOpportunite, Case caseAttaque) {
     	Case positionFinalJoueur = plateau.get(coordYFinalJoueur).get(coordXFinalJoueur); 
     	Case postionOpportunite = plateau.get(coordYOpportunite).get(coordXOpportunite); 
@@ -490,6 +615,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static void nouveauTour() throws InterruptedException {
         if (!conditionFinPartie()) { //condition de victoire
+            if (tour == 0 && nbJoueursH == 0) {
+                JOptionPane.showMessageDialog(FenetreJeu, "Les IA vont s'affronter, vous ne pourrez pas prendre la main tant que les deux ia sont en partie");         
+            }
             if (tour != 0) {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
@@ -504,7 +632,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Thread.sleep(1000);
                 nouveauTour();
             }
-            System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+            evenementExterieur();
         }
         else {
             effacerDonnes();
@@ -854,7 +982,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return terrain;
     }
     
-    public TypeBatimentVue batimentModeleToVue(TypeBatiment batiment) {
+    public static TypeBatimentVue batimentModeleToVue(TypeBatiment batiment) {
         TypeBatimentVue typeBatimentVue = null;
         switch (batiment) {
             case MONUMENT:
