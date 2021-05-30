@@ -294,47 +294,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return (row >= 0) && (row < cote) && (col >= 0) && (col < cote);
       }
 
-    public static int calculDistanceAttaque(int mat[][], int srcX, int srcY, int destX, int destY) {
-        int rowNum[] = { -1, 0, 0, 1 };
-        int colNum[] = { 0, -1, 1, 0 };
-
-        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
-            return -1;
-
-        boolean[][] visited = new boolean[cote][cote];
-
-        visited[srcY][srcX] = true;
-
-        Queue<Node> q = new LinkedList<>();
-
-        Node s = new Node(srcY, srcX, 0, null);
-        q.add(s);
-
-        while (!q.isEmpty()) {
-            Node curr = q.peek();
-            int ptX = curr.getX();
-            int ptY = curr.getY();
-
-            if (ptX == destX && ptY == destY){
-            return curr.getDist();
-            }
-
-            q.remove();
-
-            
-            for (int i = 0; i < 4; i++) {
-            int row = ptX + rowNum[i];
-            int col = ptY + colNum[i];
-            if (estValideAttaque(row, col) && mat[row][col] !=0 && !visited[row][col]) {
-                visited[row][col] = true;
-                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
-                q.add(Adjcell);
-            }
-            }
-        }
-        return -1;
-    }
-
     private static void faireDeplacement(Unite unite, ArrayList<Node> deplacement) throws InterruptedException
     {
         Deplacement:
@@ -817,8 +776,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 matriceEmplacement[i][j] = 99;
                 if (plateau.get(i).get(j).estOccupe() != null){
                     int [] coord = {i,j};
-                    if (!joueurActuel.estMonEntite(caseTest) && coord != estDeplacementPossible(coord))
-                        matriceEmplacement[i][j] = calculDistanceAttaque(matricePlateau, coordUnite[0], coordUnite[1], i, j);                    
+                    if (!joueurActuel.estMonEntite(caseTest) && coord != estDeplacementPossible(coord)) {
+                        Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], i, j);
+                        matriceEmplacement[i][j] = -1;
+                        if (chemin != null) {
+                            matriceEmplacement[i][j] = chemin.getDist();
+                        }
+                    }                  
                 }                   
             }
         }
@@ -1474,7 +1438,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)){
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
-                                int distanceCase = calculDistanceAttaque(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                int distanceCase = -1;
+                                if (chemin != null) {
+                                    distanceCase = chemin.getDist();
+                                }
                                 if (combat(hexCaseClic, hexClic, distanceCase)){
                                     JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
                                 }
