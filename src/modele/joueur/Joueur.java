@@ -86,7 +86,7 @@ public class Joueur {
     }
 
 
-    public boolean estMonUnite(Case caseClic1) {
+    public boolean estMonEntite(Case caseClic1) {
         Entite entite = (Entite) caseClic1.estOccupe();
         if (entite instanceof Unite){
             for (int i = 0; i < this.armee.size(); i++) {
@@ -95,7 +95,7 @@ public class Joueur {
             }
         }
         else if (entite instanceof Batiment){
-            if (((Batiment) entite).getEstBase() == TypeBatiment.BASE && this.getBase().getIdentifiant() == entite.getIdentifiant()){
+            if (caseClic1.getBatiment().getEstBase() == TypeBatiment.BASE && this.getBase().getIdentifiant() == caseClic1.getBatiment().getIdentifiant()){
                 return true;
             }
         }
@@ -165,5 +165,10 @@ public class Joueur {
     public void setPseudo(String pseudo){
         this.pseudo=pseudo;
     }
+
+    public static void setCompteur(int compt){
+        Joueur.compteur = compt;
+    }
+
 
 }

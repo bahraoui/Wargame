@@ -181,5 +181,8 @@ public class FrameJeu extends JFrame{
 		return FrameJeu.panelJeu;
 	}
 
-	// FIN Getters and setters
+	public PanelVictoire getPanelVictoire() {
+        return FrameJeu.panelVictoire;
+    }
+
 }

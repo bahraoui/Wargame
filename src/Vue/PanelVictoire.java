@@ -24,7 +24,6 @@ public class PanelVictoire extends JPanel{
     private BorderLayout bdl;
     private JPanel panelInfosVictoire;
     private JLabel labelVictoire;
-    private int numJoueur;
     private JLabel labelNomVainqueur;
     private JButton boutonQuitter;
 
@@ -37,10 +36,10 @@ public class PanelVictoire extends JPanel{
         panelInfosVictoire.setLayout(new BoxLayout(panelInfosVictoire, BoxLayout.Y_AXIS));
         panelInfosVictoire.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
         
-        labelVictoire = new JLabel("Victoire du joueur "+numJoueur, SwingConstants.CENTER);
+        labelVictoire = new JLabel("Victoire du joueur ", SwingConstants.CENTER);
         panelInfosVictoire.add(labelVictoire);
 
-        labelNomVainqueur = new JLabel("Clément", SwingConstants.CENTER);
+        labelNomVainqueur = new JLabel("", SwingConstants.CENTER);
         panelInfosVictoire.add(labelNomVainqueur);
 
         JLabel labelFelicitation = new JLabel("Felicitation !!", SwingConstants.CENTER);
@@ -85,5 +84,47 @@ public class PanelVictoire extends JPanel{
             e.printStackTrace();
         }
     }
+
+    public BorderLayout getBdl() {
+        return this.bdl;
+    }
+
+    public void setBdl(BorderLayout bdl) {
+        this.bdl = bdl;
+    }
+
+    public JPanel getPanelInfosVictoire() {
+        return this.panelInfosVictoire;
+    }
+
+    public void setPanelInfosVictoire(JPanel panelInfosVictoire) {
+        this.panelInfosVictoire = panelInfosVictoire;
+    }
+
+    public JLabel getLabelVictoire() {
+        return this.labelVictoire;
+    }
+
+    public void setLabelVictoire(JLabel labelVictoire) {
+        this.labelVictoire = labelVictoire;
+    }
+
+    public JLabel getLabelNomVainqueur() {
+        return this.labelNomVainqueur;
+    }
+
+    public void setLabelNomVainqueur(JLabel labelNomVainqueur) {
+        this.labelNomVainqueur = labelNomVainqueur;
+    }
+
+    public JButton getBoutonQuitter() {
+        return this.boutonQuitter;
+    }
+
+    public void setBoutonQuitter(JButton boutonQuitter) {
+        this.boutonQuitter = boutonQuitter;
+    }
+    
+
     
 }

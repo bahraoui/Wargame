@@ -149,7 +149,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     if (defenseur.getUnite().getIdentifiant() == listeJoueur.get(i).getArmee().get(j).getIdentifiant()){
                         listeJoueur.get(i).getArmee().remove(j); //armee
                         defenseur.setUnite(null); //plateau
-                        if (listeJoueur.get(i).getArmee().size() > 0 || listeJoueur.get(i).getPieces() > 10){
+                        if (listeJoueur.get(i).getArmee().size() == 0 && listeJoueur.get(i).getPieces() < 6){
                             listeJoueur.get(i).setEnJeu(false);
                         }
                         return;
@@ -158,12 +158,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         else if (defenseur.getBatiment() != null) {
+            System.out.println("BATIMENT !!!");
             if (defenseur.getBatiment().getEstBase() == TypeBatiment.BASE) {
+                System.out.println("BASE !!!");
+                System.out.println(defenseur.getBatiment().getIdentifiant());
                 for (int i = 0; i < listeJoueur.size(); i++) {
-                    if (listeJoueur.get(i).getBase().getIdentifiant() == defenseur.getBatiment().getIdentifiant()) {
+                    if (listeJoueur.get(i).getBase().getIdentifiant() == defenseur.getBatiment().getIdentifiant()){
                         listeJoueur.get(i).setEnJeu(false);
+                        System.out.println("BASE DETRUITE");
                         ArrayList<Integer> coordBase = postionBaseJoueur.get(listeJoueur.get(i).getNumeroJoueur());
+                        System.out.print("Coord Base : ");
+                        for (int j = 0; j < coordBase.size(); j++) {
+                            System.out.print(coordBase.get(j)+ " ");
+                        }
+                        System.out.println("");
                         plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
+                        return;
                     }
                 }
             }
@@ -284,47 +294,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return (row >= 0) && (row < cote) && (col >= 0) && (col < cote);
       }
 
-    public static int calculDistanceAttaque(int mat[][], int srcX, int srcY, int destX, int destY) {
-        int rowNum[] = { -1, 0, 0, 1 };
-        int colNum[] = { 0, -1, 1, 0 };
-
-        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
-            return -1;
-
-        boolean[][] visited = new boolean[cote][cote];
-
-        visited[srcY][srcX] = true;
-
-        Queue<Node> q = new LinkedList<>();
-
-        Node s = new Node(srcY, srcX, 0, null);
-        q.add(s);
-
-        while (!q.isEmpty()) {
-            Node curr = q.peek();
-            int ptX = curr.getX();
-            int ptY = curr.getY();
-
-            if (ptX == destX && ptY == destY){
-            return curr.getDist();
-            }
-
-            q.remove();
-
-            
-            for (int i = 0; i < 4; i++) {
-            int row = ptX + rowNum[i];
-            int col = ptY + colNum[i];
-            if (estValideAttaque(row, col) && mat[row][col] !=0 && !visited[row][col]) {
-                visited[row][col] = true;
-                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
-                q.add(Adjcell);
-            }
-            }
-        }
-        return -1;
-    }
-
     private static void faireDeplacement(Unite unite, ArrayList<Node> deplacement) throws InterruptedException
     {
         Deplacement:
@@ -332,8 +301,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
             plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).setUnite(null);
             plateau.get(deplacement.get(i).getX()).get(deplacement.get(i).getY()).setUnite(unite);
             try {
-                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
                 cellulesCarte[deplacement.get(i).getX()][deplacement.get(i).getY()].getHex().setUnite(uniteModelToVue(unite));
+                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setUnite(null);
+                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -341,23 +311,24 @@ public class Jeu extends MouseAdapter implements ActionListener {
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
             Thread.sleep(150);
-            System.out.println(plateau.affichage());
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
         }
     }
   
 
-    public static boolean conditionTourEnJeu(){
+    public static boolean conditionFinPartie(){
         if (tour == 30){
+            System.out.println("PLus de tour");
             return true;
         }
         for (int i = 0; i < listeJoueur.size(); i++) {
             if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
+                System.out.println("Encore du monde en jeu");
                 return false;
             }
         }
-        System.out.println("tout le monde joue");
+        System.out.println("Gagant unanime");
         return true;
     }
 
@@ -367,8 +338,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
-    public static void calculVitoire(){
-        if (conditionTourEnJeu()){
+    public static boolean calculVitoire(){
+        if (conditionFinPartie()){
             if (tour == 30){
                 int[] value = new int[listeJoueur.size()];
                 for (int i = 0; i < value.length; i++) {
@@ -393,8 +364,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurGagnant = joueurActuel;
             }
+            System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+            FenetreJeu.changePanel(PanelActuel.VICTOIRE);
+            FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
+            FenetreJeu.getPanelVictoire().getLabelVictoire().setText("Victoire du joueur n°"+joueurGagnant.getNumeroJoueur());
+            effacerDonnes();
+            return true;
         }
-        System.out.println("Joueur gagant : "+joueurGagnant.getPseudo());
+        return false;
     }        
 
 
@@ -448,6 +425,130 @@ public class Jeu extends MouseAdapter implements ActionListener {
     	}, 2000 , 2000);
     }
 
+    public static void evenementExterieur(){
+        int evenement = new Random().nextInt(100);
+        if (evenement >95 && evenement <100){
+            if (joueurActuel.getArmee().size() > 1){
+                int uniteMalade = new Random().nextInt(joueurActuel.getArmee().size());
+                int[] coordUniteMalade = rechercheMonUniteDansPlateau(joueurActuel.getArmee().get(uniteMalade));
+                plateau.get(coordUniteMalade[0]).get(coordUniteMalade[1]).setUnite(null);
+                try {
+                    cellulesCarte[coordUniteMalade[1]][coordUniteMalade[0]].getHex().setTerrain(terrainModeleToVue(plateau.get(coordUniteMalade[1]).get(coordUniteMalade[0]).getTerrain()));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(FenetreJeu, "Une de vos unités est tombé malade, cette dernière est morte de maladie...");         
+            }
+        }
+        else if (evenement >90 && evenement <95){
+            int gainGold =  4 + (int)(Math.random() * joueurActuel.getPieces()/2);
+            JOptionPane.showMessageDialog(FenetreJeu, "L'Etat a décidé de vous aider dans cette guerre elle vous ajoute "+gainGold+" a votre banque !");
+            joueurActuel.setPieces(joueurActuel.getPieces()+gainGold);
+            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+        }
+        else if (evenement >85 && evenement <90){
+            for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
+                int gainPointDeVie = joueurActuel.getArmee().get(i).getPointDeVieActuel() + 10;
+                if (gainPointDeVie > joueurActuel.getArmee().get(i).getDeplacementMax())
+                    gainPointDeVie = joueurActuel.getArmee().get(i).getPointDeVieMax();
+                joueurActuel.getArmee().get(i).setPointDeVieActuel(gainPointDeVie);
+            }
+            JOptionPane.showMessageDialog(FenetreJeu, "Un voile de magie eclaire le champ de bataille... Toutes vos unités régénère 10 point de vie");
+        }
+        else if (evenement >80 && evenement <85){
+            int inmpots = (int) (joueurActuel.getPieces()*0.1);
+            JOptionPane.showMessageDialog(FenetreJeu, "Les impots touchent tout le monde, vous n'y échapperez pas ! L'Etat récupère 10% de votre banque..."); 
+            joueurActuel.setPieces(joueurActuel.getPieces()-inmpots);
+            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+        }
+        else if (evenement >75 && evenement <80){
+            boolean presenceMonument = false;
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size(); j++) {
+                    Entite entiteSelectionne = (Entite) plateau.get(i).get(j).estOccupe();
+                    if (entiteSelectionne != null && entiteSelectionne instanceof Batiment && ((Batiment) entiteSelectionne).getEstBase() == TypeBatiment.MONUMENT) {
+                        presenceMonument = true;
+                        ((Batiment) entiteSelectionne).setTresor((int)(((Batiment) entiteSelectionne).getTresor()*1.2));
+                    }
+                }
+            }
+            if (presenceMonument)
+                JOptionPane.showMessageDialog(FenetreJeu, "D'après quelques sources, les monuments présents sur le champ de batille possèderait plus de pièces..."); 
+        }
+        else if (evenement >70 && evenement <75){
+            boolean presenceMonument = false;
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size(); j++) {
+                    Entite entiteSelectionne = (Entite) plateau.get(i).get(j).estOccupe();
+                    if (entiteSelectionne != null && entiteSelectionne instanceof Batiment && ((Batiment) entiteSelectionne).getEstBase() == TypeBatiment.MONUMENT) {
+                        presenceMonument = true;
+                        ((Batiment) entiteSelectionne).setTresor((int)(((Batiment) entiteSelectionne).getTresor()*0.8));
+                    }
+                }
+            }
+            if (presenceMonument)
+                JOptionPane.showMessageDialog(FenetreJeu, "Des pillards sont arrivés avant nous sur le champ de bataille et ils ont volé une partie des trésor des monuments"); 
+        }
+        
+        else if (evenement >65 && evenement <70){
+            JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de sable est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size()-1; j++) {
+                    int changerTypeTerrain = new Random().nextInt(4);
+                    if (changerTypeTerrain == 2){
+                        plateau.get(i).get(j).setTerrain(new Desert());
+                        try {
+                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Desert()));
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+           
+        }
+        else if (evenement >60 && evenement <65){
+            JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de neige est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size() - 1; j++) {
+                    System.out.println("Coord : "+i+ " - "+j);
+                    int changerTypeTerrain = new Random().nextInt(4);
+                    if (changerTypeTerrain == 2){
+                        plateau.get(i).get(j).setTerrain(new ToundraNeige());
+                        try {
+                            System.out.println(cellulesCarte[i][j].getHex().getAll());
+                            System.out.println("Coord Aleatoire : "+i+ " - "+j);
+                            cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new ToundraNeige()));
+                
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        else if (evenement >55 && evenement <60){
+            JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size()-1; j++) {
+                    int changerTypeTerrain = new Random().nextInt(4);
+                    if (changerTypeTerrain == 2){
+                        plateau.get(i).get(j).setTerrain(new Mer());
+                        try {
+                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static void actionDopportunite(Joueur joueur, int coordYFinalJoueur, int coordXFinalJoueur, int coordYOpportunite, int coordXOpportunite, Case caseAttaque) {
     	Case positionFinalJoueur = plateau.get(coordYFinalJoueur).get(coordXFinalJoueur); 
     	Case postionOpportunite = plateau.get(coordYOpportunite).get(coordXOpportunite); 
@@ -472,7 +573,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void nouveauTour() throws InterruptedException {
-        if (!conditionTourEnJeu()) { //condition de victoire
+        if (!conditionFinPartie()) { //condition de victoire
+            if (tour == 0 && nbJoueursH == 0) {
+                JOptionPane.showMessageDialog(FenetreJeu, "Les IA vont s'affronter, vous ne pourrez pas prendre la main tant que les deux ia sont en partie");         
+            }
             if (tour != 0) {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
@@ -485,9 +589,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (joueurActuel.getEstIa()){
                 tourIA();
                 Thread.sleep(1000);
-                //nouveauTour();
+                nouveauTour();
             }
-            System.out.println(joueurActuel.getPseudo() +" - "+joueurActuel.getArmee().size());
+            evenementExterieur();
         }
         else {
             effacerDonnes();
@@ -508,11 +612,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
     public static void effacerDonnes() {
         resetChrono();
+        Joueur.setCompteur(0);
+        Entite.setCompteur(0);
         int nbJoueurs = listeJoueur.size();
         for (int i = nbJoueurs-1; i > 0 ; i--) {
             listeJoueur.remove(i);
         }
         listeJoueur = new ArrayList<Joueur>();
+        
         plateau.removeAll(plateau);
         plateau = new Plateau();
         System.out.println("RESET HARD");
@@ -526,25 +633,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //PARTIE IA
     //
 
-    /*public static void joueurAAttaquerIA() {
-        if (joueurActuel.getIdentifiantCible() == -1 || listeJoueur.get(joueurActuel.getIdentifiantCible()).getEnJeu() == false) {
-            ArrayList<Integer> quiAttaquer = new ArrayList<Integer>();
-            for (int i = 0; i < listeJoueur.size(); i++) {
-                if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(joueurActuel.getIdentifiantCible()).getEnJeu()){
-                    quiAttaquer.add(listeJoueur.get(i).getNumeroJoueur());
-                }
-            }
-            joueurActuel.setIdentifiantCible(quiAttaquer.get(new Random().nextInt(quiAttaquer.size())));
-        }
-    }*/
-
     //Par rapport à la base placé vers le centre de la map en prio
     public static boolean placementUnite(Unite unite) {
+        System.out.println("NOMBRE DE JOUEUR : "+listeJoueur.size());
         int[][][] coordPossible = {{{0,1},{0,2},{1,0},{2,0},{2,1}},
                                 {{13,14},{14,14},{14,15},{15,12},{15,13}},
                                 {{0,14},{1,14},{2,15},{0,13},{1,13}},
                                 {{12,0},{13,0},{14,0},{14,1},{15,1}}};
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
             if (placerUniteJoueur(joueurActuel, unite, coordPossible[joueurActuel.getNumeroJoueur()][i][0],coordPossible[joueurActuel.getNumeroJoueur()][i][1])){
                 cellulesCarte[coordPossible[joueurActuel.getNumeroJoueur()][i][0]][coordPossible[joueurActuel.getNumeroJoueur()][i][1]].getHex().setUnite(uniteModelToVue(unite));
                 return true;
@@ -570,38 +666,149 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (depense >= new Archer().getCout()) {
             troupeAchete = new Archer();
         }
-        if (placementUnite(troupeAchete)){
+        if (placementUnite(troupeAchete))
             joueurActuel.achatUniteArmee(troupeAchete);
-            joueurActuel.getArmee().add(troupeAchete);
-            System.out.println("ACHAT POSSIBLE");
-        }
         else {
             System.out.println("ACHAT IMPOSSIBLE");
         }
         return troupeAchete;
     }
 
-    public static void rechercheEntiteProche() {
+    
 
-
-    }
-
-    public static void estDeplacementPossible() {
-
-        //renvoie une pos
+    public static int[] estDeplacementPossible(int[] coord) {
+        int[][] coordTest = {{1,1},{1,0},{1,-1},{0,1},{0,-1},{-1,1},{-1,0},{-1,-1}};
+        int row,col;
+        for (int i = 0; i < coordTest.length; i++) {
+            row = coord[0]+coordTest[i][0];
+            col = coord[1]+coordTest[i][1];
+            if (estValide(row, col)){
+                int[] coordFinal = {row,col};
+                return coordFinal;
+            }
+        }
+        return coord;
     }
 
     public static void actionUniteIA(Unite unite) {
         //recherche Entite plus proche et deplacement vers elle/attaquer
+        int[] coordUnite = rechercheMonUniteDansPlateau(unite);
+        Entite cible = rechercheEntiteProche(coordUnite);
+        System.out.println("CIBLE CHOSIS :"+cible);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        int[] coordDeplacement = new int[2];
+        int[] coordCible = new int[2];
+        if (cible != null) {
+            coordCible = rechercheMonUniteDansPlateau(cible);
+            System.out.print("Coord Cible : ");
+            for (int i = 0; i < coordCible.length; i++) {
+                System.out.print(coordCible[i]+ " ");
+            }
+            System.out.println("");
+            coordDeplacement = estDeplacementPossible(coordCible);
+            System.out.print("Ou se deplacer : ");
+            for (int i = 0; i < coordDeplacement.length; i++) {
+                System.out.print(coordDeplacement[i]+ " ");
+            }
+            System.out.println("");
+            int[][] matricePlateau = new int[cote][cote];
+            plateauToMatice(matricePlateau);
+            Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], coordDeplacement[0], coordDeplacement[1]);
+            ArrayList<Node> cheminComplet = new ArrayList<Node>();
+            Node.nodeToArray(cheminComplet,chemin);
+            try { 
+                faireDeplacement(unite,cheminComplet);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        coordUnite= rechercheMonUniteDansPlateau(unite);
+        System.out.print("Coord APRES DEPLACEMENT : ");
+        for (int i = 0; i < coordUnite.length; i++) {
+            System.out.print(coordUnite[i]+ " ");
+        }
+        System.out.println("");
+        if (coordUnite[0] == coordDeplacement[0] && coordUnite[1] == coordDeplacement[1]){
+            System.out.println("DEDANS");
+            cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(uniteModelToVue(unite));
+            if (combat(cellulesCarte[coordUnite[0]][coordUnite[1]].getHex(), cellulesCarte[coordCible[0]][coordCible[1]].getHex(), 0)) {
+                System.out.println("Combat !");
+                if (plateau.get(coordCible[0]).get(coordCible[1]).estOccupe() instanceof Batiment)
+                    System.out.println("HP Cible : "+plateau.get(coordCible[0]).get(coordCible[1]).getBatiment().getPointDeVieActuel());
+                else if (plateau.get(coordCible[0]).get(coordCible[1]).estOccupe() instanceof Unite)
+                    System.out.println("HP Cible : "+plateau.get(coordCible[0]).get(coordCible[1]).getUnite().getPointDeVieActuel());
+            }
+        }
     }
 
-    public static void rechercheMonUniteDansPlateau(){
+    public static int[] rechercheMonUniteDansPlateau(Entite entite){
+        int [] coordUnite = new int[2];
+        for (int i = 0; i < plateau.size(); i++) {
+            for (int j = 0; j < plateau.size(); j++) {
+                if (plateau.get(i).get(j).estOccupe() instanceof Unite && entite.getIdentifiant() ==  plateau.get(i).get(j).getUnite().getIdentifiant()){
+                    coordUnite[0] = i;coordUnite[1] = j;
+                    System.out.println("Unite trouvé dans le plateau, coord : "+i+" - "+j);
+                    
+                }
+                else if (plateau.get(i).get(j).estOccupe() instanceof Batiment && entite.getIdentifiant() ==  plateau.get(i).get(j).getBatiment().getIdentifiant()){
+                    System.out.println("Batiment trouvé dans le plateau, coord : "+i+" - "+j);
+                    coordUnite[0] = i;coordUnite[1] = j;
+                }
+            }
+        }
+        return coordUnite;
+    }
+
+    public static Entite rechercheEntiteProche(int[] coordUnite) {
+        Entite entiteAAttaquer = new Entite();
+        int[][] matriceEmplacement = new int[cote][cote];
+        int[][] matricePlateau = new int[cote][cote];
+        plateauToMatice(matricePlateau);
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j <  cote; j++) {
+                Case caseTest = plateau.get(i).get(j);
+                matriceEmplacement[i][j] = 99;
+                if (plateau.get(i).get(j).estOccupe() != null){
+                    int [] coord = {i,j};
+                    if (!joueurActuel.estMonEntite(caseTest) && coord != estDeplacementPossible(coord)) {
+                        Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], i, j);
+                        matriceEmplacement[i][j] = -1;
+                        if (chemin != null) {
+                            matriceEmplacement[i][j] = chemin.getDist();
+                        }
+                    }                  
+                }                   
+            }
+        }
+        int minValue = 99;
+        int[] coord = new int[2];
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
+               if (matriceEmplacement[i][j] < minValue){
+                    minValue = matriceEmplacement[i][j];
+                    coord[0] = i;coord[1]=j;
+               } 
+            }
+        }
+        if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Batiment)
+            entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getBatiment();
         
+        else if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Unite)
+            entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getUnite();
+        System.out.println("FINAL CIBLE COORD : "+coord[0]+" - "+coord[1]);
+        return entiteAAttaquer;
     }
 
     public static void tourIA(){
         //joueurAAttaquerIA();
-        int depense = new Random().nextInt(joueurActuel.getPieces());
+        int depense =  4 + (int)(Math.random() * joueurActuel.getPieces());
+        System.out.println("DEPENSE DU TOUR :"+depense);
         while(depense >= 5) {
             try {
                 Unite uniteachete = achatTroupesIA(depense);
@@ -615,10 +822,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 e.printStackTrace();
             }
         }
+        System.out.println("ARMEE JOUEUR : "+joueurActuel.getArmee().size());
         for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
-            actionUniteIA(joueurActuel.getArmee().get(i));
+            if (!calculVitoire())
+                actionUniteIA(joueurActuel.getArmee().get(i));
         }
 
+        System.out.println(plateau.affichage());
     }
 
     //    
@@ -736,7 +946,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return terrain;
     }
     
-    public TypeBatimentVue batimentModeleToVue(TypeBatiment batiment) {
+    public static TypeBatimentVue batimentModeleToVue(TypeBatiment batiment) {
         TypeBatimentVue typeBatimentVue = null;
         switch (batiment) {
             case MONUMENT:
@@ -1225,10 +1435,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                         JOptionPane.showMessageDialog(FenetreJeu, "Unité n'a plus de point déplacement");
                                 }
                             }
-                            else if (caseClic2.estOccupe() != null && !joueurActuel.estMonUnite(caseClic2)){
+                            else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)){
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
-                                int distanceCase = calculDistanceAttaque(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),hexCaseClic.getCoord().getY(),hexClic.getCoord().getX(),hexClic.getCoord().getY());
+                                int distanceCase = -1;
+                                if (chemin != null) {
+                                    distanceCase = chemin.getDist();
+                                }
                                 if (combat(hexCaseClic, hexClic, distanceCase)){
                                     JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
                                 }
@@ -1241,7 +1455,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                            caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                            System.out.println("Premier clic recup");
                            hexCaseClic = hexClic;
-                           if (caseClic1.estOccupe() == null || !joueurActuel.estMonUnite(caseClic1)){
+                           if (caseClic1.estOccupe() == null || !joueurActuel.estMonEntite(caseClic1)){
                                 caseClic1 = null;
                                 JOptionPane.showMessageDialog(FenetreJeu, "Mauvaise case");
                            }
@@ -1250,6 +1464,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                     System.out.println(caseSelectionne);
                     System.out.println(hexClic.getCoord().getX()+" - "+hexClic.getCoord().getY());
+                    System.out.println(hexClic.getAll());
                     FenetreJeu.getPanelJeu().getLabelTypeTerrain().setText(caseSelectionne.getTerrain().afficherTypeTerrain());
                     FenetreJeu.getPanelJeu().getLabelBonusTerrain().setText(caseSelectionne.getTerrain().afficherBonus());
                     break;
@@ -1415,7 +1630,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         pj.enregistreEcouteur(this);
                         FenetreJeu.changePanel(PanelActuel.JEU);
                         initPanelJeu = true;
-                        nouveauTour(); 
+                        //pj.repaint();
+                        nouveauTour();
+                        pj.repaint();
                         resetChrono(); 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -1473,11 +1690,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "finTour":
                     try {
+                        //JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
                         resetChrono();
                         nouveauTour();
                         joueurActuel.regenerationUniteArmee();
                         joueurActuel.gainTourJoueur(tour);
-                        JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
