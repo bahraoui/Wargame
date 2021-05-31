@@ -32,7 +32,6 @@ public class Joueur {
     private int numeroJoueur;
     private static int compteur = 0;
     private boolean estIa;
-    //private int identifiantCible;
     private boolean enJeu;
     private String pseudo;
 
