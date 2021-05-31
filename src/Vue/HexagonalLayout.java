@@ -34,12 +34,12 @@ public class HexagonalLayout implements LayoutManager {
     public HexagonalLayout(int cols, Insets i, boolean beginWithSmallRow, int nbComposants) {
         checkColInput(cols);
         insets = i;
-        minSize = new Dimension(800, 600); //Standard size. Can be changed with setter.
-        prefSize = new Dimension(800, 600); //Standard size. Can be changed with setter.
-        this.cols = cols;
-        this.beginWithSmallRow = beginWithSmallRow;
-        this.rows = calculateRows(nbComposants);
-        this.nbComposants = nbComposants;
+        minSize = new Dimension(800, 600); // Taille par defaut du layout
+        prefSize = new Dimension(800, 600);
+        this.cols = cols; // le nombre de colonnes
+        this.beginWithSmallRow = beginWithSmallRow; // booleen permettant de savoir si la premiere ligne est petite ou non
+        this.rows = calculateRows(nbComposants); // nombre de lignes
+        this.nbComposants = nbComposants; // nombre d'elements
     }
     
     /**
@@ -101,31 +101,27 @@ public class HexagonalLayout implements LayoutManager {
     @Override
     public void layoutContainer(Container parent) {
         
-        // Get componentCount and check that it is not 0
+        // recupere le nombre d'elements et verifie leur nombre si nul
         int componentCount = parent.getComponentCount();
         if (componentCount == 0) {
             return;
         }
         
-        // This indicates wither or not to begin with a small row
+        // Savoir si on commence par une petite ou grande ligne
         boolean smallRow = beginWithSmallRow;
         
-        // Calculating the number of rows needed
-        //rows = calculateRows(componentCount);
-        
-        // insets
+        // bordures
         int leftOffset = insets.left;
         int rightOffset = insets.right;
         int topOffset = insets.top;
         int bottomOffset = insets.bottom;
         
-        // spacing dimensions
+        // espacer les elements
         int boxWidth = parent.getWidth() / cols;
-        int boxHeight = (int) Math
-        .round((parent.getHeight() / (1 + (0.75 * (rows - 1)))));
+        int boxHeight = (int) Math.round((parent.getHeight() / (1 + (0.75 * (rows - 1)))));
         double heightRatio = 0.75;
         
-        // component dimensions
+        // dimensions des elements
         int cWidth = (boxWidth - (leftOffset + rightOffset));
         int cHeight = (boxHeight - (topOffset + bottomOffset));
         
@@ -138,7 +134,7 @@ public class HexagonalLayout implements LayoutManager {
         x = 0;
         y = 0;
         
-        // Laying out each of the components in the container
+        // Disposer tous les elements dans le conteneur
         for (Component c : parent.getComponents()) {
             if (x > parent.getWidth() - boxWidth) {
                 smallRow = !smallRow;

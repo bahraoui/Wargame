@@ -40,7 +40,7 @@ public class PanelJeu extends JPanel {
 	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
 	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
 	private JLabel labelBonusTerrain;
-	public static String str = new String("00:00");
+	public static String str;
 	private Timer timerTour;
 	private Timer timerHorloge;
 	private JButton boutonSauvegarder;
@@ -77,15 +77,22 @@ public class PanelJeu extends JPanel {
 
 		// Tours
 		labelNbTours = new JLabel("Nombre de tour(s) : ");
+		labelNbTours.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
+        labelNbTours.setForeground(new Color(109,7,26));
 		panelInfoTour.add(labelNbTours);
 
 		// Nom du joueur
 		labelNomJoueur = new JLabel("Tour de : ");
+		labelNomJoueur.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
+        labelNomJoueur.setForeground(new Color(109,7,26));
 		panelInfoTour.add(labelNomJoueur);
 
 				
 		// Chrono
-		JLabel Label1 = new JLabel("02:00");
+		JLabel labelChrono = new JLabel("02:00");
+		labelChrono.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
+        labelChrono.setForeground(new Color(109,7,26));
+		str = new String("00:00");
 		ActionListener tacheTimerHorloge = new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e1)
@@ -100,7 +107,7 @@ public class PanelJeu extends JPanel {
 				if(seconde<10)
 					str+=("0");
 				str+=seconde;
-				Label1.setText(str);/* rafraichir le label */
+				labelChrono.setText(str);/* rafraichir le label */
 
 			}
 		};
@@ -114,7 +121,7 @@ public class PanelJeu extends JPanel {
 				str = "02:00";
 				seconde = 0;
 				minute = 2;
-				Label1.setText(str);
+				labelChrono.setText(str);
 				try {
 					Jeu.nouveauTour();
 				} catch (Exception e) {
@@ -126,7 +133,7 @@ public class PanelJeu extends JPanel {
 		timerTour.start();
 		timerHorloge.start();
 
-		panelInfoTour.add(Label1);
+		panelInfoTour.add(labelChrono);
 		panelGaucheInfos.add(panelInfoTour);
 
 		///////////////////////
@@ -152,12 +159,10 @@ public class PanelJeu extends JPanel {
 		// bonus terrain
 		labelBonusTerrain = new JLabel("");
         labelBonusTerrain.setForeground(new Color(109,7,26));
-		panelInfoPartie.add(labelBonusTerrain);
-
-				
+		panelInfoPartie.add(labelBonusTerrain);	
 		// unite batiment
 		labelBatimentUnite = new JLabel("");
-		labelBatimentUnite.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
+		labelBatimentUnite.setFont(new Font("Tempus Sans ITC", Font.BOLD, 10));
         labelBatimentUnite.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelBatimentUnite);
 
@@ -201,10 +206,14 @@ public class PanelJeu extends JPanel {
 
 		// titre
 		JLabel labelTitreBoutique = new JLabel("Boutique d'achats :");
+		labelTitreBoutique.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelTitreBoutique.setForeground(new Color(109,7,26));
 		panelBoutique.add(labelTitreBoutique);
 
 		// golds
 		labelGolds = new JLabel(" Golds");
+		labelGolds.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelGolds.setForeground(new Color(109,7,26));
 		panelBoutique.add(labelGolds);
 
 		// liste d'achat
@@ -215,6 +224,8 @@ public class PanelJeu extends JPanel {
 
 			// Archer
 		labelArcher = new JLabel("Archer");
+		labelArcher.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelArcher.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
 		boutonArcher = new JButton();
@@ -225,6 +236,8 @@ public class PanelJeu extends JPanel {
 			// Cavalerie
 		contrainte.gridx=0; contrainte.gridy=1;
 		labelCavalerie = new JLabel("Cavalerie");
+		labelCavalerie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelCavalerie.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
 		boutonCavalerie = new JButton();
@@ -235,6 +248,8 @@ public class PanelJeu extends JPanel {
 			// Infanterie
 		contrainte.gridx=0; contrainte.gridy=2;
 		labelInfanterie = new JLabel("Infanterie");
+		labelInfanterie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelInfanterie.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterie = new JButton();
@@ -245,6 +260,8 @@ public class PanelJeu extends JPanel {
 			// Infanterie Lourde
 		contrainte.gridx=0; contrainte.gridy=3;
 		labelInfanterieLourde = new JLabel("Infanterie Lourde");
+		labelInfanterieLourde.setFont(new Font("Tempus Sans ITC", Font.BOLD, 14));
+		labelInfanterieLourde.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterieLourde = new JButton();
@@ -255,6 +272,8 @@ public class PanelJeu extends JPanel {
 			// Mage
 		contrainte.gridx=0; contrainte.gridy=4;
 		labelMage = new JLabel("Mage");
+		labelMage.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelMage.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
 		boutonMage = new JButton();
@@ -387,7 +406,6 @@ public class PanelJeu extends JPanel {
 		this.timerHorloge = timerHorloge;
 	}
 
-
 	public int getMinute() {
 		return this.minute;
 	}
@@ -427,8 +445,6 @@ public class PanelJeu extends JPanel {
 	public void setLabelBatimentUnite(JLabel labelBatimentUnite) {
 		this.labelBatimentUnite = labelBatimentUnite;
 	}
-
-	
 
 	public JLabel getLabelGolds() {
 		return this.labelGolds;
@@ -651,5 +667,5 @@ public class PanelJeu extends JPanel {
 
 
 	// FIN Getters et setters
-	
+
 }

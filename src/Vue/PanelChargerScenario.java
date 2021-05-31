@@ -1,10 +1,6 @@
 package Vue;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Image;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -52,6 +48,8 @@ public class PanelChargerScenario extends JPanel{
         panelGauche = new JPanel();
         nbMonumentsRestants = 6; // le nombre de monuments restants
         nbMonumentLabel = new JLabel(nbMonumentsRestants+" monuments restants"); // indique le nombre de monuments restants
+        nbMonumentLabel.setFont(new Font("Tempus Sans ITC", Font.BOLD, 13));
+        nbMonumentLabel.setForeground(new Color(109,7,26));
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
         JPanel panelActions = new JPanel();
@@ -76,6 +74,8 @@ public class PanelChargerScenario extends JPanel{
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
         listeTerrains.setActionCommand("listeTerrains");
         terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0].toString()+" <br/>selectionné</html>");
+        terrainChoisi.setFont(new Font("Tempus Sans ITC", Font.BOLD, 13));
+        terrainChoisi.setForeground(new Color(109,7,26));
         terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
         panelTerrains.add(listeTerrains);
         panelTerrains.add(terrainChoisi);
@@ -89,6 +89,8 @@ public class PanelChargerScenario extends JPanel{
          */
         btnChoixMonument.setActionCommand("choixMonument");
         monumentChoisi = new JLabel("");
+        monumentChoisi.setFont(new Font("Tempus Sans ITC", Font.BOLD, 13));
+        monumentChoisi.setForeground(new Color(109,7,26));
         panelMonuments.add(btnChoixMonument);
         panelMonuments.add(monumentChoisi);
         panelMonuments.add(nbMonumentLabel);
@@ -204,4 +206,14 @@ public class PanelChargerScenario extends JPanel{
     }
     
     // Fin getters et setters
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"fond.jpg")), 0, 0, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

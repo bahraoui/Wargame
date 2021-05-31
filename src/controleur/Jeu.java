@@ -144,7 +144,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 if (!joueurActuel.getEstIa())
                     JOptionPane.showMessageDialog(FenetreJeu, "Votre unité a déjà attaqué !");  
-            }       
+            }
         }
         return false;
     }

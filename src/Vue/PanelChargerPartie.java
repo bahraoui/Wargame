@@ -17,6 +17,9 @@ import javax.swing.JPanel;
 
 import controleur.Jeu;
 
+/**
+ * La classe PanelChargerPartie herite de JPanel et permet de selectionner une sauvegarde pour jouer
+ */
 public class PanelChargerPartie extends JPanel{
 
     private JButton btnChargerSauvegarde;
@@ -24,25 +27,35 @@ public class PanelChargerPartie extends JPanel{
     private JButton btnContinuerScenario;
     private JButton btnQuitter;
 
+    /**
+     * Le contructeur de PanelChargerPartie permet d'instancier le JPanel
+     */
     public PanelChargerPartie() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
         JLabel lblParcourirFichier = new JLabel("Veuillez choisir une sauvegarde : ");
         lblParcourirFichier.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
         lblParcourirFichier.setForeground(new Color(109,7,26));
+
+        // bouton sauvegarde
         btnChargerSauvegarde = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
         lblCarteChosie = new JLabel("Sauvegarde choisie : ");
         lblCarteChosie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
         lblCarteChosie.setForeground(new Color(109,7,26));
+
+        // bouton Lancer la partie
         btnContinuerScenario = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
+
+        // bouton Quitter
         btnQuitter = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         btnChargerSauvegarde.setActionCommand("chercherSauvegarde");
         btnContinuerScenario.setActionCommand("lancerPartieChargee");
         btnQuitter.setActionCommand("retourMenu");
 
+        // ajout des elements avecGridBagLayout
         contrainte.gridx=0;
         contrainte.gridy=0;
         JLabel chargerPartie = new JLabel("Charger une partie");
@@ -78,12 +91,21 @@ public class PanelChargerPartie extends JPanel{
         }
     }
 
+     /**
+	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
+	 */
     public void enregistreEcouteur(Jeu controleur) {
         btnChargerSauvegarde.addActionListener(controleur);
         btnContinuerScenario.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
     }
 
+    
+    /**
+     * Le getter getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
+     * @return JLabel
+     */
     public JLabel getLblCarteChosie(){
         return lblCarteChosie;
     }
