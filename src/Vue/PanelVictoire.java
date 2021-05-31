@@ -36,6 +36,7 @@ public class PanelVictoire extends JPanel{
     public PanelVictoire() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        // Informations sur le vainqueur
         panelInfosVictoire = new JPanel();
         panelInfosVictoire.setOpaque(false);
         
@@ -51,20 +52,21 @@ public class PanelVictoire extends JPanel{
         JLabel labelFelicitation = new JLabel("Felicitation !!", SwingConstants.CENTER);
         panelInfosVictoire.add(labelFelicitation);
         
-
+        // placement au centre de l'ecran
         panelInfosVictoire.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0,0,0)));
         Border border = panelInfosVictoire.getBorder();
         Border margin = new EmptyBorder(370,450,0,0); // N W S E
         panelInfosVictoire.setBorder(new CompoundBorder(margin, border));
         this.add(panelInfosVictoire);
 
+        // Bouton retour Menu
         JPanel panelBas = new JPanel();
         panelBas.setOpaque(false);
         boutonQuitter = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");
         panelBas.add(boutonQuitter);
-        this.add(panelBas/*,BorderLayout.SOUTH*/);
+        this.add(panelBas);
     }
 
     /**

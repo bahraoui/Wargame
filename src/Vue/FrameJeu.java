@@ -43,17 +43,19 @@ public class FrameJeu extends JFrame{
 	 * @throws InterruptedException
 	 */
 	public FrameJeu() throws IOException, InterruptedException {
-		super("Wargame");		
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super("Wargame");
 		panelActuel = PanelActuel.MENU;
 
-		
+		// instantation des différents panels 
 		panelMenu = new PanelMenu();
 		panelNouvellePartie = new PanelNouvellePartie();
 		panelChargerPartie = new PanelChargerPartie();
 		panelRegles = new PanelRegles();
 		panelVictoire = new PanelVictoire();
+
+		// parametrage de la fenetre
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
 		this.setPreferredSize(new Dimension(1500,800));
@@ -185,4 +187,5 @@ public class FrameJeu extends JFrame{
         return FrameJeu.panelVictoire;
     }
 
+	// FIN Getters et setters
 }
