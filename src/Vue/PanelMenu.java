@@ -73,8 +73,8 @@ public class PanelMenu extends JPanel{
 
     /**
      * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName String
-     * @param btnAModifier JButton
+     * @param filePathName le chemin de l'image à utiliser
+     * @param btnAModifier le bouton à modifier
      */
     private void setImageBouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));

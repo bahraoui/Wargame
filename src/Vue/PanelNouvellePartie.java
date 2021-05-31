@@ -89,6 +89,11 @@ public class PanelNouvellePartie extends JPanel{
         this.add(btnQuitter,contrainte);
     }
 
+    /**
+     * Verifie la saisie des pseudos.
+     * @param max le nombre maximum de pseudos à vérifier.
+     * @return Si saisie des pseudos bien faite.
+     */
     public boolean setAllNames(int max){
         if (max > 4) {
             max = 4;
@@ -101,6 +106,10 @@ public class PanelNouvellePartie extends JPanel{
         return true;
     }
 
+    /**
+     * Initialise la liste des cartes à afficher.
+     * @param nomMap la variable à initialiser.
+     */
     public void initListeCartes(ArrayList<String> nomMap){
         nomMap.add("");
         File dossierCartes = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator);
@@ -116,8 +125,8 @@ public class PanelNouvellePartie extends JPanel{
 
     /**
      * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName String
-     * @param btnAModifier JButton
+     * @param filePathName le chemin de l'image à utiliser
+     * @param btnAModifier le bouton à modifier
      */
 	private void setImageBouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
@@ -129,6 +138,10 @@ public class PanelNouvellePartie extends JPanel{
         }
     }
 
+    /**
+	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
+	 */
     public void enregistreEcouteur(Jeu controleur) {
         btnContinuer.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
@@ -136,6 +149,9 @@ public class PanelNouvellePartie extends JPanel{
         nbJoueursHumain.addActionListener(controleur);
         nbJoueursIA.addActionListener(controleur);
     }
+    
+    // Getters et setters
+
     public JLabel[] getNomJoueur() {
         return this.nomJoueur;
     }
@@ -193,6 +209,8 @@ public class PanelNouvellePartie extends JPanel{
     public void setTxtNomJoueur(JTextField[] txtNomJoueur) {
         this.txtNomJoueur = txtNomJoueur;
     }
+
+    // FIN getters et setters
 
     @Override
     protected void paintComponent(Graphics g) {
