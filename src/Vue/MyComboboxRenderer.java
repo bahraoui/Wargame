@@ -7,7 +7,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
 /**
- * La classe MyComboboxRenderer herite de DefaultListCellRenderer
+ * MyComboboxRenderer permet de modifier le style d'un objet de type {@link JComboBox}.
  */
 public class MyComboboxRenderer extends DefaultListCellRenderer{
     
@@ -15,7 +15,7 @@ public class MyComboboxRenderer extends DefaultListCellRenderer{
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
             boolean cellHasFocus) {
         super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-        setFont(new Font("Tempus sans ITC", Font.BOLD, 16));
+        setFont(new Font("Tempus sans ITC", Font.BOLD, 16)); // changement de la police d'ecriture des elements de la liste
         return this;
     }
 }

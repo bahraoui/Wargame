@@ -7,7 +7,6 @@ public class Node {
   private int y;
   private int dist;
   private Node parent;
-  private final static int taillePlateau = 16;
 
   public Node(int y, int x, int dist, Node parent) {
     this.x = x;

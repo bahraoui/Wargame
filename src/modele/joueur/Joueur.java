@@ -32,7 +32,6 @@ public class Joueur {
     private int numeroJoueur;
     private static int compteur = 0;
     private boolean estIa;
-    //private int identifiantCible;
     private boolean enJeu;
     private String pseudo;
 
@@ -44,11 +43,10 @@ public class Joueur {
     public Joueur(String pseudo,boolean parEstIa){
         this.pseudo = pseudo;
         this.numeroJoueur = compteur++;
-        this.pieces = 40;
+        this.pieces = 20;
         this.estIa = parEstIa;
         this.enJeu = true;
         this.armee = new ArrayList<Unite>();
-        //this.identifiantCible = -1;
     }
 
     public boolean achatUniteArmee(Unite unite){
@@ -134,14 +132,6 @@ public class Joueur {
     public boolean isEstIa() {
         return this.estIa;
     }
-
-    /*public int getIdentifiantCible() {
-        return this.identifiantCible;
-    }
-
-    public void setIdentifiantCible(int identifiantCible) {
-        this.identifiantCible = identifiantCible;
-    }*/
 
     public boolean isEnJeu() {
         return this.enJeu;

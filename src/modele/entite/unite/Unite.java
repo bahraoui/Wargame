@@ -99,4 +99,23 @@ public class Unite extends Entite{
     public void setAAttaque(boolean aAttaque) {
         this.aAttaque = aAttaque;
     }
+
+    public String afficherNomUnite() {
+        if (this instanceof Archer){
+            return "Archer";
+        }
+        else if (this instanceof Cavalerie){
+            return "Cavalerie";
+        }
+        else if (this instanceof Infanterie){
+            return "Infanterie";
+        }
+        else if (this instanceof InfanterieLourde){
+            return "InfanterieLourde";
+        }
+        else if (this instanceof Mage){
+            return "Mage";
+        }
+        return "";
+    }
 }
