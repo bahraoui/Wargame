@@ -1,5 +1,6 @@
 package Vue;
 
+
 import java.awt.Insets;
 import java.io.IOException;
 
@@ -54,14 +55,6 @@ public class PanelMap extends JPanel {
     }
 
 	/**
-	 * Le getter getCells permet de recuperer toute les cases du plateau
-	 * @return
-	 */
-    public Hexagone[][] getCells() {
-		return hexs;
-	}
-
-	/**
 	 * La methode enregistreEcouteur met a l'ecoute toutes les cases du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
@@ -74,4 +67,13 @@ public class PanelMap extends JPanel {
 			}
 		}
 	}
+
+	/**
+	 * Le getter getCells permet de recuperer toute les cases du plateau
+	 * @return
+	 */
+    public Hexagone[][] getCells() {
+		return hexs;
+	}
+
 }
