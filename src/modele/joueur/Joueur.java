@@ -48,7 +48,6 @@ public class Joueur {
         this.estIa = parEstIa;
         this.enJeu = true;
         this.armee = new ArrayList<Unite>();
-        //this.identifiantCible = -1;
     }
 
     public boolean achatUniteArmee(Unite unite){
@@ -134,14 +133,6 @@ public class Joueur {
     public boolean isEstIa() {
         return this.estIa;
     }
-
-    /*public int getIdentifiantCible() {
-        return this.identifiantCible;
-    }
-
-    public void setIdentifiantCible(int identifiantCible) {
-        this.identifiantCible = identifiantCible;
-    }*/
 
     public boolean isEnJeu() {
         return this.enJeu;
