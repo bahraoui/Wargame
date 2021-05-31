@@ -1564,7 +1564,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     int res = choose.showOpenDialog(null);
                     if (res == JFileChooser.APPROVE_OPTION) {
                         sauvegardeChoisis = choose.getSelectedFile();
-                        ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
+                        ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLabelCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
                     }
                     break;
                 /**
