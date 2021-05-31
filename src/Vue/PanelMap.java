@@ -29,7 +29,7 @@ public class PanelMap extends JPanel {
 		 * Initialisation des champs de la classe
 		 */
 		petiteLigne = false;
-		HexagonalLayout hexLayout = new HexagonalLayout(16, new Insets(-1,-1,-1,0), petiteLigne, 248);
+		HexagonalLayout hexLayout = new HexagonalLayout(16, new Insets(1,1,1,1), petiteLigne, 248);
 		this.hexs = parHexs;
 		totalCells = hexLayout.getNbComposants();
 		this.setLayout(hexLayout);
