@@ -96,9 +96,9 @@ public class Hexagone extends JLabel {
      * @param sol TypeTerrain
      * @param g Graphics
      */
-    private void placerSol(TypeTerrain sol, Graphics g){
+    private void placerSol(TypeTerrain parSol, Graphics g){
         try {
-            switch (sol) {
+            switch (parSol) {
                 case MER:
                     g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
                     break;
@@ -131,9 +131,9 @@ public class Hexagone extends JLabel {
      * @param bat TypeBatimentVue
      * @param g Graphics
      */
-    private void placerBatiment(TypeBatimentVue bat, Graphics g){
+    private void placerBatiment(TypeBatimentVue typeBatimentVue, Graphics g){
         try {
-            switch (batiment) {
+            switch (typeBatimentVue) {
                 case BASE:
                     g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 10, 0, null);
                     break;
@@ -154,9 +154,9 @@ public class Hexagone extends JLabel {
      * @param unite TypeUnite
      * @param g Graphics
      */
-    private void placerUnite(TypeUnite unite, Graphics g){
+    private void placerUnite(TypeUnite parUnite, Graphics g){
         try {
-            switch (unite) {
+            switch (parUnite) {
                 case ARCHER:
                     g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
                     break;
