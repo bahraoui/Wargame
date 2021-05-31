@@ -298,14 +298,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
         for (int i = 1; i < deplacement.size(); i++) {
             plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).setUnite(null);
             plateau.get(deplacement.get(i).getX()).get(deplacement.get(i).getY()).setUnite(unite);
-            try {
-                cellulesCarte[deplacement.get(i).getX()][deplacement.get(i).getY()].getHex().setUnite(uniteModelToVue(unite));
-                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setUnite(null);
-                cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            cellulesCarte[deplacement.get(i).getX()][deplacement.get(i).getY()].getHex().setUnite(uniteModelToVue(unite));
+            cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setUnite(null);
+            cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
             Thread.sleep(150);
@@ -492,12 +487,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     int changerTypeTerrain = new Random().nextInt(4);
                     if (changerTypeTerrain == 2){
                         plateau.get(i).get(j).setTerrain(new Desert());
-                        try {
-                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Desert()));
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                        cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Desert()));
                     }
                 }
             }
@@ -511,15 +501,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     int changerTypeTerrain = new Random().nextInt(4);
                     if (changerTypeTerrain == 2){
                         plateau.get(i).get(j).setTerrain(new ToundraNeige());
-                        try {
-                            System.out.println(cellulesCarte[i][j].getHex().getAll());
-                            System.out.println("Coord Aleatoire : "+i+ " - "+j);
-                            cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new ToundraNeige()));
-                
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                        System.out.println(cellulesCarte[i][j].getHex().getAll());
+                        System.out.println("Coord Aleatoire : "+i+ " - "+j);
+                        cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new ToundraNeige()));
                     }
                 }
             }
@@ -531,12 +515,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     int changerTypeTerrain = new Random().nextInt(4);
                     if (changerTypeTerrain == 2){
                         plateau.get(i).get(j).setTerrain(new Mer());
-                        try {
-                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                        cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
                     }
                 }
             }
@@ -1326,14 +1305,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             switch (FenetreJeu.getPanelActuel()) {
                 case CHANGERSCENARIO:
                     if (terrainChoisi != null && selectionMonument == false) {
-                        try {
-                            hexClic.setTerrain(terrainChoisi);
-                            cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
-                            if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
-                                hexClic.setBatiment(batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
-                            }
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
+                        hexClic.setTerrain(terrainChoisi);
+                        cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                        if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
+                            hexClic.setBatiment(batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
                         }
                     } else if (selectionMonument == true) {
                         try {

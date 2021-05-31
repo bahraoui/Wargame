@@ -85,7 +85,7 @@ public class Hexagone extends JLabel {
      * @param sol TypeTerrain
      * @throws IOException
      */
-    public void setTerrain(TypeTerrain sol) throws IOException{
+    public void setTerrain(TypeTerrain sol){
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         placerSol(sol,g);
@@ -93,11 +93,6 @@ public class Hexagone extends JLabel {
             placerBatiment(batiment,g);      
         }
         else {
-            try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"VIDE.png")), 0, 0, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             this.batiment=null;
         }
 
@@ -105,14 +100,7 @@ public class Hexagone extends JLabel {
             placerUnite(unite,g);
         }
         else {
-            try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"VIDE.png")), 0, 0, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             this.unite=null;
-
-            
         }
         this.sol = sol;
         this.paintChildren(g);
@@ -142,12 +130,13 @@ public class Hexagone extends JLabel {
      * @param typeBatimentVue
      * @throws IOException
      */
-    public void setBatiment(TypeBatimentVue typeBatimentVue) throws IOException {
+    public void setBatiment(TypeBatimentVue typeBatimentVue) {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         if (typeBatimentVue != null) {
             placerBatiment(typeBatimentVue, g);
         }
+        this.batiment = typeBatimentVue;
         this.paintChildren(g);
     }
 
@@ -230,34 +219,14 @@ public class Hexagone extends JLabel {
         g.setClip(hexagonalShape);
         if (sol != null) {
             placerSol(sol, g);
-        } else {
-            try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"VIDE.png")), 0, 0, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         if (batiment != null) {
             placerBatiment(batiment, g);
         }
-        else {
-            try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"VIDE.png")), 0, 0, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
         if (unite != null) {
             placerUnite(unite, g);
-        }
-        else {
-            try {
-                g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"VIDE.png")), 0, 0, null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
     
