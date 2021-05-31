@@ -25,10 +25,8 @@ import java.util.ArrayList;
  */
 public class PanelNouvellePartie extends JPanel{
     private JComboBox<String> choixMap;
-    private JComboBox<Integer> nbJoueursHumain;
-    private JComboBox<Integer> nbJoueursIA;
-    private JButton btnContinuer;
-    private JButton btnQuitter;
+    private JComboBox<Integer> nbJoueursHumain,nbJoueursIA;
+    private JButton btnContinuer,btnQuitter;
     private JLabel[] nomJoueur;
     private JTextField[] txtNomJoueur;
 

@@ -29,9 +29,8 @@ public class PanelChargerScenario extends JPanel{
     private JPanel panelGauche;
     private JComboBox<TypeTerrain> listeTerrains;
     private JLabel terrainChoisi, monumentChoisi, nbMonumentLabel;
-    private JButton btnChoixMonument, btnLancerPartie, btnQuitter;
+    private JButton btnChoixMonument, btnLancerPartie, btnQuitter,btnSauvegarderPartie;
     private Integer nbMonumentsRestants;
-    private JButton btnSauvegarderPartie;
     private JTextField nomSauvergardeCarte;
 	
     /**

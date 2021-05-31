@@ -6,6 +6,9 @@ import java.awt.Font;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
+/**
+ * La classe MyComboboxRenderer herite de DefaultListCellRenderer
+ */
 public class MyComboboxRenderer extends DefaultListCellRenderer{
     
     @Override
