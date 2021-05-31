@@ -72,6 +72,7 @@ public class PanelChargerScenario extends JPanel{
          */
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
+        listeTerrains.setRenderer(new MyComboboxRenderer());
         listeTerrains.setActionCommand("listeTerrains");
         terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0].toString()+" <br/>selectionné</html>");
         terrainChoisi.setFont(new Font("Tempus Sans ITC", Font.BOLD, 13));
