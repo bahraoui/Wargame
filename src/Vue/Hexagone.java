@@ -34,9 +34,8 @@ public class Hexagone extends JLabel {
      * @param unite TypeUnite
      * @param batiment TypeBatimentVue
      * @param coord Point
-     * @throws IOException
      */
-    public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord) throws IOException {
+    public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord){
         super();
         hexagonalShape = getHexPolygon();
         this.sol = sol;
@@ -65,7 +64,6 @@ public class Hexagone extends JLabel {
         return hex;
     }
 
-    
     // Getters et setters : 
     
     public Polygon getHexagonalShape() {
@@ -76,6 +74,129 @@ public class Hexagone extends JLabel {
     }
     
     // FIN Getters et setters
+
+
+    /**
+     * getAll est une methode de debugage qui renvoie une chaine de caractere qui donne les informations sur la case
+     * @return String
+     */
+    public String getAll(){
+        if (unite != null)
+            return "Hexagone : \n\tUnite : "+unite.toString();
+        if (batiment != null)
+            return "Hexagone :Batiment: "+batiment.toString();
+        if (sol != null)
+            return "Hexagone :Sol: "+sol.toString();
+        return "Rien";
+    }
+
+    
+    /**
+     * placerSol permet de dessiner le sol en fonction du type de terrain
+     * @param sol TypeTerrain
+     * @param g Graphics
+     */
+    private void placerSol(TypeTerrain sol, Graphics g){
+        try {
+            switch (sol) {
+                case MER:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
+                    break;
+                case DESERT:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
+                    break;
+                case FORET:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
+                    break;
+                case MONTAGNE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
+                    break;
+                case PLAINE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
+                    break;
+                case NEIGE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
+                    break;
+            
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }  
+    }
+
+    /**
+     * placerBatiment permet de dessiner le batiment en fonction du type de batiment si la case posede un batiment
+     * @param bat TypeBatimentVue
+     * @param g Graphics
+     */
+    private void placerBatiment(TypeBatimentVue bat, Graphics g){
+        try {
+            switch (batiment) {
+                case BASE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 10, 0, null);
+                    break;
+                case MONUMENT:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
+                    break;
+            
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * placerUnite permet de dessiner une unite en fonction du type d'unite si la case posede une unite
+     * @param unite TypeUnite
+     * @param g Graphics
+     */
+    private void placerUnite(TypeUnite unite, Graphics g){
+        try {
+            switch (unite) {
+                case ARCHER:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
+                    break;
+                case CAVALERIE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
+                    break;
+                case INFANTERIE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
+                    break;
+                case INFANTERIELOURDE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
+                    break;
+                case MAGE:
+                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+
+    /**
+     * setUnite permet d'afficher un unite sur la case si le parametre n'est pas vide
+     * @param parUnite TypeUnite
+     */
+    public void setUnite(TypeUnite parUnite) {
+        Graphics g = getGraphics();
+        g.setClip(hexagonalShape);
+        if (parUnite != null) {
+                placerUnite(parUnite, g);
+        }
+        this.unite = parUnite;
+        this.paintChildren(g);
+    }
+
 
     /**
      * setTerrain permet d'afficher un sol sur la case
@@ -102,24 +223,6 @@ public class Hexagone extends JLabel {
         this.sol = sol;
         this.paintChildren(g);
         
-    }
-
-    /**
-     * setMonument permet d'afficher un monument sur la case si le parametre est vrai
-     * @param Monument boolean
-     * @throws IOException
-     */
-    public void setMonument(boolean Monument) throws IOException{
-        if (Monument) {
-            Graphics g = getGraphics();
-            g.setClip(hexagonalShape);
-            setTerrain(sol);
-            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
-            this.batiment = TypeBatimentVue.MONUMENT;
-            this.paintChildren(g);
-        } else {
-            this.batiment = null;
-        }
     }
 
     /**
@@ -214,17 +317,14 @@ public class Hexagone extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
         g.setClip(hexagonalShape);
-        if (sol != null) {
+        if (sol != null)
             placerSol(sol, g);
-        }
 
-        if (batiment != null) {
+        if (batiment != null)
             placerBatiment(batiment, g);
-        }
 
-        if (unite != null) {
+        if (unite != null)
             placerUnite(unite, g);
-        }
     }
     
 
@@ -237,123 +337,4 @@ public class Hexagone extends JLabel {
         // N'affiche pas de bordure
     }
 
-
-    /**
-     * setUnite permet d'afficher un unite sur la case si le parametre n'est pas vide
-     * @param parUnite TypeUnite
-     */
-    public void setUnite(TypeUnite parUnite) {
-        Graphics g = getGraphics();
-        g.setClip(hexagonalShape);
-        if (parUnite != null) {
-                placerUnite(parUnite, g);
-        }
-        this.unite = parUnite;
-        this.paintChildren(g);
-    }
-
-    /**
-     * getAll est une methode de debugage qui renvoie une chaine de caractere qui donne les informations sur la case
-     * @return String
-     */
-    public String getAll(){
-        if (unite != null)
-            return "Hexagone : \n\tUnite : "+unite.toString();
-        if (batiment != null)
-            return "Hexagone :Batiment: "+batiment.toString();
-        if (sol != null)
-            return "Hexagone :Sol: "+sol.toString();
-        return "Rien";
-    }
-
-    /**
-     * placerSol permet de dessiner le sol en fonction du type de terrain
-     * @param sol TypeTerrain
-     * @param g Graphics
-     */
-    private void placerSol(TypeTerrain sol, Graphics g){
-        try {
-            switch (sol) {
-                case MER:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
-                    break;
-                case DESERT:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"DESERT.jpg")), 0, 0, null);
-                    break;
-                case FORET:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"FORET.jpg")), 0, 0, null);
-                    break;
-                case MONTAGNE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MONTAGNE.jpg")), 0, 0, null);
-                    break;
-                case PLAINE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"PLAINE.jpg")), 0, 0, null);
-                    break;
-                case NEIGE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg")), 0, 0, null);
-                    break;
-            
-                default:
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }  
-    }
-
-    /**
-     * placerBatiment permet de dessiner le batiment en fonction du type de batiment si la case posede un batiment
-     * @param bat TypeBatimentVue
-     * @param g Graphics
-     */
-    private void placerBatiment(TypeBatimentVue bat, Graphics g){
-        try {
-            switch (batiment) {
-                case BASE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 10, 0, null);
-                    break;
-                case MONUMENT:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
-                    break;
-            
-                default:
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * placerUnite permet de dessiner une unite en fonction du type d'unite si la case posede une unite
-     * @param unite TypeUnite
-     * @param g Graphics
-     */
-    private void placerUnite(TypeUnite unite, Graphics g){
-        try {
-            switch (unite) {
-                case ARCHER:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"ARCHER.png")), 15, 0, null);
-                    break;
-                case CAVALERIE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"CAVALERIE.png")), 12, 0, null);
-                    break;
-                case INFANTERIE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIE.png")), 17, 1, null);
-                    break;
-                case INFANTERIELOURDE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"INFANTERIELOURDE.png")), 8, 5, null);
-                    break;
-                case MAGE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Unite"+File.separator+"MAGE.png")), 8, 0, null);
-                    break;
-                default:
-                    break;
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-    }
 }

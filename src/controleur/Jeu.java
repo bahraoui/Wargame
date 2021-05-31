@@ -589,18 +589,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
         
     }
 
-    public static int nbMonumentPlateau() {
-        int nbMonument = 0;
-        for (int i = 0; i < plateau.size(); i++) {
-            for (int j = 0; j < plateau.size(); j++) {
-                if (plateau.get(i).get(j).estOccupe() != null && plateau.get(i).get(j).estOccupe() instanceof Batiment && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT) {
-                    nbMonument++;
-                }
-            }
-        }
-        return nbMonument;
-    }
-
     public static void resetChrono() {
         if (initPanelJeu) {
             FenetreJeu.getPanelJeu().setSeconde(0);
