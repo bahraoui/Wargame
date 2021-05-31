@@ -45,8 +45,11 @@ public class PanelNouvellePartie extends JPanel{
          * Boutons, listes et champs de formulaire d'une nouvelle partie
          */
         nbJoueursHumain = new JComboBox<Integer>(nbJoueursH);
+        nbJoueursHumain.setRenderer(new MyComboboxRenderer());
         nbJoueursIA = new JComboBox<Integer>(nbJoueursIAInteger);
+        nbJoueursIA.setRenderer(new MyComboboxRenderer());
         choixMap = new JComboBox<String>();
+        choixMap.setRenderer(new MyComboboxRenderer());
         nomJoueur = new JLabel[4];
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
