@@ -630,6 +630,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         nbJoueursIA = 0;
         plateau.removeAll(plateau);
         plateau = new Plateau();
+        FenetreJeu.getPanelNouvellePartie().getNbJoueursHumain().setSelectedIndex(0);
+        FenetreJeu.getPanelNouvellePartie().getNbJoueursIA().setSelectedIndex(0);
         System.out.println("RESET HARD");
     }
 
