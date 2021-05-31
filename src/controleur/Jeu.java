@@ -86,21 +86,25 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         Jeu controleur = new Jeu();
+        
         carteChoisis = "";
         finpartie = false;
-        selectionMonument=false;
-        uniteAchete=null;
-        caseClic1 = null;
-        caseClic2 = null;
-        initPanelJeu = false;
-        joueurGagnant = null;
-        cellulesCarte = new Cellule[16][16];
+        selectionMonument=false;uniteAchete=null;
+        
+        caseClic1 = null;caseClic2 = null;
+        initPanelJeu = false;joueurGagnant = null;
+        
         terrainChoisi = TypeTerrain.NEIGE;
+
         nbJoueursH = nbJoueursIA = 0;
         listeJoueur = new ArrayList<Joueur>();
         postionBaseJoueur = new ArrayList<ArrayList<Integer>>();
         plateau = new Plateau();
+
+        cellulesCarte = new Cellule[16][16];
         setCellulesMap();
+
+
         FenetreJeu = new FrameJeu();
         FenetreJeu.enregistreEcouteur(controleur);
     }
@@ -112,36 +116,53 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //DONNES
     //
 
-    //donne en parametre uniquement une case pas null
-    public static boolean combat(Hexagone attaquant, Hexagone defenseur, int distanceCases) {
-        int rangeAttaque;
-        Case attaquantCase = plateau.get(attaquant.getCoord().getX()).get(attaquant.getCoord().getY());
-        Case defenseCase = plateau.get(defenseur.getCoord().getX()).get(defenseur.getCoord().getY());
-        if (attaquantCase.getBatiment() != null) {
-            rangeAttaque = attaquantCase.getBatiment().getVision();
-        }
-        else {
+    /**
+     * La fonction combat permet de générer un combat entre deux entités du terrain.
+     * Elle prend prend en paramètre les deux hexagones du combat et la distances entre les deux hexagones sur la carte
+     * La fonction renvoie true si le combat s'est bien passé, false sinon
+     * @param attaquantHex hexagone qui est à l'origine de l'attaque
+     * @param defenseurHex hexagone qui est attaqué
+     * @param distanceCases distante entre les deux hexagones
+     * @return
+     */
+    public static boolean combat(Hexagone attaquantHex, Hexagone defenseurHex, int distanceCases) {
+        int rangeAttaque = 0;
+        //on récupérer les cases où se trouve l'attaquant et le défenseur grace aux hexagones donnés en paramètre
+        Case attaquantCase = plateau.get(attaquantHex.getCoord().getX()).get(attaquantHex.getCoord().getY()); 
+        Case defenseCase = plateau.get(defenseurHex.getCoord().getX()).get(defenseurHex.getCoord().getY());
+
+        //on récupere la distance a laquelle l'unité peut frapper
+        if (attaquantCase.getUnite() != null) {
             rangeAttaque = attaquantCase.getUnite().getVision();
         }
-        if (rangeAttaque > distanceCases) {
-            if (attaquantCase.getUnite().getAAttaque() == false){
+
+        //si l'unité est assez proche
+        if (rangeAttaque >= distanceCases) {
+            //si l'unité n'a pas déjà attaqué
+            if (attaquantCase.getUnite() != null  && attaquantCase.getUnite().getAAttaque() == false){
+                //on lance l'attaque
                 Case.attaquer(attaquantCase,defenseCase);
-                attaquantCase.getUnite().setAAttaque(true);
+                
+                //si l'entité est tué
                 if (defenseCase.estOccupe() != null && ((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
+                    //on supprime a l'affichage
                     if (defenseCase.estOccupe() instanceof Batiment)
-                        defenseur.setBatiment(null);
+                        defenseurHex.setBatiment(null);
                     else 
-                        defenseur.setUnite(null);
+                        defenseurHex.setUnite(null);
+                    defenseurHex.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
                     
-                    defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
-                    
-                    mortEntite(defenseCase);                    
+                    //on lance la fonction qui enleve l'entité du plateau
+                    mortEntite(defenseCase);     
+                    //on verifie si la partie est terminé               
                     calculVitoire();
                     
                 }
                 return true; 
             }
+            //si le joueur a déjà attaqué
             else {
+                //afichage pour les joueurs humains
                 if (!joueurActuel.getEstIa())
                     JOptionPane.showMessageDialog(FenetreJeu, "Votre unité a déjà attaqué !");  
             }
@@ -149,63 +170,105 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return false;
     }
 
-    //revoir
-    public static void mortEntite(Case defenseur){
-        if (defenseur.getUnite() != null) {
+    /**
+     * Cette fonction est utilisé lors de la mort d'une entité
+     * La fonction enlève l'entité du plateau dans la structure de données non à l'affichage
+     * @param caseEntiteMorte case sur laquelle l'entité est morte
+     */
+    public static void mortEntite(Case caseEntiteMorte){
+        //si l'entité est une unité 
+        if (caseEntiteMorte.getUnite() != null) {
+            //on enleve l'unité de l'armée du joueur et du plateau
             for (int i = 0; i < listeJoueur.size(); i++) {
-                for (int j = 0; j < listeJoueur.get(i).getArmee().size(); j++){
-                    if (defenseur.getUnite().getIdentifiant() == listeJoueur.get(i).getArmee().get(j).getIdentifiant()){
-                        listeJoueur.get(i).getArmee().remove(j); //armee
-                        defenseur.setUnite(null); //plateau
-                        if (listeJoueur.get(i).getArmee().size() == 0 && listeJoueur.get(i).getPieces() < 6){
-                            listeJoueur.get(i).setEnJeu(false);
+                //on récupère un joueur de la partie
+                Joueur joueur = listeJoueur.get(i);
+                for (int j = 0; j < joueur.getArmee().size(); j++){
+                    //recherche de l'unité par rapport à son identifiant
+                    if (caseEntiteMorte.getUnite().getIdentifiant() == joueur.getArmee().get(j).getIdentifiant()){
+                        //on enlève l'unité de l'armée
+                        joueur.getArmee().remove(j); 
+                        // on enlève l'unité du plateau
+                        caseEntiteMorte.setUnite(null);
+                        //si après cette perte, l'armée n'a plus d'unité dans son armée et qu'il n'a pas plus de pieces alors on change son statut
+                        if (joueur.getArmee().size() == 0 && joueur.getPieces() < 6){
+                            joueur.setEnJeu(false);
                         }
                         return;
                     }
                 }
             }
         }
-        else if (defenseur.getBatiment() != null) {
-            if (defenseur.getBatiment().getEstBase() == TypeBatiment.BASE) {
+        //si l'entité est un batiment
+        else if (caseEntiteMorte.getBatiment() != null) {
+            //si l'entité est une base
+            if (caseEntiteMorte.getBatiment().getEstBase() == TypeBatiment.BASE) {
                 for (int i = 0; i < listeJoueur.size(); i++) {
-                    if (listeJoueur.get(i).getBase().getIdentifiant() == defenseur.getBatiment().getIdentifiant()){
-                        listeJoueur.get(i).setEnJeu(false);
-                        ArrayList<Integer> coordBase = postionBaseJoueur.get(listeJoueur.get(i).getNumeroJoueur());
+                    //on récupère un joueur de la partie
+                    Joueur joueur = listeJoueur.get(i);
+                    //on regarde si l'entité morte correspond à la base du joueur
+                    if (joueur.getBase().getIdentifiant() == caseEntiteMorte.getBatiment().getIdentifiant()){
+                        //on change le statut du joueur car il a perdu sa base et donc la partie
+                        joueur.setEnJeu(false);
+                        //on recupère les coordonnées de la base du joueur et on l'enlève du plateau
+                        ArrayList<Integer> coordBase = postionBaseJoueur.get(joueur.getNumeroJoueur());
                         plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
                         return;
                     }
                 }
             }
+            //si l'entité est un monument
             else {
-                joueurActuel.setPieces(joueurActuel.getPieces() + defenseur.getBatiment().getTresor());
-                defenseur.setBatiment(null); //plateau
+                //on supprime le monument du plateau et on ajoute le trésor à la banque du joueur
+                joueurActuel.setPieces(joueurActuel.getPieces() + caseEntiteMorte.getBatiment().getTresor());
+                caseEntiteMorte.setBatiment(null); 
                 FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
             }   
         }
     }
 
+    /**
+     * Cette fonction place les base de tous les joueurs
+     */
     public static void placerBasesJoueurs() {
         int nbJoueurs = listeJoueur.size();
         placerBase(listeJoueur.get(0),0,0);
-        placerBase(listeJoueur.get(1),15,14);
+        placerBase(listeJoueur.get(1),cote-1,cote-2);
         if (nbJoueurs >=3) {
-            placerBase(listeJoueur.get(2),0,15);            
+            placerBase(listeJoueur.get(2),0,cote-1);            
         }
         if (nbJoueurs == 4) {
-            placerBase(listeJoueur.get(3),15,0);            
+            placerBase(listeJoueur.get(3),cote-1,0);            
         }
     }
 
+    /**
+     * Cette fonction place la base du joueur a des coordonnées données en paramètre
+     * @param joueur Joueur a qui appartient la base du joueur a placé
+     * @param coordY Coordonnées en Y de la base
+     * @param coordX Coordonnées en X de la base
+     */
     public static void placerBase(Joueur joueur, int coordY, int coordX){
+        //On crée la base du joueur
         Batiment base = new Batiment(TypeBatiment.BASE);
+        //On assigne la base au joueur
         joueur.setBase(base);
+        //On place dans le plateau la base
         plateau.get(coordY).get(coordX).setBatiment(base);
+        //On garde en mémoire la position de la base du joueur
         ArrayList<Integer> baseJ1 = new ArrayList<Integer>();
         baseJ1.add(0,coordY);
         baseJ1.add(1,coordX);
         postionBaseJoueur.add(baseJ1);
     }
 
+    /**
+     * Cette fonction est utilisé pour placer l'unité d'un joueur sur le plateau
+     * @param joueur Joueur qui veut placer une unité sur le terrain
+     * @param unite Unite que le joueur veut placer
+     * @param coordY Coordonnées en Y pour le placement du jeu
+     * @param coordX
+     * @return
+     */
     public static boolean placerUniteJoueur(Joueur joueur, Unite unite, int coordY, int coordX){
         Case caseUnite = plateau.get(coordY).get(coordX);
         int coordYBase = postionBaseJoueur.get(joueur.getNumeroJoueur()).get(0);
@@ -518,14 +581,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         else if (evenement >55 && evenement <60){
             if (!joueurActuel.getEstIa())
-                JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
+                JOptionPane.showMessageDialog(FenetreJeu, "Un tsunami est passé sur le champ de bataille !"); 
             for (int i = 0; i < cote; i++) {
                 for (int j = 0; j < cote-1; j++) {
                     if ((i%2==1 && j < cote-1) || i%2==0){
                         int changerTypeTerrain = new Random().nextInt(4);
                         if (changerTypeTerrain == 2){
                             plateau.get(i).get(j).setTerrain(new Mer());
-                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
+                            cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new Mer()));
                         }
                     }
                 }
