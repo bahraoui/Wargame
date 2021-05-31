@@ -84,7 +84,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        chronometre();        
         Jeu controleur = new Jeu();
         carteChoisis = "";
         finpartie = false;
@@ -388,9 +387,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     }else if(index == listeJoueur.size()-1){
                         index = 0;
                     }else if(index < listeJoueur.size() && i < listeJoueur.size()){   
-                        System.out.println(joueurActuel);
                         joueurActuel = listeJoueur.get(index+1);
-                        System.out.println(joueurActuel);
                         index += 1; 
                     }       
                 } 
@@ -413,9 +410,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     }else if(index == listeJoueur.size()-1){
                         index = 0;
                     }else if(index < listeJoueur.size() && i < listeJoueur.size()){   
-                        System.out.println(joueurActuel);
                         joueurActuel = listeJoueur.get(index+1);
-                        System.out.println(joueurActuel);
                         index += 1; 
                     }       
                 } 
@@ -619,7 +614,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             listeJoueur.remove(i);
         }
         listeJoueur = new ArrayList<Joueur>();
-        
+        nbJoueursH = 0;
+        nbJoueursIA = 0;
         plateau.removeAll(plateau);
         plateau = new Plateau();
         System.out.println("RESET HARD");
@@ -1165,19 +1161,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             strValues2[3] = strValues2[3].replace("{", "");
             strValues2[3] = strValues2[3].replace("}", "");
             if(strValues2[3].length() > 0){
-                if (strValues2[3].split(".").length == 0){
-                    strValues3 = new String[1];
-                    strValues3[0] = strValues2[3];
-                }
-                else 
-                    strValues3 = strValues2[3].split(".");
-                
-                for (int j = 0; j < strValues3.length; j++) {
-                    System.out.println("VALEUR : "+strValues3[i]);
-                }
-                
-                strValues3 = strValues2[3].split(".");
-                System.out.println("AFFICHAGE : "+strValues2[3]);
+                strValues3 = strValues2[3].split("\\.");
                 for (int j = 0; j < strValues3.length; j++) {
                     listeUnite[i][j]=Integer.parseInt(strValues3[j]);
                 }

@@ -88,11 +88,8 @@ public class Joueur {
 
     public boolean estMonEntite(Case caseClic1) {
         Entite entite = (Entite) caseClic1.estOccupe();
-        System.out.println(entite.getIdentifiant());
         if (entite instanceof Unite){
-            System.out.println("DEDANS "+ this.armee.size());
             for (int i = 0; i < this.armee.size(); i++) {
-                System.out.println(entite.getIdentifiant() + " - "+ armee.get(i).getIdentifiant());
                 if (entite.getIdentifiant() == armee.get(i).getIdentifiant())
                     return true;
             }
