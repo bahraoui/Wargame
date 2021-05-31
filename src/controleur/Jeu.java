@@ -409,8 +409,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static int nbMonumentPlateau() {
         int nbMonument = 0;
-        for (int i = 0; i < plateau.size(); i++) {
-            for (int j = 0; j < plateau.size(); j++) {
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
                 if (plateau.get(i).get(j).estOccupe() != null && plateau.get(i).get(j).estOccupe() instanceof Batiment && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT) {
                     nbMonument++;
                 }
@@ -458,8 +458,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         else if (evenement >75 && evenement <80){
             boolean presenceMonument = false;
-            for (int i = 0; i < plateau.size(); i++) {
-                for (int j = 0; j < plateau.size(); j++) {
+            for (int i = 0; i < cote; i++) {
+                for (int j = 0; j < cote; j++) {
                     Entite entiteSelectionne = (Entite) plateau.get(i).get(j).estOccupe();
                     if (entiteSelectionne != null && entiteSelectionne instanceof Batiment && ((Batiment) entiteSelectionne).getEstBase() == TypeBatiment.MONUMENT) {
                         presenceMonument = true;
@@ -472,8 +472,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         else if (evenement >70 && evenement <75){
             boolean presenceMonument = false;
-            for (int i = 0; i < plateau.size(); i++) {
-                for (int j = 0; j < plateau.size(); j++) {
+            for (int i = 0; i < cote; i++) {
+                for (int j = 0; j < cote; j++) {
                     Entite entiteSelectionne = (Entite) plateau.get(i).get(j).estOccupe();
                     if (entiteSelectionne != null && entiteSelectionne instanceof Batiment && ((Batiment) entiteSelectionne).getEstBase() == TypeBatiment.MONUMENT) {
                         presenceMonument = true;
@@ -488,8 +488,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (evenement >65 && evenement <70){
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de sable est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size(); i++) {
-                for (int j = 0; j < plateau.size(); j++) {
+            for (int i = 0; i < cote; i++) {
+                for (int j = 0; j < cote; j++) {
                     if ((i%2==1 && j < cote-1) || i%2==0){
                         int changerTypeTerrain = new Random().nextInt(4);
                         if (changerTypeTerrain == 2){
@@ -504,8 +504,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (evenement >60 && evenement <65){
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de neige est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size(); i++) {
-                for (int j = 0; j < plateau.size() - 1; j++) {
+            for (int i = 0; i < cote; i++) {
+                for (int j = 0; j < cote - 1; j++) {
                     if ((i%2==1 && j < cote-1) || i%2==0){
                         int changerTypeTerrain = new Random().nextInt(4);
                         if (changerTypeTerrain == 2){
@@ -519,8 +519,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (evenement >55 && evenement <60){
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size(); i++) {
-                for (int j = 0; j < plateau.size()-1; j++) {
+            for (int i = 0; i < cote; i++) {
+                for (int j = 0; j < cote-1; j++) {
                     if ((i%2==1 && j < cote-1) || i%2==0){
                         int changerTypeTerrain = new Random().nextInt(4);
                         if (changerTypeTerrain == 2){
@@ -713,8 +713,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static int[] rechercheMonUniteDansPlateau(Entite entite){
         int [] coordUnite = new int[2];
-        for (int i = 0; i < plateau.size(); i++) {
-            for (int j = 0; j < plateau.size(); j++) {
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
                 if (plateau.get(i).get(j).estOccupe() instanceof Unite && entite.getIdentifiant() ==  plateau.get(i).get(j).getUnite().getIdentifiant()){
                     coordUnite[0] = i;coordUnite[1] = j;
                 }
@@ -1081,7 +1081,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         String line = new String();
         Scanner scanner = new Scanner(file); 
         int[][] listeUnite = new int[50][50];
-        for (int i = 0; i < plateau.size(); i++) {
+        for (int i = 0; i < cote; i++) {
             line = scanner.nextLine();
             chargeLineMap(line,i,listeUnite);
         }
@@ -1128,7 +1128,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         
-        for (int i = 0; i < plateau.size(); i++) {
+        for (int i = 0; i < cote; i++) {
             line = scanner.nextLine();
             strValues1 = line.split(",");
             chargeLineMap(line,i,listeUnite);
@@ -1177,8 +1177,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static String sauvegardeStringMap(String chaine) {
         
-        for (int i = 0; i < plateau.size(); i++) {
-            for (int j = 0; j < plateau.size(); j++) {
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
                     /// Ajout du premier [ pour chaque case
                     chaine+="[";
 
@@ -1212,7 +1212,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
                     /// Ajout de fin
                     chaine+="]";
-                    if (j<plateau.size()-1) {
+                    if (j<cote-1) {
                         chaine+=";";
                     }
                 }
