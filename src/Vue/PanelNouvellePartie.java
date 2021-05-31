@@ -41,14 +41,17 @@ public class PanelNouvellePartie extends JPanel{
         Integer[] nbJoueursH = {0,1,2,3,4};
         Integer[] nbJoueursIAInteger= {0,1,2,3,4};
         
+        /*
+         * Boutons, listes et champs de formulaire d'une nouvelle partie
+         */
         nbJoueursHumain = new JComboBox<Integer>(nbJoueursH);
         nbJoueursIA = new JComboBox<Integer>(nbJoueursIAInteger);
         choixMap = new JComboBox<String>();
         nomJoueur = new JLabel[4];
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
         btnQuitter = new JButton();
+        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
@@ -56,6 +59,9 @@ public class PanelNouvellePartie extends JPanel{
         btnContinuer.setActionCommand("nouvellePartieContinuer");
         btnQuitter.setActionCommand("retourMenu");
 
+        /*
+         * Placement des elements 
+         */
         contrainte.gridx=0;
         contrainte.gridy=0;
         this.add(new JLabel("Nom Map : "),contrainte);
