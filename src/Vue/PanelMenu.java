@@ -33,6 +33,10 @@ public class PanelMenu extends JPanel{
     public PanelMenu() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
+
+        /*
+         * Boutons du panel 
+         */
         btnNvllePartie = new JButton();
         btnRegles = new JButton();
         btnChargerPartie = new JButton();
@@ -41,12 +45,14 @@ public class PanelMenu extends JPanel{
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
-        //btnChargerPartie = new JButton("Charger Partie");
         btnNvllePartie.setActionCommand("nouvellePartie");
         btnChargerPartie.setActionCommand("chargerPartie");
         btnRegles.setActionCommand("afficherRegles");
         btnQuitter.setActionCommand("quit");
 
+        /*
+         * Placement des boutons 
+         */
         contrainte.gridx=0;
         contrainte.gridy=0;
         this.add(new JLabel("Menu"),contrainte);

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -44,13 +45,20 @@ public class PanelChargerScenario extends JPanel{
      */
 	public PanelChargerScenario(Hexagone[][] parHexs) throws IOException {
         super(new BorderLayout());
-        panelMap = new PanelMap(parHexs);
+        /*
+         * Initialise tous les panels inclus dans la classe 
+         */
+        panelMap = new PanelMap(parHexs); // le panel de la carte
         panelGauche = new JPanel();
-        nbMonumentsRestants = 6;
-        nbMonumentLabel = new JLabel(nbMonumentsRestants+" monuments restants");
+        nbMonumentsRestants = 6; // le nombre de monuments restants
+        nbMonumentLabel = new JLabel(nbMonumentsRestants+" monuments restants"); // indique le nombre de monuments restants
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
         JPanel panelActions = new JPanel();
+
+        /*
+         *  Boutons du panel
+         */
         btnChoixMonument = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
         btnLancerPartie = new JButton();
@@ -61,12 +69,14 @@ public class PanelChargerScenario extends JPanel{
         btnQuitter = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
 
-
+        /*
+         * Liste des terrains disponibles a selectionner 
+         */
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
         listeTerrains.setActionCommand("listeTerrains");
         terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0].toString()+" <br/>selectionné</html>");
-        //terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
+        terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"NEIGE.jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
         panelTerrains.add(listeTerrains);
         panelTerrains.add(terrainChoisi);
         panelTerrains.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0,0,0)));
@@ -74,6 +84,9 @@ public class PanelChargerScenario extends JPanel{
         Border margin = new EmptyBorder(3,3,3,3);
         panelTerrains.setBorder(new CompoundBorder(margin, border));
 
+        /*
+         * Choix d'un monument 
+         */
         btnChoixMonument.setActionCommand("choixMonument");
         monumentChoisi = new JLabel("");
         panelMonuments.add(btnChoixMonument);
@@ -84,6 +97,9 @@ public class PanelChargerScenario extends JPanel{
         margin = new EmptyBorder(3,3,3,3);
         panelMonuments.setBorder(new CompoundBorder(margin, border));
         
+        /*
+         * placement des elements a gauche 
+         */
         panelGauche.setBorder(new CompoundBorder(margin, border));
         panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
         panelGauche.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0,0,0)));
@@ -93,6 +109,9 @@ public class PanelChargerScenario extends JPanel{
         panelGauche.setBorder(new CompoundBorder(margin, border));
 
 
+        /*
+         * placement des boutons 
+         */
         btnLancerPartie.setActionCommand("lancerPartieApresScenario");
         btnSauvegarderPartie.setActionCommand("sauvegarderCarte");
         btnQuitter.setActionCommand("retourMenu");
@@ -101,6 +120,9 @@ public class PanelChargerScenario extends JPanel{
         panelActions.add(btnSauvegarderPartie);
         panelActions.add(btnQuitter);
         
+        /*
+         * placement de tous les panels 
+         */
         panelGauche.add(panelTerrains);
         panelGauche.add(panelMonuments);
         panelGauche.add(panelActions);
@@ -144,6 +166,7 @@ public class PanelChargerScenario extends JPanel{
      */
     public void setChoixTerrainTxt(String txt) {
         this.terrainChoisi.setText("<html><br/>"+txt+" <br/>selectionné</html>");
+        terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+txt+".jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));        
         this.monumentChoisi.setText("");
     }
 

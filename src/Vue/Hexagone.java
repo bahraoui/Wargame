@@ -346,15 +346,6 @@ public class Hexagone extends JLabel {
                 case BASE:
                     g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE.png")), 10, 0, null);
                     break;
-               /*case BASE_BAS:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_BAS.png")), 0, 0, null);
-                    break;
-                case BASE_GAUCHE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_GAUCHE.png")), 32, 0, null);
-                    break;
-                case BASE_DROITE:
-                    g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"BASE_DROITE.png")), 11, 33, null);
-                    break;*/
                 case MONUMENT:
                     g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Batiment"+File.separator+"MONUMENT.png")), 9, 6, null);
                     break;
