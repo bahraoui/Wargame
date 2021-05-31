@@ -1,5 +1,4 @@
 package controleur;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -408,25 +407,35 @@ public class Jeu extends MouseAdapter implements ActionListener {
     	}, 2000 , 2000);
     }
 
+    public static int nbMonumentPlateau() {
+        int nbMonument = 0;
+        for (int i = 0; i < plateau.size(); i++) {
+            for (int j = 0; j < plateau.size(); j++) {
+                if (plateau.get(i).get(j).estOccupe() != null && plateau.get(i).get(j).estOccupe() instanceof Batiment && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT) {
+                    nbMonument++;
+                }
+            }
+        }
+        return nbMonument;
+    }
+
     public static void evenementExterieur(){
-        int evenement = 0;
+        int evenement = new Random().nextInt(101);
         if (evenement >95 && evenement <100){
             if (joueurActuel.getArmee().size() > 1){
                 int uniteMalade = new Random().nextInt(joueurActuel.getArmee().size());
                 int[] coordUniteMalade = rechercheMonUniteDansPlateau(joueurActuel.getArmee().get(uniteMalade));
                 plateau.get(coordUniteMalade[0]).get(coordUniteMalade[1]).setUnite(null);
-                /*try {
-                    //cellulesCarte[coordUniteMalade[0]][coordUniteMalade[1]].getHex().setTerrain(coordUniteMalade[1]).get(coordUniteMalade[0]).getTerrain())));
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }*/
-                JOptionPane.showMessageDialog(FenetreJeu, "Une de vos unités est tombé malade, cette dernière est morte de maladie...");         
+                cellulesCarte[coordUniteMalade[0]][coordUniteMalade[1]].getHex().setUnite(null);
+                cellulesCarte[coordUniteMalade[0]][coordUniteMalade[1]].getHex().setTerrain(terrainModeleToVue(plateau.get(coordUniteMalade[0]).get(coordUniteMalade[1]).getTerrain()));
+                if (!joueurActuel.getEstIa())
+                    JOptionPane.showMessageDialog(FenetreJeu, "Une de vos unités est tombé malade, cette dernière est morte de maladie...");         
             }
         }
         else if (evenement >90 && evenement <95){
             int gainGold =  4 + (int)(Math.random() * joueurActuel.getPieces()/2);
-            JOptionPane.showMessageDialog(FenetreJeu, "L'Etat a décidé de vous aider dans cette guerre elle vous ajoute "+gainGold+" a votre banque !");
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu, "L'Etat a décidé de vous aider dans cette guerre elle vous ajoute "+gainGold+" a votre banque !");
             joueurActuel.setPieces(joueurActuel.getPieces()+gainGold);
             FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
         }
@@ -437,11 +446,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     gainPointDeVie = joueurActuel.getArmee().get(i).getPointDeVieMax();
                 joueurActuel.getArmee().get(i).setPointDeVieActuel(gainPointDeVie);
             }
-            JOptionPane.showMessageDialog(FenetreJeu, "Un voile de magie eclaire le champ de bataille... Toutes vos unités régénère 10 point de vie");
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu, "Un voile de magie eclaire le champ de bataille... Toutes vos unités régénère 10 point de vie");
         }
         else if (evenement >80 && evenement <85){
             int inmpots = (int) (joueurActuel.getPieces()*0.1);
-            JOptionPane.showMessageDialog(FenetreJeu, "Les impots touchent tout le monde, vous n'y échapperez pas ! L'Etat récupère 10% de votre banque..."); 
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu, "Les impots touchent tout le monde, vous n'y échapperez pas ! L'Etat récupère 10% de votre banque..."); 
             joueurActuel.setPieces(joueurActuel.getPieces()-inmpots);
             FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
         }
@@ -456,7 +467,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     }
                 }
             }
-            if (presenceMonument)
+            if (presenceMonument && !joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "D'après quelques sources, les monuments présents sur le champ de batille possèderait plus de pièces..."); 
         }
         else if (evenement >70 && evenement <75){
@@ -470,13 +481,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     }
                 }
             }
-            if (presenceMonument)
+            if (presenceMonument && !joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Des pillards sont arrivés avant nous sur le champ de bataille et ils ont volé une partie des trésor des monuments"); 
         }
         
         else if (evenement >65 && evenement <70){
-            JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de sable est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size(); i++) {
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de sable est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size()-1; i++) {
                 for (int j = 0; j < plateau.size()-1; j++) {
                     int changerTypeTerrain = new Random().nextInt(4);
                     if (changerTypeTerrain == 2){
@@ -488,8 +500,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
            
         }
         else if (evenement >60 && evenement <65){
-            JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de neige est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size(); i++) {
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de neige est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size()-1; i++) {
                 for (int j = 0; j < plateau.size() - 1; j++) {
                     int changerTypeTerrain = new Random().nextInt(4);
                     if (changerTypeTerrain == 2){
@@ -500,8 +513,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         else if (evenement >55 && evenement <60){
-            JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size(); i++) {
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
+            for (int i = 0; i < plateau.size()-1; i++) {
                 for (int j = 0; j < plateau.size()-1; j++) {
                     int changerTypeTerrain = new Random().nextInt(4);
                     if (changerTypeTerrain == 2){
@@ -557,9 +571,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 tourIA();
                 Thread.sleep(100);
                 resetChrono();
+                evenementExterieur();
                 nouveauTour();
             }
-            evenementExterieur();
         }
         else {
             effacerDonnes();
@@ -1413,6 +1427,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     if (caseSelectionne.estOccupe() != null){
                         if (caseSelectionne.estOccupe() instanceof Unite){
                             FenetreJeu.getPanelJeu().getLabelNomEntite().setText(caseSelectionne.getUnite().afficherNomUnite());
+                            FenetreJeu.getPanelJeu().getLabelPointDeplacement().setText("Points de deplacement : "+((Unite) caseSelectionne.estOccupe()).getDeplacementActuel());
                         }
                         else {
                             FenetreJeu.getPanelJeu().getLabelNomEntite().setText(caseSelectionne.getBatiment().afficherNomBatiment());
@@ -1420,7 +1435,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         FenetreJeu.getPanelJeu().getLabelPointVie().setText("Point de vie : "+((Entite) caseSelectionne.estOccupe()).getPointDeVieActuel());
                         FenetreJeu.getPanelJeu().getLabelAttaque().setText("Attaque : "+((Entite) caseSelectionne.estOccupe()).getAttaque());
                         FenetreJeu.getPanelJeu().getLabelDefense().setText("Defense : "+((Entite) caseSelectionne.estOccupe()).getDefense());
-                        FenetreJeu.getPanelJeu().getLabelPointDeplacement().setText("Points de deplacement : "+((Unite) caseSelectionne.estOccupe()).getDeplacementActuel());
                     
                     }
                     else {
@@ -1669,6 +1683,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "finTour":
                     try {
+                        evenementExterieur();
                         nouveauTour();
                         JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
         
@@ -1769,4 +1784,3 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 }
-
