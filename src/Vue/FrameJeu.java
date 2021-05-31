@@ -61,7 +61,7 @@ public class FrameJeu extends JFrame{
 		this.setPreferredSize(new Dimension(1500,800));
 		this.setVisible(true);	this.setSize(1500,800);
 		this.setLocation(20, 15);	this.setResizable(true);
-		
+
 	}
 
 	/**
