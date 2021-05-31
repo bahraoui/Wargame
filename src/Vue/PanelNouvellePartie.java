@@ -6,7 +6,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import controleur.Jeu;
@@ -16,6 +15,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * PanelNouvellePartie contient tous les elements visuels permettant la creation d'une nouvelle partie.
+ * 
+ * Premierement, une liste de map est propose sous la forme d'une {@link JComboBox}, puis deux autres combobox afin de donner le nombre de joueurs humain/IA.
+ * Ensuite, jusqu'a 4 {@link JTextField} pour inscrire les pseudos des joueurs.
+ * Enfin, deux {@link JButton} pour retourner vers le menu {@link PanelMenu} ou pour continuer vers {@link PanelChargerScenario}.
+ * 
+ */
 public class PanelNouvellePartie extends JPanel{
     private JComboBox<String> choixMap;
     private JComboBox<Integer> nbJoueursHumain;
@@ -25,6 +32,9 @@ public class PanelNouvellePartie extends JPanel{
     private JLabel[] nomJoueur;
     private JTextField[] txtNomJoueur;
 
+    /**
+     * Constructeur du panel.
+     */
     public PanelNouvellePartie() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();

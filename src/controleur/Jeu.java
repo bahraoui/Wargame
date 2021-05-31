@@ -30,7 +30,6 @@ import Vue.PanelActuel;
 import Vue.PanelChargerPartie;
 import Vue.PanelChargerScenario;
 import Vue.PanelJeu;
-import Vue.PanelMap;
 import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
@@ -77,8 +76,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Hexagone hexCaseClic;
     private static Joueur joueurGagnant;
     private static boolean initPanelJeu;
-
-    private static int cmpt=0;
 
     private static final int cote = 16;
     
@@ -1012,7 +1009,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     
     public static Batiment analyseSplBatiment(String spl) {
-
         String [] spl1 = new String[25];
         spl1 = spl.split(",");
         if (spl1.length == 3) {
@@ -1131,105 +1127,95 @@ public class Jeu extends MouseAdapter implements ActionListener {
     public void chargerCarte(FileInputStream file){
         String line = new String();
         Scanner scanner = new Scanner(file); 
-        String [] strValues1;
         int[][] listeUnite = new int[50][50];
         for (int i = 0; i < plateau.size(); i++) {
             line = scanner.nextLine();
-            strValues1 = line.split(",");
             chargeLineMap(line,i,listeUnite);
         }
+        scanner.close();
     }
 
 
-    public static void chargePartie(FileInputStream file) {
+    public static void chargePartie(FileInputStream file) {            
+        String line = new String();
+        String [] strValues1;
+        String [] strValues2;
+        String [] strValues3;
+        Scanner scanner = new Scanner(file);  
         
-        //try {
-            
-            String line = new String();
-		    String [] strValues1;
-            String [] strValues2;
-            String [] strValues3;
-			Scanner scanner = new Scanner(file);  
-            
-            
+        
 
-            line = scanner.nextLine();
-            strValues1 = line.split(";");
+        line = scanner.nextLine();
+        strValues1 = line.split(";");
 
-            int[][] listeUnite = new int[4][10];
+        int[][] listeUnite = new int[4][10];
 
-            for (int i = 0; i < strValues1.length; i++) {
-                strValues1[i] = strValues1[i].replace("[", "");
-                strValues1[i] = strValues1[i].replace("]", "");
-                strValues2 = strValues1[i].split(",");
-                Joueur joueur = new Joueur(strValues2[0],Boolean.parseBoolean(strValues2[1]));
-                if (joueur.isEstIa())
-                    nbJoueursIA++;
-                else
-                    nbJoueursH++;
-                listeJoueur.add(joueur);
-                joueur.setPieces(Integer.parseInt(strValues2[2]));
+        for (int i = 0; i < strValues1.length; i++) {
+            strValues1[i] = strValues1[i].replace("[", "");
+            strValues1[i] = strValues1[i].replace("]", "");
+            strValues2 = strValues1[i].split(",");
+            Joueur joueur = new Joueur(strValues2[0],Boolean.parseBoolean(strValues2[1]));
+            if (joueur.isEstIa())
+                nbJoueursIA++;
+            else
+                nbJoueursH++;
+            listeJoueur.add(joueur);
+            joueur.setPieces(Integer.parseInt(strValues2[2]));
 
-                strValues2[3] = strValues2[3].replace("{", "");
-                strValues2[3] = strValues2[3].replace("}", "");
-                if(strValues2[3].length() > 0){
-                    if (strValues2[3].split(".").length == 0){
-                        strValues3 = new String[1];
-                        strValues3[0] = strValues2[3];
-                    }
-                    else 
-                        strValues3 = strValues2[3].split(".");
-                    
-                    for (int j = 0; j < strValues3.length; j++) {
-                        System.out.println("VALEUR : "+strValues3[i]);
-                    }
-                    
+            strValues2[3] = strValues2[3].replace("{", "");
+            strValues2[3] = strValues2[3].replace("}", "");
+            if(strValues2[3].length() > 0){
+                if (strValues2[3].split(".").length == 0){
+                    strValues3 = new String[1];
+                    strValues3[0] = strValues2[3];
+                }
+                else 
                     strValues3 = strValues2[3].split(".");
-                    System.out.println("AFFICHAGE : "+strValues2[3]);
-                    for (int j = 0; j < strValues3.length; j++) {
-                        listeUnite[i][j]=Integer.parseInt(strValues3[j]);
-                    }
-                }
-                else{
-                    listeUnite[i][0] = -1 ;
-                }
-            }
-            
-            for (int i = 0; i < plateau.size(); i++) {
-                line = scanner.nextLine();
-                strValues1 = line.split(",");
-                System.out.println(" LISTE ARMME ");
-                /*for (int j = 0; j < listeUnite.length; j++) {
-                    for (int j2 = 0; j2 < listeUnite[j].length; j2++) {
-                        System.out.print(listeUnite[j][j2]+ " ");
-                    }
-                    System.out.println(" ");
-                }*/
-                chargeLineMap(line,i,listeUnite);
-            }
-            
-            line = scanner.nextLine();
-            tour = Integer.parseInt(line);
-            line = scanner.nextLine();
-            joueurActuel = listeJoueur.get(Integer.parseInt(line));
-
-            line = scanner.nextLine();
-            strValues1 = line.split(";");
-            
-            for (int i = 0; i < strValues1.length; i++) {
-                strValues1[i] = strValues1[i].replace("[", "");  
-                strValues1[i] = strValues1[i].replace("]", "");
-                strValues2 = strValues1[i].split(",");
-                placerBase(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
                 
+                for (int j = 0; j < strValues3.length; j++) {
+                    System.out.println("VALEUR : "+strValues3[i]);
+                }
+                
+                strValues3 = strValues2[3].split(".");
+                System.out.println("AFFICHAGE : "+strValues2[3]);
+                for (int j = 0; j < strValues3.length; j++) {
+                    listeUnite[i][j]=Integer.parseInt(strValues3[j]);
+                }
             }
-
+            else{
+                listeUnite[i][0] = -1 ;
+            }
+        }
+        
+        for (int i = 0; i < plateau.size(); i++) {
             line = scanner.nextLine();
-            finpartie = Boolean.parseBoolean(line);
-            line = scanner.nextLine();
-            Entite.setCompteur(Integer.parseInt(line));
+            strValues1 = line.split(",");
+            System.out.println(" LISTE ARMME ");
+            chargeLineMap(line,i,listeUnite);
+        }
+        
+        line = scanner.nextLine();
+        tour = Integer.parseInt(line);
+        line = scanner.nextLine();
+        joueurActuel = listeJoueur.get(Integer.parseInt(line));
 
-	        scanner.close();    
+        line = scanner.nextLine();
+        strValues1 = line.split(";");
+        
+        for (int i = 0; i < strValues1.length; i++) {
+            strValues1[i] = strValues1[i].replace("[", "");  
+            strValues1[i] = strValues1[i].replace("]", "");
+            strValues2 = strValues1[i].split(",");
+            placerBase(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
+            
+        }
+
+        line = scanner.nextLine();
+        finpartie = Boolean.parseBoolean(line);
+        line = scanner.nextLine();
+        Entite.setCompteur(Integer.parseInt(line));
+
+        scanner.close();    
     }
 
     public static void sauvegardeMap(String fichier){
@@ -1370,8 +1356,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
                                 switch (batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
                                     case MONUMENT:
-                                        hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
                                         hexClic.setMonument(false);
+                                        hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
                                         panelChargerScenario.setMonumentNb(false);
                                         cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(null);                              
                                         break;

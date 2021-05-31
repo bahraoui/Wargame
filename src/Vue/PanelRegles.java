@@ -12,10 +12,19 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * PanelRegles contient toutes les règles nécéssaires afin que tout le monde puisse rapidement comprendre WarGame et pouvoir y jouer.
+ * 
+ * La partie centrale contient les règles.
+ * En dessous de cette partie, se trouve un {@link JButton} permettant de retourner vers le menu {@link PanelMenu}.
+ */
 public class PanelRegles  extends JPanel{
 
     private JButton btnQuitter;
 
+    /**
+     * Constructeur du panel.
+     */
     public PanelRegles() {
         super(new GridBagLayout());
         GridBagConstraints contrainte = new GridBagConstraints();
@@ -151,8 +160,10 @@ public class PanelRegles  extends JPanel{
 
     }
 
-    
-
+    /**
+	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
+	 */
     public void enregistreEcouteur(Jeu controleur) {
         btnQuitter.addActionListener(controleur);;
     }

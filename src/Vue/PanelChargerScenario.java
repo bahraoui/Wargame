@@ -22,6 +22,11 @@ import javax.swing.border.EmptyBorder;
 
 import controleur.Jeu;
 
+/**
+ * PanelChargerScenario contient la vue d'une modification de scénario.
+ * 
+ * A droite, se trouve la carte a modifier. A gauche, se trouve les elements pour pouvoir modifier la carte.
+ */
 public class PanelChargerScenario extends JPanel{
     private PanelMap panelMap;
     private JPanel panelGauche;
@@ -32,6 +37,11 @@ public class PanelChargerScenario extends JPanel{
     private JButton btnSauvegarderPartie;
     private JTextField nomSauvergardeCarte;
 	
+    /**
+     * Contructeur du panel.
+     * @param parHexs le tableau contenant les cases du plateau
+     * @throws IOException
+     */
 	public PanelChargerScenario(Hexagone[][] parHexs) throws IOException {
         super(new BorderLayout());
         panelMap = new PanelMap(parHexs);
@@ -113,6 +123,10 @@ public class PanelChargerScenario extends JPanel{
         }
     }
 
+    /**
+	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
+	 */
     public void enregistreEcouteur(Jeu controleur) {
         panelMap.enregistreEcouteur(controleur);
         listeTerrains.addActionListener(controleur);
@@ -122,16 +136,32 @@ public class PanelChargerScenario extends JPanel{
         btnQuitter.addActionListener(controleur);
     }
 
+    /**
+     * Modifie le texte du label associé au changement de terrrain.
+     * 
+     * Ce texte est formaté sous html afin de le rendre plus ergonomique et agréable.
+     * @param txt le nouveau texte à inscrire
+     */
     public void setChoixTerrainTxt(String txt) {
         this.terrainChoisi.setText("<html><br/>"+txt+" <br/>selectionné</html>");
         this.monumentChoisi.setText("");
     }
 
+    /**
+     * Modifie le texte du label associé au changement de monument.
+     * 
+     * Ce texte est formaté sous html afin de le rendre plus ergonomique et agréable.
+     * @param txt le nouveau texte à inscrire
+     */
     public void setChoixMonumentTxt(String txt) {
         this.monumentChoisi.setText(txt);
         this.terrainChoisi.setText("");
     }
 
+    /**
+     * Incremente ou decremente le nombre de monuments placables en fonction du paramètre.
+     * @param diminuer Decrementer le nombre ?
+     */
     public void setMonumentNb(boolean diminuer) {
         if (diminuer)          
             this.nbMonumentsRestants--;
@@ -140,6 +170,8 @@ public class PanelChargerScenario extends JPanel{
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
+    // Getters et setters
+
     public Integer getNbMonumentsRestants(){
         return this.nbMonumentsRestants;
     }
@@ -147,4 +179,6 @@ public class PanelChargerScenario extends JPanel{
     public JTextField getNomCarte(){
         return this.nomSauvergardeCarte;
     }
+    
+    // Fin getters et setters
 }
