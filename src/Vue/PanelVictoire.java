@@ -5,15 +5,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
+
 
 import java.awt.*;
 
@@ -34,39 +31,49 @@ public class PanelVictoire extends JPanel{
      * Le constructeur de PanelVictoire permet d'intancier ce JPanel
      */
     public PanelVictoire() {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        super(new GridBagLayout());
+        GridBagConstraints contrainte = new GridBagConstraints();
+        contrainte.gridx=0;
+        contrainte.gridy=0;
 
         // Informations sur le vainqueur
         panelInfosVictoire = new JPanel();
-        panelInfosVictoire.setOpaque(false);
-        
-        panelInfosVictoire.setLayout(new BoxLayout(panelInfosVictoire, BoxLayout.Y_AXIS));
+        panelInfosVictoire.setOpaque(true);
+        panelInfosVictoire.setBackground(new Color(255, 212, 164));
+        panelInfosVictoire.setPreferredSize(new Dimension(350,150));
         panelInfosVictoire.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+        panelInfosVictoire.setLayout(new GridBagLayout());
+		GridBagConstraints contrainte2= new GridBagConstraints();
+		contrainte2.gridx=0; contrainte2.gridy=0;
         
-        labelVictoire = new JLabel("Victoire du joueur ", SwingConstants.CENTER);
-        panelInfosVictoire.add(labelVictoire);
+        labelVictoire = new JLabel("Victoire du joueur 1",SwingConstants.CENTER);
+        labelVictoire.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
+		labelVictoire.setForeground(new Color(109,7,26));
+        panelInfosVictoire.add(labelVictoire,contrainte2);
 
-        labelNomVainqueur = new JLabel("", SwingConstants.CENTER);
-        panelInfosVictoire.add(labelNomVainqueur);
+        labelNomVainqueur = new JLabel("pas Marwane",SwingConstants.CENTER);
+        labelNomVainqueur.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
+		labelNomVainqueur.setForeground(new Color(109,7,26));
+        contrainte2.gridy++;
+        panelInfosVictoire.add(labelNomVainqueur,contrainte2);
 
-        JLabel labelFelicitation = new JLabel("Felicitation !!", SwingConstants.CENTER);
-        panelInfosVictoire.add(labelFelicitation);
+        JLabel labelFelicitation = new JLabel("Felicitation !!",SwingConstants.CENTER);
+        labelFelicitation.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
+		labelFelicitation.setForeground(new Color(109,7,26));
+        contrainte2.gridy++;
+        panelInfosVictoire.add(labelFelicitation,contrainte2);
         
-        // placement au centre de l'ecran
+    
         panelInfosVictoire.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0,0,0)));
-        Border border = panelInfosVictoire.getBorder();
-        Border margin = new EmptyBorder(370,450,0,0); // N W S E
-        panelInfosVictoire.setBorder(new CompoundBorder(margin, border));
-        this.add(panelInfosVictoire);
+        this.add(panelInfosVictoire,contrainte);
 
         // Bouton retour Menu
-        JPanel panelBas = new JPanel();
-        panelBas.setOpaque(false);
         boutonQuitter = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");
-        panelBas.add(boutonQuitter);
-        this.add(panelBas);
+        contrainte.gridy++;
+
+        this.add(boutonQuitter,contrainte);
     }
 
     /**
