@@ -131,12 +131,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         defenseur.setBatiment(null);
                     else 
                         defenseur.setUnite(null);
-                    try {
-                        defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    
+                    defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
+                    
                     mortEntite(defenseCase);                    
                     calculVitoire();
                 }
@@ -315,7 +312,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             cellulesCarte[deplacement.get(i-1).getX()][deplacement.get(i-1).getY()].getHex().setTerrain(terrainModeleToVue(plateau.get(deplacement.get(i-1).getX()).get(deplacement.get(i-1).getY()).getTerrain()));
             
             unite.setDeplacementActuel(unite.getDeplacementActuel()-1);
-            Thread.sleep(150);
+            Thread.sleep(50);
             if (unite.getDeplacementActuel() == 0)
                 break Deplacement;
         }
@@ -577,7 +574,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
             if (joueurActuel.getEstIa()){
                 tourIA();
-                Thread.sleep(1000);
+                Thread.sleep(100);
                 resetChrono();
                 nouveauTour();
             }
@@ -690,7 +687,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         Entite cible = rechercheEntiteProche(coordUnite); //doute bizzare
         System.out.println("CIBLE CHOSIS :"+cible);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         } catch (InterruptedException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -813,7 +810,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 if (uniteachete != null){
                     depense -= uniteachete.getCout();
                     FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -824,7 +821,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (!calculVitoire())
                 actionUniteIA(joueurActuel.getArmee().get(i));
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
