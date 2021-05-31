@@ -29,8 +29,13 @@ public class Terrain {
     }
 
     public String afficherBonus(){
-        return "Point de déplacement " + this.ptsDeplacement+ " Bonus de défense  " + this.bonusDefense ;
+        return "Bonus de défense  " + this.bonusDefense ;
     }
+
+    public String afficherPointDeplacement(){
+        return "Point de déplacement " + this.ptsDeplacement;
+    }
+
 
     public String afficherTypeTerrain(){
         if (this instanceof Desert) {
