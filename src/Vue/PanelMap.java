@@ -25,13 +25,19 @@ public class PanelMap extends JPanel {
 	 */
     public PanelMap(Hexagone[][] parHexs) throws IOException {
         super();
+		/*
+		 * Initialisation des champs de la classe
+		 */
 		petiteLigne = false;
-		HexagonalLayout hexLayout = new HexagonalLayout(16, new Insets(1,1,1,1), petiteLigne, 248);
+		HexagonalLayout hexLayout = new HexagonalLayout(16, new Insets(-1,-1,-1,0), petiteLigne, 248);
 		this.hexs = parHexs;
 		totalCells = hexLayout.getNbComposants();
 		this.setLayout(hexLayout);
 		int col=0,ligne=0;
-		System.out.println("totalcells : "+totalCells);
+		
+		/*
+		 * Placement des hexagones 
+		 */
 		for(int nbCellules = 0; nbCellules < totalCells; nbCellules++) {
 			this.add(hexs[ligne][col]);
 			col++;
