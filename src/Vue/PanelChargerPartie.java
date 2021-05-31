@@ -1,18 +1,21 @@
 package Vue;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileSystemView;
 
 import controleur.Jeu;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class PanelChargerPartie extends JPanel{
 
@@ -20,7 +23,6 @@ public class PanelChargerPartie extends JPanel{
     private JLabel lblCarteChosie;
     private JButton btnContinuerScenario;
     private JButton btnQuitter;
-    private JFileChooser fileChoose;
 
     public PanelChargerPartie() {
         super(new GridBagLayout());
