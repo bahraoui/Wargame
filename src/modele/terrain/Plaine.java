@@ -18,7 +18,7 @@ public class Plaine extends Terrain{
     }
     
     /**
-     * Affichage d'une case plaine pour terminal
+     * Affichage d'une case Plaine pour terminal
      */
     public String toString(){
         return "Plaine : " +super.toString();

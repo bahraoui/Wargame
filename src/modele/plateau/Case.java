@@ -56,6 +56,10 @@ public class Case {
         
     }
 
+    /**
+     * Permet de savoir si une case contient une unite ou un batiment ou aucun des deux
+     * @return Retourne une unite, un batiment ou null 
+     */
     public Object estOccupe(){
         if (this.unite != null)
             return this.unite;
@@ -64,6 +68,11 @@ public class Case {
         return null; 
     }
 
+    /**
+     * Permet d'effectuer l'action d'attaque entre deux cases (leurs entite), simule l'attaque et met a jour les pv restants des entitées
+     * @param attaquant Case attaquante
+     * @param defenseur Case qui defend
+     */
     public static void attaquer(Case attaquant, Case defenseur){
         Entite def = new Entite();
         Entite att = new Entite();
@@ -92,8 +101,6 @@ public class Case {
             def.setPointDeVieActuel(def.getPointDeVieActuel() - random.nextInt(5));
         }
     }
-
-   
 
     //
     //Getters et Setters

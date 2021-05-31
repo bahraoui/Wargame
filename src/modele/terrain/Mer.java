@@ -18,7 +18,7 @@ public class Mer extends Terrain{
     }
     
     /**
-     * Affichage d'une case mer  pour terminal
+     * Affichage d'une case Mer pour terminal
      */
     public String toString(){
         return "Mer : " +super.toString();

@@ -18,7 +18,7 @@ public class Desert extends Terrain{
     }
 
     /**
-     * Affichage d'une case desert pour terminal
+     * Affichage d'une case Desert pour terminal
      */
     public String toString(){
         return "Desert : " +super.toString();

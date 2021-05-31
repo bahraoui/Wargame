@@ -48,7 +48,12 @@ public class Joueur {
         this.enJeu = true;
         this.armee = new ArrayList<Unite>();
     }
-
+    
+    /**
+     * Permet d'effectuer l'action d'achat d'unité pour un joueur, le prix de l'unité est directement reduit de sa besace
+     * @param unite L'unité à acheter
+     * @return retourne si l'action d'achat a eu lieu ou non 
+     */
     public boolean achatUniteArmee(Unite unite){
         if (this.getPieces() >= unite.getCout()){
             this.setPieces(this.getPieces()-unite.getCout());
@@ -59,6 +64,10 @@ public class Joueur {
         }
     }
 
+    /**
+     * La fonction calcule le gain de pv des unités au debut du tour du joueur
+     * Elle met a jour les pv des unités
+     */
     public void regenerationUniteArmee() {
         for(int i = 0; i<this.getArmee().size();i++) {
             if (this.getArmee().get(i).getEnRepos() == true) {
@@ -78,12 +87,20 @@ public class Joueur {
         }
     }
 
+    /**
+     * Calcule le gain en piece des joueurs et met a jour sa besace
+     * @param tour Le nombre de tour de la partie
+     */
     public void gainTourJoueur(int tour) {
         int pieceGain = (int) (tour * 0.2 + 4);
         this.setPieces(this.getPieces()+pieceGain);
     }
 
-
+    /**
+     * La fonction retourne vraie si l'unité passer en parametre appartient au joueur qui clic dessus
+     * @param caseClic1 La case choisis par le joueur
+     * @return Vrai ou Faux
+     */
     public boolean estMonEntite(Case caseClic1) {
         Entite entite = (Entite) caseClic1.estOccupe();
         if (entite instanceof Unite){
@@ -124,19 +141,15 @@ public class Joueur {
     public String getPseudo() {
         return pseudo;
     }
-
     public void setNumeroJoueur(int numeroJoueur) {
         this.numeroJoueur = numeroJoueur;
     }
-
     public boolean isEstIa() {
         return this.estIa;
     }
-
     public boolean isEnJeu() {
         return this.enJeu;
     }
-
     public void setEstIa(boolean estIa) {
         this.estIa = estIa;
     }
@@ -155,10 +168,7 @@ public class Joueur {
     public void setPseudo(String pseudo){
         this.pseudo=pseudo;
     }
-
     public static void setCompteur(int compt){
         Joueur.compteur = compt;
     }
-
-
 }

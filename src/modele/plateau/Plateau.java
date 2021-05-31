@@ -11,14 +11,14 @@ import modele.terrain.Terrain;
  * La classe Plateau représente le plateau du jeu "Wargame"
  * 
  * La classe Plateau hérite de la classe {@link ArrayList}
- * Elle posède un champs : cote, la taille du cote du plateau
+ * Elle posède un champs : cote qui représente la taille du cote du plateau
  * Elle possede une methode d'affichage pour terminal
  */
 public class Plateau extends ArrayList<ArrayList<Case>> {
     private int cote = 16;
     
     /**
-     * Constructeur de la classe plateau
+     * Constructeur de la classe plateau , initialisation de toutes les cases du plateau
      */
     public Plateau() {
         for (int i = 0; i <cote; i++) {
@@ -34,7 +34,7 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
     }
 
     /**
-     * Affichage du plateau pour terminal
+     * Affichage du plateau pour terminal, affiche l'interieur des cases dans le terminal
      */
     public String toString(){
         String chaine = "";
@@ -48,7 +48,7 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
     }
 
     /**
-     * Affichage du plateau pour terminal
+     * Affichage du plateau pour terminal, affiche la forme globale dans le terminal
      */
     public String affichage(){
         String chaine = "";
