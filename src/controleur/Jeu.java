@@ -127,13 +127,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Case.attaquer(attaquantCase,defenseCase);
                 attaquantCase.getUnite().setAAttaque(true);
                 if (((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
-                    mortEntite(defenseCase);
+                    if (defenseCase.estOccupe() instanceof Batiment)
+                        defenseur.setBatiment(null);
+                    else 
+                        defenseur.setUnite(null);
                     try {
                         defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
+                    mortEntite(defenseCase);                    
                     calculVitoire();
                 }
                 return true;
