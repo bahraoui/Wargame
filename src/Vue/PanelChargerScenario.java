@@ -69,7 +69,9 @@ public class PanelChargerScenario extends JPanel{
         btnQuitter = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
 
-
+        /*
+         * Liste des terrains disponibles a selectionner 
+         */
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
         listeTerrains.setActionCommand("listeTerrains");
@@ -82,6 +84,9 @@ public class PanelChargerScenario extends JPanel{
         Border margin = new EmptyBorder(3,3,3,3);
         panelTerrains.setBorder(new CompoundBorder(margin, border));
 
+        /*
+         * Choix d'un monument 
+         */
         btnChoixMonument.setActionCommand("choixMonument");
         monumentChoisi = new JLabel("");
         panelMonuments.add(btnChoixMonument);
@@ -92,6 +97,9 @@ public class PanelChargerScenario extends JPanel{
         margin = new EmptyBorder(3,3,3,3);
         panelMonuments.setBorder(new CompoundBorder(margin, border));
         
+        /*
+         * placement des elements a gauche 
+         */
         panelGauche.setBorder(new CompoundBorder(margin, border));
         panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
         panelGauche.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0,0,0)));
@@ -101,6 +109,9 @@ public class PanelChargerScenario extends JPanel{
         panelGauche.setBorder(new CompoundBorder(margin, border));
 
 
+        /*
+         * placement des boutons 
+         */
         btnLancerPartie.setActionCommand("lancerPartieApresScenario");
         btnSauvegarderPartie.setActionCommand("sauvegarderCarte");
         btnQuitter.setActionCommand("retourMenu");
@@ -109,6 +120,9 @@ public class PanelChargerScenario extends JPanel{
         panelActions.add(btnSauvegarderPartie);
         panelActions.add(btnQuitter);
         
+        /*
+         * placement de tous les panels 
+         */
         panelGauche.add(panelTerrains);
         panelGauche.add(panelMonuments);
         panelGauche.add(panelActions);
