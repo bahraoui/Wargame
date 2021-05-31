@@ -15,10 +15,10 @@ public class Mage extends Unite{
      * Attribue pour un archer ses points de vie, son attaque, sa defense,sa vision, son cout, ses deplacement
      */
     public Mage() {
-        super(35,65,30,3);
+        super(15,55,7,2);
         setPointDeVieMax(super.getPointDeVieActuel());
-        setDeplacementMax(5);
-        setDeplacementActuel(5);
+        setDeplacementMax(4);
+        setDeplacementActuel(4);
         setCout(20);
     }
     

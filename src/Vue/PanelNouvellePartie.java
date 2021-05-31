@@ -69,7 +69,7 @@ public class PanelNouvellePartie extends JPanel{
         this.add(choixMap,contrainte);
         contrainte.gridx=0;
         contrainte.gridy++;
-        this.add(new JLabel("Joueur(s) Huamin(s) : "),contrainte);
+        this.add(new JLabel("Joueur(s) Humain(s) : "),contrainte);
         contrainte.gridx++;
         this.add(nbJoueursHumain,contrainte);
         contrainte.gridx=0;

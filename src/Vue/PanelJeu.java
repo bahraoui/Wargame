@@ -44,6 +44,12 @@ public class PanelJeu extends JPanel {
 	private Timer timerTour;
 	private Timer timerHorloge;
 	private JButton boutonSauvegarder;
+	private JLabel labelNomEntite;
+	private JLabel labelPointVie;
+	private JLabel labelAttaque;
+	private JLabel labelDefense;
+	private JLabel labelPointDeplacement;
+	private JLabel labelPointDeplacementTerrain;
 
 	/**
 	 * Le contructeur PanelJeu permet d'instancier le JPanel avec comme parametre le tableau contenant les cases du plateau
@@ -128,24 +134,23 @@ public class PanelJeu extends JPanel {
 		///////////////////////
 
 		this.panelInfoPartie = new JPanel();
-		panelInfoPartie.setPreferredSize(new Dimension(200,100));
+		panelInfoPartie.setPreferredSize(new Dimension(200,160));
 		panelInfoPartie.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		panelInfoPartie.setLayout(new BoxLayout(panelInfoPartie, BoxLayout.Y_AXIS));
 		
-		// titre
-		JLabel labelTitreInfoCase = new JLabel("Infomartions de la case");
-		//labelTitreInfoCase.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
-        labelTitreInfoCase.setForeground(new Color(109,7,26));
-		panelInfoPartie.add(labelTitreInfoCase);
-
 		// type de terrain
 		labelTypeTerrain = new JLabel("");
-		//labelTypeTerrain.setFont(new Font("Tempus Sans ITC", Font.BOLD, 12));
         labelTypeTerrain.setForeground(new Color(109,7,26));
+		labelTypeTerrain.setFont(new Font("",Font.PLAIN,20));
 		panelInfoPartie.add(labelTypeTerrain);
+
+		// Point de deplacement terrain
+		labelPointDeplacementTerrain = new JLabel("");
+		labelPointDeplacementTerrain.setForeground(new Color(109,7,26));
+		panelInfoPartie.add(labelPointDeplacementTerrain);
+
 		// bonus terrain
 		labelBonusTerrain = new JLabel("");
-		//labelBonusTerrain.setFont(new Font("Tempus Sans ITC", Font.BOLD, 12));
         labelBonusTerrain.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelBonusTerrain);
 
@@ -156,13 +161,41 @@ public class PanelJeu extends JPanel {
         labelBatimentUnite.setForeground(new Color(109,7,26));
 		panelInfoPartie.add(labelBatimentUnite);
 
+
+		// nom entite
+		labelNomEntite = new JLabel("");
+		labelNomEntite.setFont(new Font("",Font.PLAIN,20));
+		labelNomEntite.setForeground(new Color(109,7,26));
+		panelInfoPartie.add(labelNomEntite);
+
+		// point de vue
+		labelPointVie = new JLabel("");
+		labelPointVie.setForeground(new Color(109,7,26));
+		panelInfoPartie.add(labelPointVie);
+
+		// attaque
+		labelAttaque = new JLabel("");
+		labelAttaque.setForeground(new Color(109,7,26));
+		panelInfoPartie.add(labelAttaque);
+
+		// defense
+		labelDefense = new JLabel("");
+		labelDefense.setForeground(new Color(109,7,26));
+		panelInfoPartie.add(labelDefense);
+
+		// Point Deplacement
+		labelPointDeplacement = new JLabel("");
+		labelPointDeplacement.setForeground(new Color(109,7,26));
+		panelInfoPartie.add(labelPointDeplacement);
+
+
 		panelGaucheInfos.add(panelInfoPartie);
 
 		////////////////////
 		// PANEL BOUTIQUE //
 		////////////////////
 		this.panelBoutique = new JPanel();
-		panelBoutique.setPreferredSize(new Dimension(200,300));
+		panelBoutique.setPreferredSize(new Dimension(200,270));
 		panelBoutique.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 		//panelBoutique.setLayout(new BoxLayout(panelBoutique, BoxLayout.Y_AXIS));
 
@@ -405,6 +438,216 @@ public class PanelJeu extends JPanel {
 		this.labelGolds = labelGolds;
 	}
 
+
+	public BorderLayout getBdl() {
+		return this.bdl;
+	}
+
+	public void setBdl(BorderLayout bdl) {
+		this.bdl = bdl;
+	}
+
+	public JPanel getPanelGaucheInfos() {
+		return this.panelGaucheInfos;
+	}
+
+	public void setPanelGaucheInfos(JPanel panelGaucheInfos) {
+		this.panelGaucheInfos = panelGaucheInfos;
+	}
+
+	public JPanel getPanelBoutons() {
+		return this.panelBoutons;
+	}
+
+	public void setPanelBoutons(JPanel panelBoutons) {
+		this.panelBoutons = panelBoutons;
+	}
+
+	public JPanel getPanelInfoTour() {
+		return this.panelInfoTour;
+	}
+
+	public void setPanelInfoTour(JPanel panelInfoTour) {
+		this.panelInfoTour = panelInfoTour;
+	}
+
+	public JPanel getPanelInfoPartie() {
+		return this.panelInfoPartie;
+	}
+
+	public void setPanelInfoPartie(JPanel panelInfoPartie) {
+		this.panelInfoPartie = panelInfoPartie;
+	}
+
+	public JPanel getPanelBoutique() {
+		return this.panelBoutique;
+	}
+
+	public void setPanelBoutique(JPanel panelBoutique) {
+		this.panelBoutique = panelBoutique;
+	}
+
+	public JLabel getLabelArcher() {
+		return this.labelArcher;
+	}
+
+	public void setLabelArcher(JLabel labelArcher) {
+		this.labelArcher = labelArcher;
+	}
+
+	public JLabel getLabelCavalerie() {
+		return this.labelCavalerie;
+	}
+
+	public void setLabelCavalerie(JLabel labelCavalerie) {
+		this.labelCavalerie = labelCavalerie;
+	}
+
+	public JLabel getLabelInfanterie() {
+		return this.labelInfanterie;
+	}
+
+	public void setLabelInfanterie(JLabel labelInfanterie) {
+		this.labelInfanterie = labelInfanterie;
+	}
+
+	public JLabel getLabelInfanterieLourde() {
+		return this.labelInfanterieLourde;
+	}
+
+	public void setLabelInfanterieLourde(JLabel labelInfanterieLourde) {
+		this.labelInfanterieLourde = labelInfanterieLourde;
+	}
+
+	public JLabel getLabelMage() {
+		return this.labelMage;
+	}
+
+	public void setLabelMage(JLabel labelMage) {
+		this.labelMage = labelMage;
+	}
+
+	public JButton getBoutonArcher() {
+		return this.boutonArcher;
+	}
+
+	public void setBoutonArcher(JButton boutonArcher) {
+		this.boutonArcher = boutonArcher;
+	}
+
+	public JButton getBoutonCavalerie() {
+		return this.boutonCavalerie;
+	}
+
+	public void setBoutonCavalerie(JButton boutonCavalerie) {
+		this.boutonCavalerie = boutonCavalerie;
+	}
+
+	public JButton getBoutonInfanterie() {
+		return this.boutonInfanterie;
+	}
+
+	public void setBoutonInfanterie(JButton boutonInfanterie) {
+		this.boutonInfanterie = boutonInfanterie;
+	}
+
+	public JButton getBoutonInfanterieLourde() {
+		return this.boutonInfanterieLourde;
+	}
+
+	public void setBoutonInfanterieLourde(JButton boutonInfanterieLourde) {
+		this.boutonInfanterieLourde = boutonInfanterieLourde;
+	}
+
+	public JButton getBoutonMage() {
+		return this.boutonMage;
+	}
+
+	public void setBoutonMage(JButton boutonMage) {
+		this.boutonMage = boutonMage;
+	}
+
+	public JButton getBoutonFinDeTour() {
+		return this.boutonFinDeTour;
+	}
+
+	public void setBoutonFinDeTour(JButton boutonFinDeTour) {
+		this.boutonFinDeTour = boutonFinDeTour;
+	}
+
+	public JButton getBoutonAbandonner() {
+		return this.boutonAbandonner;
+	}
+
+	public void setBoutonAbandonner(JButton boutonAbandonner) {
+		this.boutonAbandonner = boutonAbandonner;
+	}
+
+	public JButton getBoutonQuitter() {
+		return this.boutonQuitter;
+	}
+
+	public void setBoutonQuitter(JButton boutonQuitter) {
+		this.boutonQuitter = boutonQuitter;
+	}
+
+	public JButton getBoutonSauvegarder() {
+		return this.boutonSauvegarder;
+	}
+
+	public void setBoutonSauvegarder(JButton boutonSauvegarder) {
+		this.boutonSauvegarder = boutonSauvegarder;
+	}
+
+	public JLabel getLabelNomEntite() {
+		return this.labelNomEntite;
+	}
+
+	public void setLabelNomEntite(JLabel labelNomEntite) {
+		this.labelNomEntite = labelNomEntite;
+	}
+
+	public JLabel getLabelPointVie() {
+		return this.labelPointVie;
+	}
+
+	public void setLabelPointVie(JLabel labelPointVie) {
+		this.labelPointVie = labelPointVie;
+	}
+
+	public JLabel getLabelAttaque() {
+		return this.labelAttaque;
+	}
+
+	public void setLabelAttaque(JLabel labelAttaque) {
+		this.labelAttaque = labelAttaque;
+	}
+
+	public JLabel getLabelDefense() {
+		return this.labelDefense;
+	}
+
+	public void setLabelDefense(JLabel labelDefense) {
+		this.labelDefense = labelDefense;
+	}
+
+	public JLabel getLabelPointDeplacement() {
+		return this.labelPointDeplacement;
+	}
+
+	public void setLabelPointDeplacement(JLabel labelPointDeplacement) {
+		this.labelPointDeplacement = labelPointDeplacement;
+	}
+
+
+
+	public JLabel getLabelPointDeplacementTerrain() {
+		return this.labelPointDeplacementTerrain;
+	}
+
+	public void setLabelPointDeplacementTerrain(JLabel labelPointDeplacementTerrain) {
+		this.labelPointDeplacementTerrain = labelPointDeplacementTerrain;
+	}
 
 
 	// FIN Getters et setters

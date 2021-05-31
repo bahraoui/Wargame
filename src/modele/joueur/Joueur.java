@@ -44,7 +44,7 @@ public class Joueur {
     public Joueur(String pseudo,boolean parEstIa){
         this.pseudo = pseudo;
         this.numeroJoueur = compteur++;
-        this.pieces = 40;
+        this.pieces = 20;
         this.estIa = parEstIa;
         this.enJeu = true;
         this.armee = new ArrayList<Unite>();

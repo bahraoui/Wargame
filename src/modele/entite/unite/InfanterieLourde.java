@@ -15,10 +15,10 @@ public class InfanterieLourde extends Unite{
      * Attribue pour un archer ses points de vie, son attaque, sa defense,sa vision, son cout, ses deplacement
      */
     public InfanterieLourde() {
-        super(120,15,45,2);
+        super(50,45,10,1);
         setPointDeVieMax(super.getPointDeVieActuel());
-        setDeplacementMax(4);
-        setDeplacementActuel(4);
+        setDeplacementMax(2);
+        setDeplacementActuel(2);
         setCout(30);
     }
     
