@@ -1,6 +1,13 @@
 package Vue;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -29,9 +36,8 @@ public class PanelChargerScenario extends JPanel{
     private JPanel panelGauche;
     private JComboBox<TypeTerrain> listeTerrains;
     private JLabel terrainChoisi, monumentChoisi, nbMonumentLabel;
-    private JButton btnChoixMonument, btnLancerPartie, btnQuitter;
+    private JButton btnChoixMonument, btnLancerPartie, btnQuitter,btnSauvegarderPartie;
     private Integer nbMonumentsRestants;
-    private JButton btnSauvegarderPartie;
     private JTextField nomSauvergardeCarte;
 	
     /**
@@ -72,6 +78,7 @@ public class PanelChargerScenario extends JPanel{
          */
         TypeTerrain[] listeTerrainsNoms = {TypeTerrain.NEIGE,TypeTerrain.DESERT,TypeTerrain.FORET,TypeTerrain.MONTAGNE,TypeTerrain.PLAINE,TypeTerrain.MER};
         listeTerrains = new JComboBox<TypeTerrain>(listeTerrainsNoms);
+        listeTerrains.setRenderer(new MyComboboxRenderer());
         listeTerrains.setActionCommand("listeTerrains");
         terrainChoisi = new JLabel("<html><br/>"+listeTerrainsNoms[0].toString()+" <br/>selectionné</html>");
         terrainChoisi.setFont(new Font("Tempus Sans ITC", Font.BOLD, 13));
@@ -195,6 +202,11 @@ public class PanelChargerScenario extends JPanel{
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
+    public void setMonumentNb(int nbMonuments) {
+        this.nbMonumentsRestants = nbMonuments;
+        this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
+    }
+
     // Getters et setters
 
     public Integer getNbMonumentsRestants(){
@@ -216,4 +228,6 @@ public class PanelChargerScenario extends JPanel{
             e.printStackTrace();
         }
     }
+
+
 }

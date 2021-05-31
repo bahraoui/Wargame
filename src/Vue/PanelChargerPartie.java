@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,7 @@ public class PanelChargerPartie extends JPanel{
     private JButton btnQuitter;
 
     /**
-     * Le contructeur de PanelChargerPartie permet d'instancier le JPanel
+     * Le contructeur de PanelChargerPartie permet d'instancier le panel
      */
     public PanelChargerPartie() {
         super(new GridBagLayout());
@@ -103,10 +104,10 @@ public class PanelChargerPartie extends JPanel{
 
     
     /**
-     * Le getter getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
+     * getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
      * @return JLabel
      */
-    public JLabel getLblCarteChosie(){
+    public JLabel getLabelCarteChosie(){
         return lblCarteChosie;
     }
 

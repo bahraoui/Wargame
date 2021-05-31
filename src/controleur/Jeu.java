@@ -660,6 +660,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             FenetreJeu.getPanelJeu().getTimerHorloge().restart();
         }
     }
+
     public static void effacerDonnes() {
         resetChrono();
         Joueur.setCompteur(0);
@@ -1351,32 +1352,28 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             hexClic.setBatiment(batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
                         }
                     } else if (selectionMonument == true) {
-                        try {
-                            if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
-                                switch (batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
-                                    case MONUMENT:
-                                        hexClic.setMonument(false);
-                                        hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
-                                        panelChargerScenario.setMonumentNb(false);
-                                        cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(null);                              
-                                        break;
-                                    
-                                    default:
-                                        JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une base placé ici.");         
-                                        break;
-                                }
+                        if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
+                            switch (batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase())) {
+                                case MONUMENT:
+                                    hexClic.setBatiment(null);
+                                    hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
+                                    panelChargerScenario.setMonumentNb(false);
+                                    cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(null);                              
+                                    break;
+                                
+                                default:
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une base placé ici.");         
+                                    break;
                             }
-                            else if(panelChargerScenario.getNbMonumentsRestants() == 0)
-                                JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
-                            else if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getUnite() != null)
-                                JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
-                            else {
-                                panelChargerScenario.setMonumentNb(true);
-                                hexClic.setMonument(true);
-                                cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
-                            }
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
+                        }
+                        else if(panelChargerScenario.getNbMonumentsRestants() == 0)
+                            JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
+                        else if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getUnite() != null)
+                            JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
+                        else {
+                            panelChargerScenario.setMonumentNb(true);
+                            hexClic.setBatiment(TypeBatimentVue.MONUMENT);
+                            cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
                         }
                     }
                     break;
@@ -1596,6 +1593,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             //REGROUPER ?
                             setCellulesMap();
                             panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
+                            panelChargerScenario.setMonumentNb(6-nbMonumentPlateau());
                             FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                             panelChargerScenario.enregistreEcouteur(this);
                             //REGROUPER
@@ -1629,7 +1627,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     int res = choose.showOpenDialog(null);
                     if (res == JFileChooser.APPROVE_OPTION) {
                         sauvegardeChoisis = choose.getSelectedFile();
-                        ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLblCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
+                        ((PanelChargerPartie) FenetreJeu.getPanelChargerPartie()).getLabelCarteChosie().setText("Sauvegarde chosie : " + sauvegardeChoisis.getName());
                     }
                     break;
                 /**
