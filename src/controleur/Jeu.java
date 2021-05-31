@@ -122,19 +122,26 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else {
             rangeAttaque = attaquantCase.getUnite().getVision();
         }
-        if (rangeAttaque > distanceCases){
-            Case.attaquer(attaquantCase,defenseCase);
-            if (((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
-                mortEntite(defenseCase);
-                try {
-                    defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+        if (rangeAttaque > distanceCases) {
+            if (attaquantCase.getUnite().getAAttaque() == false){
+                Case.attaquer(attaquantCase,defenseCase);
+                attaquantCase.getUnite().setAAttaque(true);
+                if (((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0){
+                    mortEntite(defenseCase);
+                    try {
+                        defenseur.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    calculVitoire();
                 }
-                calculVitoire();
+                return true;
             }
-            return true;
+            else {
+                if (!joueurActuel.getEstIa())
+                    JOptionPane.showMessageDialog(FenetreJeu, "Votre unité a déjà attaqué !");  
+            }       
         }
         return false;
     }
@@ -241,10 +248,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 petiteLigne = !petiteLigne;
             }
         }
+        
     }
 
     public static boolean estValide(int row, int col) {
-        return (row >= 0) && (row < cote) && (col >= 0) && (col < cote) && (plateau.get(row).get(col).estOccupe() == null);
+        return (row >= 0) && (row < cote-1) && (col >= 0) && (col < cote-1) && (plateau.get(row).get(col).estOccupe() == null);
       }
     
     public static Node trouverChemin(int mat[][], int srcX, int srcY, int destX, int destY) {
@@ -276,13 +284,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
             
             for (int i = 0; i < 4; i++) {
-            int row = ptX + rowNum[i];
-            int col = ptY + colNum[i];
-            if (estValide(row, col) && mat[row][col] !=0 && !visited[row][col]) {
-                visited[row][col] = true;
-                Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
-                q.add(Adjcell);
-            }
+                int row = ptX + rowNum[i];
+                int col = ptY + colNum[i];
+                if (estValide(row, col) && mat[row][col] !=0 && !visited[row][col]) {
+                    visited[row][col] = true;
+                    Node Adjcell = new Node(col,row,curr.getDist()+1, curr);
+                    q.add(Adjcell);
+                }
             }
         }
         return null;
@@ -547,6 +555,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static void nouveauTour() throws InterruptedException {
         if (!conditionFinPartie()) { //condition de victoire
+            resetChrono();
             if (tour == 0 && nbJoueursH == 0) {
                 JOptionPane.showMessageDialog(FenetreJeu, "Les IA vont s'affronter, vous ne pourrez pas prendre la main tant que les deux ia sont en partie");         
             }
@@ -555,6 +564,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     System.out.println("Nombre joueur : "+nbJoueursH + " - "+nbJoueursIA);
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur()+1)%(nbJoueursH+nbJoueursIA));
                 }while(joueurActuel.getEnJeu() == false);
+                joueurActuel.regenerationUniteArmee();
+                joueurActuel.gainTourJoueur(tour);
             }
             tour++;
             FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
@@ -563,6 +574,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (joueurActuel.getEstIa()){
                 tourIA();
                 Thread.sleep(1000);
+                resetChrono();
                 nouveauTour();
             }
             evenementExterieur();
@@ -597,6 +609,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         nbJoueursIA = 0;
         plateau.removeAll(plateau);
         plateau = new Plateau();
+        FenetreJeu.getPanelNouvellePartie().getNbJoueursHumain().setSelectedIndex(0);
+        FenetreJeu.getPanelNouvellePartie().getNbJoueursIA().setSelectedIndex(0);
         System.out.println("RESET HARD");
     }
 
@@ -610,7 +624,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     //Par rapport à la base placé vers le centre de la map en prio
     public static boolean placementUnite(Unite unite) {
-        System.out.println("NOMBRE DE JOUEUR : "+listeJoueur.size());
         int[][][] coordPossible = {{{0,1},{0,2},{1,0},{2,0},{2,1}},
                                 {{13,14},{14,14},{14,15},{15,12},{15,13}},
                                 {{0,14},{1,14},{2,15},{0,13},{1,13}},
@@ -659,16 +672,18 @@ public class Jeu extends MouseAdapter implements ActionListener {
             col = coord[1]+coordTest[i][1];
             if (estValide(row, col)){
                 int[] coordFinal = {row,col};
+                System.out.println("PLACE TROUVEE EN : "+coordFinal[0]+" - "+coordFinal[1]);
                 return coordFinal;
             }
         }
+        System.out.println("AUCUNE PLACE TROUVEE");
         return coord;
     }
 
     public static void actionUniteIA(Unite unite) {
         //recherche Entite plus proche et deplacement vers elle/attaquer
         int[] coordUnite = rechercheMonUniteDansPlateau(unite);
-        Entite cible = rechercheEntiteProche(coordUnite);
+        Entite cible = rechercheEntiteProche(coordUnite); //doute bizzare
         System.out.println("CIBLE CHOSIS :"+cible);
         try {
             Thread.sleep(1000);
@@ -704,13 +719,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         coordUnite= rechercheMonUniteDansPlateau(unite);
-        System.out.print("Coord APRES DEPLACEMENT : ");
-        for (int i = 0; i < coordUnite.length; i++) {
-            System.out.print(coordUnite[i]+ " ");
-        }
-        System.out.println("");
         if (coordUnite[0] == coordDeplacement[0] && coordUnite[1] == coordDeplacement[1]){
-            System.out.println("DEDANS");
             cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(uniteModelToVue(unite));
             if (combat(cellulesCarte[coordUnite[0]][coordUnite[1]].getHex(), cellulesCarte[coordCible[0]][coordCible[1]].getHex(), 0)) {
                 System.out.println("Combat !");
@@ -729,7 +738,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 if (plateau.get(i).get(j).estOccupe() instanceof Unite && entite.getIdentifiant() ==  plateau.get(i).get(j).getUnite().getIdentifiant()){
                     coordUnite[0] = i;coordUnite[1] = j;
                     System.out.println("Unite trouvé dans le plateau, coord : "+i+" - "+j);
-                    
                 }
                 else if (plateau.get(i).get(j).estOccupe() instanceof Batiment && entite.getIdentifiant() ==  plateau.get(i).get(j).getBatiment().getIdentifiant()){
                     System.out.println("Batiment trouvé dans le plateau, coord : "+i+" - "+j);
@@ -744,19 +752,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
         Entite entiteAAttaquer = new Entite();
         int[][] matriceEmplacement = new int[cote][cote];
         int[][] matricePlateau = new int[cote][cote];
-        plateauToMatice(matricePlateau);
+        System.out.println(plateau.affichage());
+        plateauToMatice(matricePlateau);        
         for (int i = 0; i < cote; i++) {
             for (int j = 0; j <  cote; j++) {
                 Case caseTest = plateau.get(i).get(j);
                 matriceEmplacement[i][j] = 99;
                 if (plateau.get(i).get(j).estOccupe() != null){
-                    int [] coord = {i,j};
-                    if (!joueurActuel.estMonEntite(caseTest) && coord != estDeplacementPossible(coord)) {
-                        Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], i, j);
-                        matriceEmplacement[i][j] = -1;
-                        if (chemin != null) {
+                    int [] coordRechercheEntiteProche = {i,j};                                        
+                    if (!joueurActuel.estMonEntite(caseTest) && coordRechercheEntiteProche != estDeplacementPossible(coordRechercheEntiteProche)) {
+                        coordRechercheEntiteProche = estDeplacementPossible(coordRechercheEntiteProche);
+                        System.out.println("\n\n ========================");
+                        System.out.println(" JE CHERCHE UN CHEMIN ENTRE : "+ coordRechercheEntiteProche[0]+ " - "+ coordRechercheEntiteProche[1]+ " / "+i + " - "+j);
+                        System.out.println("========================\n\n ");
+                        Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], coordRechercheEntiteProche[0], coordRechercheEntiteProche[1]);
+                        if (chemin != null)
                             matriceEmplacement[i][j] = chemin.getDist();
-                        }
                     }                  
                 }                   
             }
@@ -771,12 +782,20 @@ public class Jeu extends MouseAdapter implements ActionListener {
                } 
             }
         }
+        System.out.println ("Matrice DISTANCE CHEMIN: ");
+        for (int i = 0; i < matriceEmplacement.length; i++) {
+            for (int j = 0; j < matriceEmplacement.length; j++) {
+                System.out.print(matriceEmplacement[i][j]+ " ");
+            }
+            System.out.println(" ");
+        }
+        
+
         if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Batiment)
             entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getBatiment();
         
         else if (plateau.get(coord[0]).get(coord[1]).estOccupe() instanceof Unite)
             entiteAAttaquer = plateau.get(coord[0]).get(coord[1]).getUnite();
-        System.out.println("FINAL CIBLE COORD : "+coord[0]+" - "+coord[1]);
         return entiteAAttaquer;
     }
 
@@ -789,7 +808,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Unite uniteachete = achatTroupesIA(depense);
                 if (uniteachete != null){
                     depense -= uniteachete.getCout();
-                    System.err.println(plateau.affichage());
                     FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
                     Thread.sleep(1000);
                 }
@@ -802,13 +820,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (!calculVitoire())
                 actionUniteIA(joueurActuel.getArmee().get(i));
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
         }
-
-        System.out.println(plateau.affichage());
+        System.out.println("=============================");
     }
 
     //    
@@ -1686,10 +1703,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 case "finTour":
                     try {
                         //JOptionPane.showMessageDialog(FenetreJeu, "Tour n° "+tour+" Joueur : "+joueurActuel.getPseudo());
-                        resetChrono();
                         nouveauTour();
-                        joueurActuel.regenerationUniteArmee();
-                        joueurActuel.gainTourJoueur(tour);
+        
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

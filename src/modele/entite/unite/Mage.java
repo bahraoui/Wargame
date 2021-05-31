@@ -17,8 +17,8 @@ public class Mage extends Unite{
     public Mage() {
         super(35,65,30,3);
         setPointDeVieMax(super.getPointDeVieActuel());
-        setDeplacementMax(30);
-        setDeplacementActuel(30);
+        setDeplacementMax(5);
+        setDeplacementActuel(5);
         setCout(20);
     }
     
