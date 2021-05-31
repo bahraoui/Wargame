@@ -10,7 +10,13 @@ import javax.swing.JTextField;
 
 import controleur.Jeu;
 
-import java.awt.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Font;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

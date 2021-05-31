@@ -9,7 +9,10 @@ import javax.swing.JLabel;
 
 import controleur.Jeu;
 
-import java.awt.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 

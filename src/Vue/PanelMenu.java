@@ -1,6 +1,14 @@
 package Vue;
 
 
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -8,10 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controleur.Jeu;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * La classe PanelMenu herite de JPanel et permet d'afficher les boutons suivants :
