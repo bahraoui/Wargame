@@ -488,12 +488,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (evenement >65 && evenement <70){
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de sable est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size()-1; i++) {
-                for (int j = 0; j < plateau.size()-1; j++) {
-                    int changerTypeTerrain = new Random().nextInt(4);
-                    if (changerTypeTerrain == 2){
-                        plateau.get(i).get(j).setTerrain(new Desert());
-                        cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Desert()));
+            for (int i = 0; i < plateau.size(); i++) {
+                for (int j = 0; j < plateau.size(); j++) {
+                    if ((i%2==1 && j < cote-1) || i%2==0){
+                        int changerTypeTerrain = new Random().nextInt(4);
+                        if (changerTypeTerrain == 2){
+                            plateau.get(i).get(j).setTerrain(new Desert());
+                            cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new Desert()));
+                        }
                     }
                 }
             }
@@ -502,12 +504,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (evenement >60 && evenement <65){
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Une tempete de neige est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size()-1; i++) {
+            for (int i = 0; i < plateau.size(); i++) {
                 for (int j = 0; j < plateau.size() - 1; j++) {
-                    int changerTypeTerrain = new Random().nextInt(4);
-                    if (changerTypeTerrain == 2){
-                        plateau.get(i).get(j).setTerrain(new ToundraNeige());
-                        cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new ToundraNeige()));
+                    if ((i%2==1 && j < cote-1) || i%2==0){
+                        int changerTypeTerrain = new Random().nextInt(4);
+                        if (changerTypeTerrain == 2){
+                            plateau.get(i).get(j).setTerrain(new ToundraNeige());
+                            cellulesCarte[i][j].getHex().setTerrain(terrainModeleToVue(new ToundraNeige()));
+                        }
                     }
                 }
             }
@@ -515,12 +519,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
         else if (evenement >55 && evenement <60){
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Une tsunami est passé sur le champ de bataille !"); 
-            for (int i = 0; i < plateau.size()-1; i++) {
+            for (int i = 0; i < plateau.size(); i++) {
                 for (int j = 0; j < plateau.size()-1; j++) {
-                    int changerTypeTerrain = new Random().nextInt(4);
-                    if (changerTypeTerrain == 2){
-                        plateau.get(i).get(j).setTerrain(new Mer());
-                        cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
+                    if ((i%2==1 && j < cote-1) || i%2==0){
+                        int changerTypeTerrain = new Random().nextInt(4);
+                        if (changerTypeTerrain == 2){
+                            plateau.get(i).get(j).setTerrain(new Mer());
+                            cellulesCarte[j][i].getHex().setTerrain(terrainModeleToVue(new Mer()));
+                        }
                     }
                 }
             }
