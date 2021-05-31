@@ -195,6 +195,11 @@ public class PanelChargerScenario extends JPanel{
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
+    public void setMonumentNb(int nbMonuments) {
+        this.nbMonumentsRestants = nbMonuments;
+        this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
+    }
+
     // Getters et setters
 
     public Integer getNbMonumentsRestants(){
@@ -216,4 +221,6 @@ public class PanelChargerScenario extends JPanel{
             e.printStackTrace();
         }
     }
+
+
 }

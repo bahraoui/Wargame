@@ -45,9 +45,6 @@ public class Hexagone extends JLabel {
         this.coord = coord;
     }
 
-    
-    
-
     /**
     * Genere un bouton de forme hexagonale
     * @return Polygon avec les formes d'un bouton hexagonale
