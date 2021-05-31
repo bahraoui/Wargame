@@ -224,7 +224,7 @@ public class PanelJeu extends JPanel {
 
 			// Archer
 		labelArcher = new JLabel("Archer");
-		labelArcher.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelArcher.setFont(new Font("", Font.BOLD, 16));
 		labelArcher.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
@@ -236,7 +236,7 @@ public class PanelJeu extends JPanel {
 			// Cavalerie
 		contrainte.gridx=0; contrainte.gridy=1;
 		labelCavalerie = new JLabel("Cavalerie");
-		labelCavalerie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelCavalerie.setFont(new Font("", Font.BOLD, 16));
 		labelCavalerie.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
@@ -248,7 +248,7 @@ public class PanelJeu extends JPanel {
 			// Infanterie
 		contrainte.gridx=0; contrainte.gridy=2;
 		labelInfanterie = new JLabel("Infanterie");
-		labelInfanterie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelInfanterie.setFont(new Font("", Font.BOLD, 16));
 		labelInfanterie.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
@@ -260,7 +260,7 @@ public class PanelJeu extends JPanel {
 			// Infanterie Lourde
 		contrainte.gridx=0; contrainte.gridy=3;
 		labelInfanterieLourde = new JLabel("Infanterie Lourde");
-		labelInfanterieLourde.setFont(new Font("Tempus Sans ITC", Font.BOLD, 14));
+		labelInfanterieLourde.setFont(new Font("", Font.BOLD, 16));
 		labelInfanterieLourde.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
@@ -272,7 +272,7 @@ public class PanelJeu extends JPanel {
 			// Mage
 		contrainte.gridx=0; contrainte.gridy=4;
 		labelMage = new JLabel("Mage");
-		labelMage.setFont(new Font("Tempus Sans ITC", Font.BOLD, 16));
+		labelMage.setFont(new Font("", Font.BOLD, 16));
 		labelMage.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
