@@ -11,8 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-
-import java.awt.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.Graphics;
 
 import controleur.Jeu;
 
@@ -23,8 +29,7 @@ public class PanelVictoire extends JPanel{
 
     private BorderLayout bdl;
     private JPanel panelInfosVictoire;
-    private JLabel labelVictoire;
-    private JLabel labelNomVainqueur;
+    private JLabel labelVictoire, labelNomVainqueur;
     private JButton boutonQuitter;
 
     /**
@@ -36,7 +41,9 @@ public class PanelVictoire extends JPanel{
         contrainte.gridx=0;
         contrainte.gridy=0;
 
-        // Informations sur le vainqueur
+        /**
+         * Informations sur le vainqueur
+         */
         panelInfosVictoire = new JPanel();
         panelInfosVictoire.setOpaque(true);
         panelInfosVictoire.setBackground(new Color(255, 212, 164));
@@ -67,7 +74,9 @@ public class PanelVictoire extends JPanel{
         panelInfosVictoire.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0,0,0)));
         this.add(panelInfosVictoire,contrainte);
 
-        // Bouton retour Menu
+        /**
+         * Bouton retour Menu
+         * */ 
         boutonQuitter = new JButton();
         setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");

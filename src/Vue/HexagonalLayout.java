@@ -12,13 +12,9 @@ import java.awt.LayoutManager;
 public class HexagonalLayout implements LayoutManager {
     
     private Insets insets;
-    private int rows;
-    private int cols;
-    private int nbComposants;
+    private int rows, cols, nbComposants;
     private boolean beginWithSmallRow;
-    
-    private Dimension minSize;
-    private Dimension prefSize;
+    private Dimension minSize,prefSize;
     
     /**
      * Le constructeur de HexagonalLayout permet d'intancier un HexagonalLayout avec :
@@ -150,31 +146,7 @@ public class HexagonalLayout implements LayoutManager {
         
     }
     
-    /*
-    * (non-Javadoc)
-    * @see java.awt.LayoutManager#minimumLayoutSize(java.awt.Container)
-    */
-    @Override
-    public Dimension minimumLayoutSize(Container parent) {
-        return minSize;
-    }
-    
-    /*
-    * (non-Javadoc)
-    * @see java.awt.LayoutManager#preferredLayoutSize(java.awt.Container)
-    */
-    @Override
-    public Dimension preferredLayoutSize(Container parent) {
-        return prefSize;
-    }
-    
-    /*
-    * (non-Javadoc)
-    * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
-    */
-    @Override
-    public void removeLayoutComponent(Component comp) {
-    }
+   
     
     // Getters et setters : 
 
@@ -235,5 +207,31 @@ public class HexagonalLayout implements LayoutManager {
     @Override
     public void addLayoutComponent(String arg0, Component arg1) {
         // TODO Auto-generated method stub
+    }
+
+     /*
+    * (non-Javadoc)
+    * @see java.awt.LayoutManager#minimumLayoutSize(java.awt.Container)
+    */
+    @Override
+    public Dimension minimumLayoutSize(Container parent) {
+        return minSize;
+    }
+    
+    /*
+    * (non-Javadoc)
+    * @see java.awt.LayoutManager#preferredLayoutSize(java.awt.Container)
+    */
+    @Override
+    public Dimension preferredLayoutSize(Container parent) {
+        return prefSize;
+    }
+    
+    /*
+    * (non-Javadoc)
+    * @see java.awt.LayoutManager#removeLayoutComponent(java.awt.Component)
+    */
+    @Override
+    public void removeLayoutComponent(Component comp) {
     }
 }

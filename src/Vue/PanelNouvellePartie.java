@@ -10,7 +10,13 @@ import javax.swing.JTextField;
 
 import controleur.Jeu;
 
-import java.awt.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Font;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,10 +31,8 @@ import java.util.ArrayList;
  */
 public class PanelNouvellePartie extends JPanel{
     private JComboBox<String> choixMap;
-    private JComboBox<Integer> nbJoueursHumain;
-    private JComboBox<Integer> nbJoueursIA;
-    private JButton btnContinuer;
-    private JButton btnQuitter;
+    private JComboBox<Integer> nbJoueursHumain,nbJoueursIA;
+    private JButton btnContinuer,btnQuitter;
     private JLabel[] nomJoueur;
     private JTextField[] txtNomJoueur;
 

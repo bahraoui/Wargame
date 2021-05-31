@@ -1,8 +1,16 @@
 package Vue;
 
-import java.awt.*;
+
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -26,30 +34,12 @@ import controleur.Jeu;
 public class PanelJeu extends JPanel {
 	private BorderLayout bdl;
 	private PanelMap PanelCentrePlateau;
-	private JPanel panelGaucheInfos,panelBoutons;
-	private JPanel panelInfoTour;
-	private JPanel panelInfoPartie;
-	private JLabel labelNbTours;
-	private JLabel labelNomJoueur;
+	private JPanel panelGaucheInfos,panelBoutons, panelInfoTour, panelInfoPartie,panelBoutique;
+	private JLabel labelNbTours,labelNomJoueur,labelTypeTerrain,labelBatimentUnite,labelGolds, labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage, labelBonusTerrain, labelNomEntite, labelPointVie, labelAttaque, labelDefense, labelPointDeplacement, labelPointDeplacementTerrain;
 	private int minute=2,seconde=0;
-	private JLabel labelTypeTerrain;
-	private JLabel labelBatimentUnite;
-	private JPanel panelBoutique;
-	private JLabel labelGolds;
-	private JLabel labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage;
-	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage;
-	private JButton boutonFinDeTour, boutonAbandonner, boutonQuitter;
-	private JLabel labelBonusTerrain;
+	private JButton boutonArcher, boutonCavalerie, boutonInfanterie, boutonInfanterieLourde, boutonMage, boutonFinDeTour, boutonAbandonner, boutonQuitter, boutonSauvegarder;
 	public static String str;
-	private Timer timerTour;
-	private Timer timerHorloge;
-	private JButton boutonSauvegarder;
-	private JLabel labelNomEntite;
-	private JLabel labelPointVie;
-	private JLabel labelAttaque;
-	private JLabel labelDefense;
-	private JLabel labelPointDeplacement;
-	private JLabel labelPointDeplacementTerrain;
+	private Timer timerTour, timerHorloge;
 
 	/**
 	 * Le contructeur PanelJeu permet d'instancier le JPanel avec comme parametre le tableau contenant les cases du plateau

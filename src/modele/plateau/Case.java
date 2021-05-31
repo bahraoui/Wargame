@@ -100,6 +100,7 @@ public class Case {
             Random random = new Random();
             def.setPointDeVieActuel(def.getPointDeVieActuel() - random.nextInt(5));
         }
+        attaquant.getUnite().setAAttaque(true);
     }
 
     //
