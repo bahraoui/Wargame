@@ -1533,7 +1533,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             caseClic2 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                             if (caseClic2.estOccupe() == null && caseClic1.estOccupe() instanceof Unite) {
                                 if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() >= caseClic1.getTerrain().getBonusDefense()) {
-                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé.");
                                     int[][] matricePlateau = new int[cote][cote];
                                     plateauToMatice(matricePlateau);
                                     Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
@@ -1542,10 +1542,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                     ArrayList<ArrayList<Integer>> cheminComplet = new ArrayList<>();
                                     Node.nodeToArray(cheminComplet, chemin);
                                     faireDeplacement((Unite) caseClic1.estOccupe(), cheminComplet);
-                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini.");
                                 } else
                                     JOptionPane.showMessageDialog(FenetreJeu,
-                                            "Unité n'a plus assez de point déplacement");
+                                            "Unité n'a plus assez de point déplacement.");
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
@@ -1556,11 +1556,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                         hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY());
                                 chercheAttaque = false;
-                                System.out.println("DISTANCE : "+distanceCase.getDist());
                                 if (combattre(hexCaseClic, hexClic, distanceCase.getDist())) {
                                     if (joueurGagnant == null)
                                         JOptionPane.showMessageDialog(FenetreJeu, "Attaque ! ");
                                 }
+                                else 
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Vous êtes trop loin pour attaquer...");
+                                
                             }
                             caseClic1 = null; caseClic2 = null;
                         }
