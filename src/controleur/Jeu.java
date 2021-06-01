@@ -568,7 +568,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             FenetreJeu.changerPanel(PanelActuel.VICTOIRE);
             FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
-            FenetreJeu.getPanelVictoire().getLabelVictoire().setText("Victoire du joueur "+joueurGagnant.getNumeroJoueur()+1);
+            FenetreJeu.getPanelVictoire().getLabelVictoire().setText("Victoire du joueur "+(joueurGagnant.getNumeroJoueur()+1));
             return true;
         }
         return false;

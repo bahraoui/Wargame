@@ -3,7 +3,6 @@ package modele.entite.unite;
 
 //import
 import modele.entite.Entite;
-import modele.plateau.Case;
 
 /**
  * La classe Unite représente les unités de guerre du jeu "Wargame"
