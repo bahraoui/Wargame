@@ -17,7 +17,7 @@ public class Outils {
      * @param filePathName le chemin de l'image à utiliser
      * @param btnAModifier le bouton à modifier
      */
-	public static void set_image_bouton(String filePathName,JButton btnAModifier){
+	public static void setImageBouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
         try {

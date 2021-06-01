@@ -37,7 +37,7 @@ public class Hexagone extends JLabel {
      */
     public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord){
         super();
-        hexagonalShape = get_hex_polygon();
+        hexagonalShape = getHexPolygon();
         this.sol = sol;
         this.unite = unite;
         this.batiment = batiment;
@@ -48,7 +48,7 @@ public class Hexagone extends JLabel {
     * Genere un bouton de forme hexagonale
     * @return Polygon avec les formes d'un bouton hexagonale
     */
-    private Polygon get_hex_polygon() {
+    private Polygon getHexPolygon() {
         Polygon hex = new Polygon();
         int w = getWidth() - 1;
         int h = getHeight() - 1;
@@ -80,7 +80,7 @@ public class Hexagone extends JLabel {
      * getAll est une methode de debugage qui renvoie une chaine de caractere qui donne les informations sur la case
      * @return String
      */
-    public String get_all(){
+    public String getAll(){
         if (unite != null)
             return "Hexagone : \n\tUnite : "+unite.toString();
         if (batiment != null)
@@ -96,7 +96,7 @@ public class Hexagone extends JLabel {
      * @param sol TypeTerrain
      * @param g Graphics
      */
-    private void placer_sol(TypeTerrain parSol, Graphics g){
+    private void placerSol(TypeTerrain parSol, Graphics g){
         try {
             switch (parSol) {
                 case MER:
@@ -131,7 +131,7 @@ public class Hexagone extends JLabel {
      * @param typeBatimentVue TypeBatimentVue
      * @param g Graphics
      */
-    private void placer_batiment(TypeBatimentVue typeBatimentVue, Graphics g){
+    private void placerBatiment(TypeBatimentVue typeBatimentVue, Graphics g){
         try {
             switch (typeBatimentVue) {
                 case BASE:
@@ -154,7 +154,7 @@ public class Hexagone extends JLabel {
      * @param parUnite TypeUnite
      * @param g Graphics
      */
-    private void placer_unite(TypeUnite parUnite, Graphics g){
+    private void placerUnite(TypeUnite parUnite, Graphics g){
         try {
             switch (parUnite) {
                 case ARCHER:
@@ -187,11 +187,11 @@ public class Hexagone extends JLabel {
      * set_unite permet d'afficher un unite sur la case si le parametre n'est pas vide
      * @param parUnite TypeUnite
      */
-    public void set_unite(TypeUnite parUnite) {
+    public void setUnite(TypeUnite parUnite) {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         if (parUnite != null) {
-                placer_unite(parUnite, g);
+                placerUnite(parUnite, g);
         }
         this.unite = parUnite;
         this.paintChildren(g);
@@ -203,19 +203,19 @@ public class Hexagone extends JLabel {
      * @param sol TypeTerrain
      * @throws IOException
      */
-    public void set_terrain(TypeTerrain parSol){
+    public void setTerrain(TypeTerrain parSol){
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
-        placer_sol(parSol,g);
+        placerSol(parSol,g);
         if (batiment != null) {
-            placer_batiment(batiment,g);      
+            placerBatiment(batiment,g);      
         }
         else {
             this.batiment=null;
         }
 
         if (unite != null) {
-            placer_unite(unite,g);
+            placerUnite(unite,g);
         }
         else {
             this.unite=null;
@@ -230,11 +230,11 @@ public class Hexagone extends JLabel {
      * @param typeBatimentVue TypeBatimentVue
      * @throws IOException
      */
-    public void set_batiment(TypeBatimentVue typeBatimentVue) {
+    public void setBatiment(TypeBatimentVue typeBatimentVue) {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         if (typeBatimentVue != null) {
-            placer_batiment(typeBatimentVue, g);
+            placerBatiment(typeBatimentVue, g);
         }
         this.batiment = typeBatimentVue;
         this.paintChildren(g);
@@ -266,7 +266,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setSize(Dimension d) {
         super.setSize(d);
-        hexagonalShape = get_hex_polygon();
+        hexagonalShape = getHexPolygon();
     }
     
     /*
@@ -276,7 +276,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setSize(int w, int h) {
         super.setSize(w, h);
-        hexagonalShape = get_hex_polygon();
+        hexagonalShape = getHexPolygon();
     }
     
     /*
@@ -286,7 +286,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setBounds(int x, int y, int width, int height) {
         super.setBounds(x, y, width, height);
-        hexagonalShape = get_hex_polygon();
+        hexagonalShape = getHexPolygon();
     }
     
     /*
@@ -296,7 +296,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setBounds(Rectangle r) {
         super.setBounds(r);
-        hexagonalShape = get_hex_polygon();
+        hexagonalShape = getHexPolygon();
     }
     
     /*
@@ -318,13 +318,13 @@ public class Hexagone extends JLabel {
     protected void paintComponent(Graphics g) {
         g.setClip(hexagonalShape);
         if (sol != null)
-            placer_sol(sol, g);
+            placerSol(sol, g);
 
         if (batiment != null)
-            placer_batiment(batiment, g);
+            placerBatiment(batiment, g);
 
         if (unite != null)
-            placer_unite(unite, g);
+            placerUnite(unite, g);
     }
     
 

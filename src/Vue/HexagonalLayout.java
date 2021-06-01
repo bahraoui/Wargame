@@ -28,13 +28,13 @@ public class HexagonalLayout implements LayoutManager {
      * @param nbComposants int
      */
     public HexagonalLayout(int cols, Insets i, boolean beginWithSmallRow, int nbComposants) {
-        check_col_input(cols);
+        checkColInput(cols);
         insets = i;
         minSize = new Dimension(800, 600); // Taille par defaut du layout
         prefSize = new Dimension(800, 600);
         this.cols = cols; // le nombre de colonnes
         this.beginWithSmallRow = beginWithSmallRow; // booleen permettant de savoir si la premiere ligne est petite ou non
-        this.rows = calculate_rows(nbComposants); // nombre de lignes
+        this.rows = calculateRows(nbComposants); // nombre de lignes
         this.nbComposants = nbComposants; // nombre d'elements
     }
     
@@ -42,7 +42,7 @@ public class HexagonalLayout implements LayoutManager {
     * checkColInput permet de savoir si le nombre de colonne est invalide : cols > 0 
     * @param cols int
     */
-    private void check_col_input(int cols) {
+    private void checkColInput(int cols) {
         if (cols <= 0) {
             throw new IllegalArgumentException("Columns can't be set to n < 0");
         }
@@ -53,7 +53,7 @@ public class HexagonalLayout implements LayoutManager {
     * @param componentCount int
     * @return numberOfRows int
     */
-    private int calculate_rows(int componentCount) {
+    private int calculateRows(int componentCount) {
         int numberOfRows = 0;
         int bgRow = cols;
         int smRow = bgRow - 1;

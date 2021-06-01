@@ -23,7 +23,7 @@ import controleur.Jeu;
  * 
  * Premierement, une liste de map est propose sous la forme d'une {@link JComboBox}, puis deux autres combobox afin de donner le nombre de joueurs humain/IA.
  * Ensuite, jusqu'a 4 {@link JTextField} pour inscrire les pseudos des joueurs.
- * Enfin, deux {@link JButton} pour retourner vers le menu {@link PanelMenu} ou pour continuer vers {@link PanelChargerScenario}.
+ * Enfin, deux {@link JButton} pour retourner vers le menu {@link PanelMenu} ou pour continuer vers {@link PanelChangerScenario}.
  * 
  */
 public class PanelNouvellePartie extends JPanel{
@@ -55,8 +55,8 @@ public class PanelNouvellePartie extends JPanel{
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
         btnQuitter = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
         nbJoueursIA.setActionCommand("nbJoueursIA");
@@ -116,7 +116,7 @@ public class PanelNouvellePartie extends JPanel{
      * @param max le nombre maximum de pseudos à vérifier.
      * @return Si saisie des pseudos bien faite.
      */
-    public boolean set_all_names(int max){
+    public boolean setAllNames(int max){
         if (max > 4) {
             max = 4;
         }
@@ -132,7 +132,7 @@ public class PanelNouvellePartie extends JPanel{
      * Initialise la liste des cartes à afficher.
      * @param nomMap la variable à initialiser.
      */
-    public void init_liste_cartes(ArrayList<String> nomMap){
+    public void initListeCartes(ArrayList<String> nomMap){
         nomMap.add("");
         File dossierCartes = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator);
         File[] listeNomCartes = dossierCartes.listFiles();
@@ -148,7 +148,7 @@ public class PanelNouvellePartie extends JPanel{
 	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistre_ecouteur(Jeu controleur) {
+    public void enregistrerEcouteur(Jeu controleur) {
         btnContinuer.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
         choixMap.addActionListener(controleur);

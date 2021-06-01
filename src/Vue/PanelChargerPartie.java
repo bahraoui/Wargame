@@ -37,18 +37,18 @@ public class PanelChargerPartie extends JPanel{
 
         // bouton sauvegarde
         btnChargerSauvegarde = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
         lblCarteChosie = new JLabel("Sauvegarde choisie : ");
         lblCarteChosie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
         lblCarteChosie.setForeground(new Color(109,7,26));
 
         // bouton Lancer la partie
         btnContinuerScenario = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
 
         // bouton Quitter
         btnQuitter = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         btnChargerSauvegarde.setActionCommand("chercherSauvegarde");
         btnContinuerScenario.setActionCommand("lancerPartieChargee");
         btnQuitter.setActionCommand("retourMenu");
@@ -79,7 +79,7 @@ public class PanelChargerPartie extends JPanel{
 	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistre_ecouteur(Jeu controleur) {
+    public void enregistrerEcouteur(Jeu controleur) {
         btnChargerSauvegarde.addActionListener(controleur);
         btnContinuerScenario.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);

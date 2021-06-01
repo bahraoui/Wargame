@@ -22,7 +22,7 @@ public class FrameJeu extends JFrame{
 	private static PanelNouvellePartie panelNouvellePartie;
 	private static PanelRegles panelRegles;
 	private static PanelChargerPartie panelChargerPartie;
-	private static PanelChargerScenario panelChargerScenario;
+	private static PanelChangerScenario panelChargerScenario;
 	private static PanelActuel panelActuel;
 	private static PanelVictoire panelVictoire;
 
@@ -36,7 +36,7 @@ public class FrameJeu extends JFrame{
 	 * <li> {@link PanelNouvellePartie} </li>
 	 * <li> {@link PanelRegles} </li>
 	 * <li> {@link PanelChargerPartie} </li>
-	 * <li> {@link PanelChargerScenario} </li>
+	 * <li> {@link PanelChangerScenario} </li>
 	 * <li> {@link PanelVictoire} </li>
 	 * </ul>
 	 * @throws IOException
@@ -69,7 +69,7 @@ public class FrameJeu extends JFrame{
 	 * Enleve le panel donné en paramètre de la fenêtre.
 	 * @param panelVoulu Le panel à enlever.
 	 */
-	private void enlever_panel(PanelActuel panelVoulu) {		
+	private void enleverPanel(PanelActuel panelVoulu) {		
 		switch (panelVoulu) {
 			case MENU:
 				this.remove(panelMenu);
@@ -102,8 +102,8 @@ public class FrameJeu extends JFrame{
 	 * Ajoute le panel donnée en paramètre à la fenêtre.
 	 * @param panelVoulu Le panel à ajouter.
 	 */
-	public void changer_panel(PanelActuel panelVoulu) {
-		enlever_panel(panelActuel);
+	public void changerPanel(PanelActuel panelVoulu) {
+		enleverPanel(panelActuel);
 		switch (panelVoulu) {
 			case MENU:
 				this.add(panelMenu);
@@ -140,22 +140,22 @@ public class FrameJeu extends JFrame{
 	 * enregistre_ecouteur met à l'écoute tous les panels de la fenêtre.
 	 * @param controleur Jeu
 	 */
-	public void enregistre_ecouteur(Jeu controleur) {
-		panelMenu.enregistre_ecouteur(controleur);
-		panelNouvellePartie.enregistre_ecouteur(controleur);
-		panelChargerPartie.enregistre_ecouteur(controleur);
-		panelRegles.enregistre_ecouteur(controleur);
-		panelVictoire.enregistre_ecouteur(controleur);
+	public void enregistreEcouteur(Jeu controleur) {
+		panelMenu.enregistrerEcouteur(controleur);
+		panelNouvellePartie.enregistrerEcouteur(controleur);
+		panelChargerPartie.enregistrerEcouteur(controleur);
+		panelRegles.enregistrerEcouteur(controleur);
+		panelVictoire.enregistrerEcouteur(controleur);
 	}
 
 	// Getters and setters :
 
 	public void setChoixTerrainTxt(String txt) {
-        panelChargerScenario.set_choix_terrain_texte(txt);
+        panelChargerScenario.setChoixTerrain_texte(txt);
     }
 
 	public void setChoixMonumentTxt(String txt) {
-        panelChargerScenario.set_choix_monument_texte(txt);
+        panelChargerScenario.setChoixMonumentTexte(txt);
     }
 	
 	public JPanel getPanelChargerPartie(){
@@ -169,11 +169,11 @@ public class FrameJeu extends JFrame{
 		return FrameJeu.panelActuel;
 	}
 
-	public PanelChargerScenario getPanelChangerScenario() {
+	public PanelChangerScenario getPanelChangerScenario() {
 		return FrameJeu.panelChargerScenario;
 	}
 
-	public void setPanelChangerScenario(PanelChargerScenario parPanelChargerScenario) {
+	public void setPanelChangerScenario(PanelChangerScenario parPanelChargerScenario) {
 		FrameJeu.panelChargerScenario = parPanelChargerScenario;
 	}
 

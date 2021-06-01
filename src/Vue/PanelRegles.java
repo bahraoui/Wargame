@@ -196,7 +196,7 @@ public class PanelRegles  extends JPanel{
 	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistre_ecouteur(Jeu controleur) {
+    public void enregistrerEcouteur(Jeu controleur) {
         btnQuitter.addActionListener(controleur);;
     }
 

@@ -75,7 +75,7 @@ public class PanelVictoire extends JPanel{
          * Bouton retour Menu
          * */ 
         boutonQuitter = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");
         contrainte.gridy++;
 
@@ -86,7 +86,7 @@ public class PanelVictoire extends JPanel{
      * enregistre_ecouteur permet de mettre a l'ecoute le boutonQuitter
      * @param controleur Jeu
      * */
-    public void enregistre_ecouteur(Jeu controleur) {
+    public void enregistrerEcouteur(Jeu controleur) {
         boutonQuitter.addActionListener(controleur);
     }
     

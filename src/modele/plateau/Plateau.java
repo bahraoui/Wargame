@@ -50,7 +50,7 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
     /**
      * Affichage du plateau pour terminal, affiche la forme globale dans le terminal
      */
-    public String affichage(){
+    public String afficher(){
         String chaine = "";
         for (int i = 0; i <cote; i++) {
             chaine +="[";
@@ -66,7 +66,7 @@ public class Plateau extends ArrayList<ArrayList<Case>> {
      * Change tout les types de terrain de chaque case du plateau par un terrain donné en paramètre
      * @param terrain nouveau type de terrain pour le plateau
      */
-    public void replace(Terrain terrain){
+    public void remplacer(Terrain terrain){
         for (int i = 0; i < cote; i++) {
             for (int j = 0; j < cote; j++) {
                 this.get(i).get(j).setTerrain(terrain);

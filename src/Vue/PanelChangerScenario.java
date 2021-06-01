@@ -29,7 +29,7 @@ import controleur.Jeu;
  * 
  * A droite, se trouve la carte a modifier. A gauche, se trouve les elements pour pouvoir modifier la carte.
  */
-public class PanelChargerScenario extends JPanel{
+public class PanelChangerScenario extends JPanel{
     private PanelMap panelMap;
     private JPanel panelGauche;
     private JComboBox<TypeTerrain> listeTerrains;
@@ -43,7 +43,7 @@ public class PanelChargerScenario extends JPanel{
      * @param parHexs le tableau contenant les cases du plateau
      * @throws IOException
      */
-	public PanelChargerScenario(Hexagone[][] parHexs) throws IOException {
+	public PanelChangerScenario(Hexagone[][] parHexs) throws IOException {
         super(new BorderLayout());
         /*
          * Initialise tous les panels inclus dans la classe 
@@ -66,14 +66,14 @@ public class PanelChargerScenario extends JPanel{
          *  Boutons du panel
          */
         btnChoixMonument = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
         btnLancerPartie = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
         nomSauvergardeCarte = new JTextField(10);
         btnSauvegarderPartie = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
         btnQuitter = new JButton();
-        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
 
         /*
          * Liste des terrains disponibles a selectionner 
@@ -145,8 +145,8 @@ public class PanelChargerScenario extends JPanel{
 	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistre_ecouteur(Jeu controleur) {
-        panelMap.enregistre_ecouteur(controleur);
+    public void enregistrerEcouteur(Jeu controleur) {
+        panelMap.enregistrerEcouteur(controleur);
         listeTerrains.addActionListener(controleur);
         btnChoixMonument.addActionListener(controleur);
         btnLancerPartie.addActionListener(controleur);
@@ -160,7 +160,7 @@ public class PanelChargerScenario extends JPanel{
      * Ce texte est formaté sous html afin de le rendre plus ergonomique et agréable.
      * @param txt le nouveau texte à inscrire
      */
-    public void set_choix_terrain_texte(String txt) {
+    public void setChoixTerrain_texte(String txt) {
         this.terrainChoisi.setText("<html><br/>"+txt+" <br/>selectionné</html>");
         terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+txt+".jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));        
         this.monumentChoisi.setText("");
@@ -172,7 +172,7 @@ public class PanelChargerScenario extends JPanel{
      * Ce texte est formaté sous html afin de le rendre plus ergonomique et agréable.
      * @param txt le nouveau texte à inscrire
      */
-    public void set_choix_monument_texte(String txt) {
+    public void setChoixMonumentTexte(String txt) {
         this.monumentChoisi.setText(txt);
         this.terrainChoisi.setText("");
     }
@@ -181,7 +181,7 @@ public class PanelChargerScenario extends JPanel{
      * Incremente ou decremente le nombre de monuments placables en fonction du paramètre.
      * @param diminuer Decrementer le nombre ?
      */
-    public void set_monument_nombre(boolean diminuer) {
+    public void estAjouterMonument(boolean diminuer) {
         if (diminuer)          
             this.nbMonumentsRestants--;
         else 
@@ -189,15 +189,16 @@ public class PanelChargerScenario extends JPanel{
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
-    public void set_monument_nombre(int nbMonuments) {
-        this.nbMonumentsRestants = nbMonuments;
-        this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
-    }
 
     // Getters et setters
 
     public Integer getNbMonumentsRestants(){
         return this.nbMonumentsRestants;
+    }
+
+    public void setMonumentNombre(int nbMonuments) {
+        this.nbMonumentsRestants = nbMonuments;
+        this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
     public JTextField getNomCarte(){
