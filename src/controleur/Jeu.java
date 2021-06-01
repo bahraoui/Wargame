@@ -1556,29 +1556,38 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 break;
                         }
                         uniteAchete = null;
+                        caseClic1 = null;
                         FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     } else {
-                        if (caseClic2 == null && caseClic1 != null) {
-                            caseClic2 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
-                            if (caseClic2.estOccupe() == null) {
-                                if (caseClic1.estOccupe() instanceof Unite) {
-                                    if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() > 0) {
-                                        JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
-                                        int[][] matricePlateau = new int[cote][cote];
-                                        plateauToMatice(matricePlateau);
-                                        Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
-                                                hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
-                                                hexClic.getCoord().getY());
-                                        ArrayList<ArrayList<Integer>> cheminComplet = new ArrayList<>();
-                                        Node.nodeToArray(cheminComplet, chemin);
-                                        faireDeplacement((Unite) caseClic1.estOccupe(), cheminComplet);
-                                        JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
-                                    } else
-                                        JOptionPane.showMessageDialog(FenetreJeu,
-                                                "Unité n'a plus de point déplacement");
-                                }
+                        if (caseClic1 == null && caseClic2 == null){
+                            caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+                            hexCaseClic = hexClic;
+                            if (caseClic1.estOccupe() == null || !joueurActuel.estMonEntite(caseClic1)) {
+                                caseClic1 = null;
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                            } else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
+                            } else
+                                FenetreJeu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                        }
+                        else if (caseClic1 != null && caseClic2 == null) {
+                            caseClic2 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+                            if (caseClic2.estOccupe() == null && caseClic1.estOccupe() instanceof Unite) {
+                                if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() > 0) {
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
+                                    int[][] matricePlateau = new int[cote][cote];
+                                    plateauToMatice(matricePlateau);
+                                    Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
+                                            hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
+                                            hexClic.getCoord().getY());
+                                    ArrayList<ArrayList<Integer>> cheminComplet = new ArrayList<>();
+                                    Node.nodeToArray(cheminComplet, chemin);
+                                    faireDeplacement((Unite) caseClic1.estOccupe(), cheminComplet);
+                                    JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
+                                } else
+                                    JOptionPane.showMessageDialog(FenetreJeu,
+                                            "Unité n'a plus de point déplacement");
+                                FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                            }
+                            else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
                                 int distanceCase = calculDistance(matricePlateau, hexCaseClic.getCoord().getX(),
@@ -1589,17 +1598,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                     if (joueurGagnant != null)
                                         JOptionPane.showMessageDialog(FenetreJeu, "Attaque ! ");
                             }
-                            caseClic1 = null;
-                            caseClic2 = null;
-                            FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                        } else if (caseClic1 == null && caseClic2 == null) {
-                            caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
-                            hexCaseClic = hexClic;
-                            if (caseClic1.estOccupe() == null || !joueurActuel.estMonEntite(caseClic1)) {
-                                caseClic1 = null;
-                                FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                            } else
-                                FenetreJeu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                            caseClic1 = null; caseClic2 = null;
                         }
                     }
                     Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()]
@@ -1779,6 +1778,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         initNouveauTour();
                         pj.repaint();
                         reinitialiserChrono();
+                        pj.getPanelCentrePlateau().enregistrerEcouteur(this);
 
                     } else {
                         JOptionPane.showMessageDialog(FenetreJeu, "Vous devez choisir une sauvegarde de partie ! ");

@@ -346,7 +346,6 @@ public class PanelJeu extends JPanel {
 		boutonInfanterieLourde.addActionListener(controleur);
 		boutonMage.addActionListener(controleur);
 		boutonQuitter.addActionListener(controleur);
-		panelCentrePlateau.enregistrerEcouteur(controleur);
 	}
 
 	/**
