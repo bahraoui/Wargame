@@ -40,18 +40,6 @@ public class Unite extends Entite{
         this.aAttaque = false;
     }
 
-    public static boolean deplacementUnite(Unite unite, Case caseInitial, Case caseFinal){
-        int deplacementTerrain = caseInitial.getTerrain().getPtsDeplacement();
-        if (caseInitial.getBatiment() == null && caseInitial.getUnite() != null && caseFinal.getBatiment() == null && caseFinal.getUnite() == null && unite.getDeplacementActuel() > 0 && unite.getDeplacementActuel() >= deplacementTerrain){
-            unite.setDeplacementActuel(unite.getDeplacementActuel() - deplacementTerrain);
-            caseFinal.setUnite(unite);
-            caseInitial.setUnite(null);
-            caseFinal.getUnite().setEnRepos(false);
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Affichage d'un batiment pour terminal
      */
