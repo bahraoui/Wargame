@@ -78,7 +78,7 @@ public class PanelVictoire extends JPanel{
          * Bouton retour Menu
          * */ 
         boutonQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");
         contrainte.gridy++;
 
@@ -86,10 +86,10 @@ public class PanelVictoire extends JPanel{
     }
 
     /**
-     * enregistreEcouteur permet de mettre a l'ecoute le boutonQuitter
+     * enregistre_ecouteur permet de mettre a l'ecoute le boutonQuitter
      * @param controleur Jeu
      * */
-    public void enregistreEcouteur(Jeu controleur) {
+    public void enregistre_ecouteur(Jeu controleur) {
         boutonQuitter.addActionListener(controleur);
     }
     
@@ -104,11 +104,11 @@ public class PanelVictoire extends JPanel{
     }
 
     /**
-     * setImageBouton permet d'afficher une image dans le bouton
+     * set_image_bouton permet d'afficher une image dans le bouton
      * @param filePathName le chemin de l'image à utiliser
      * @param btnAModifier le bouton à modifier
      */
-    private void setImageBouton(String filePathName,JButton btnAModifier){
+    private void set_image_bouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
         try {

@@ -40,18 +40,18 @@ public class PanelChargerPartie extends JPanel{
 
         // bouton sauvegarde
         btnChargerSauvegarde = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
         lblCarteChosie = new JLabel("Sauvegarde choisie : ");
         lblCarteChosie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
         lblCarteChosie.setForeground(new Color(109,7,26));
 
         // bouton Lancer la partie
         btnContinuerScenario = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
 
         // bouton Quitter
         btnQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         btnChargerSauvegarde.setActionCommand("chercherSauvegarde");
         btnContinuerScenario.setActionCommand("lancerPartieChargee");
         btnQuitter.setActionCommand("retourMenu");
@@ -82,7 +82,7 @@ public class PanelChargerPartie extends JPanel{
      * @param filePathName le chemin de l'image à utiliser
      * @param btnAModifier le bouton à modifier
      */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
+	private void set_image_bouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
         try {
@@ -93,10 +93,10 @@ public class PanelChargerPartie extends JPanel{
     }
 
      /**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistreEcouteur(Jeu controleur) {
+    public void enregistre_ecouteur(Jeu controleur) {
         btnChargerSauvegarde.addActionListener(controleur);
         btnContinuerScenario.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
@@ -104,7 +104,7 @@ public class PanelChargerPartie extends JPanel{
 
     
     /**
-     * getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
+     * Le getter getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
      * @return JLabel
      */
     public JLabel getLabelCarteChosie(){

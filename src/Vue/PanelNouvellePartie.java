@@ -58,8 +58,8 @@ public class PanelNouvellePartie extends JPanel{
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
         btnQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
         nbJoueursIA.setActionCommand("nbJoueursIA");
@@ -119,7 +119,7 @@ public class PanelNouvellePartie extends JPanel{
      * @param max le nombre maximum de pseudos à vérifier.
      * @return Si saisie des pseudos bien faite.
      */
-    public boolean setAllNames(int max){
+    public boolean set_all_names(int max){
         if (max > 4) {
             max = 4;
         }
@@ -135,7 +135,7 @@ public class PanelNouvellePartie extends JPanel{
      * Initialise la liste des cartes à afficher.
      * @param nomMap la variable à initialiser.
      */
-    public void initListeCartes(ArrayList<String> nomMap){
+    public void init_liste_cartes(ArrayList<String> nomMap){
         nomMap.add("");
         File dossierCartes = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator);
         File[] listeNomCartes = dossierCartes.listFiles();
@@ -149,11 +149,11 @@ public class PanelNouvellePartie extends JPanel{
 
 
     /**
-     * setImageBouton permet d'afficher une image dans le bouton
+     * set_image_bouton permet d'afficher une image dans le bouton
      * @param filePathName le chemin de l'image à utiliser
      * @param btnAModifier le bouton à modifier
      */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
+	private void set_image_bouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
         try {
@@ -164,10 +164,10 @@ public class PanelNouvellePartie extends JPanel{
     }
 
     /**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistreEcouteur(Jeu controleur) {
+    public void enregistre_ecouteur(Jeu controleur) {
         btnContinuer.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
         choixMap.addActionListener(controleur);

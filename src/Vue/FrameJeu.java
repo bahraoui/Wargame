@@ -141,11 +141,11 @@ public class FrameJeu extends JFrame{
 	 * @param controleur Jeu
 	 */
 	public void enregistreEcouteur(Jeu controleur) {
-		panelMenu.enregistreEcouteur(controleur);
-		panelNouvellePartie.enregistreEcouteur(controleur);
-		panelChargerPartie.enregistreEcouteur(controleur);
-		panelRegles.enregistreEcouteur(controleur);
-		panelVictoire.enregistreEcouteur(controleur);
+		panelMenu.enregistre_ecouteur(controleur);
+		panelNouvellePartie.enregistre_ecouteur(controleur);
+		panelChargerPartie.enregistre_ecouteur(controleur);
+		panelRegles.enregistre_ecouteur(controleur);
+		panelVictoire.enregistre_ecouteur(controleur);
 	}
 
 	// Getters and setters :

@@ -42,10 +42,10 @@ public class PanelMenu extends JPanel{
         btnRegles = new JButton();
         btnChargerPartie = new JButton();
         btnQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
+        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
         btnNvllePartie.setActionCommand("nouvellePartie");
         btnChargerPartie.setActionCommand("chargerPartie");
         btnRegles.setActionCommand("afficherRegles");
@@ -71,7 +71,7 @@ public class PanelMenu extends JPanel{
 	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistreEcouteur(Jeu controleur) {
+    public void enregistre_ecouteur(Jeu controleur) {
         btnNvllePartie.addActionListener(controleur);
         btnChargerPartie.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
@@ -83,7 +83,7 @@ public class PanelMenu extends JPanel{
      * @param filePathName le chemin de l'image à utiliser
      * @param btnAModifier le bouton à modifier
      */
-    private void setImageBouton(String filePathName,JButton btnAModifier){
+    private void set_image_bouton(String filePathName,JButton btnAModifier){
         btnAModifier.setMargin(new Insets(0, 0, 0, 0));
         btnAModifier.setBorder(null);
         try {
