@@ -787,7 +787,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 genererEvenementExterieur();
             
         } else {
-            effacerDonnees();
             FenetreJeu.getPanelJeu().getTimerHorloge().stop();
             FenetreJeu.getPanelJeu().getTimerTour().stop();
         }
