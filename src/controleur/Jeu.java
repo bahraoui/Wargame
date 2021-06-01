@@ -417,7 +417,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 plateau.get(coordXDestination).get(coordYDestination).setUnite(unite);
 
                 //On enlève l'unité de la source pour la placer à la destination à l'affichage
-                cellulesCarte[coordXDestination][coordYDestination].getHex().setUnite(uniteModelToVue(unite));
+                cellulesCarte[coordXDestination][coordYDestination].getHex().setUnite(uniteModeleToVue(unite));
                 cellulesCarte[coordXSource][coordYSource].getHex().setUnite(null);
                 cellulesCarte[coordXSource][coordYSource].getHex().setTerrain(terrainModeleToVue(caseSource.getTerrain()));
 
@@ -772,7 +772,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (placerUniteJoueur(joueurActuel, unite, coordPossible[joueurActuel.getNumeroJoueur()][i][0],
                     coordPossible[joueurActuel.getNumeroJoueur()][i][1])) {
                 cellulesCarte[coordPossible[joueurActuel.getNumeroJoueur()][i][0]][coordPossible[joueurActuel
-                        .getNumeroJoueur()][i][1]].getHex().setUnite(uniteModelToVue(unite));
+                        .getNumeroJoueur()][i][1]].getHex().setUnite(uniteModeleToVue(unite));
                 return true;
             }
         }
@@ -838,7 +838,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         coordUnite = rechercheMonUniteDansPlateau(unite);
         if (coordUnite[0] == coordDeplacement[0] && coordUnite[1] == coordDeplacement[1]) {
-            cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(uniteModelToVue(unite));
+            cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(uniteModeleToVue(unite));
             combattre(cellulesCarte[coordUnite[0]][coordUnite[1]].getHex(),
                     cellulesCarte[coordCible[0]][coordCible[1]].getHex(), 0);
         }
@@ -1012,7 +1012,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return typeTerrain;
     }
 
-    public Terrain terrainVueToModele(TypeTerrain ter) {
+    public static Terrain terrainVueToModele(TypeTerrain ter) {
         Terrain terrain = null;
         switch (ter) {
             case MER:
@@ -1056,32 +1056,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return typeBatimentVue;
     }
 
-    public Unite unteVueToModele(TypeUnite typeUnite) {
-        Unite unite = null;
-        switch (typeUnite) {
-            case ARCHER:
-                unite = new Archer();
-                break;
-            case CAVALERIE:
-                unite = new Cavalerie();
-                break;
-            case INFANTERIE:
-                unite = new Infanterie();
-                break;
-            case INFANTERIELOURDE:
-                unite = new InfanterieLourde();
-                break;
-            case MAGE:
-                unite = new Mage();
-                break;
-
-            default:
-                break;
-        }
-        return unite;
-    }
-
-    public static TypeUnite uniteModelToVue(Unite unite) {
+    public static TypeUnite uniteModeleToVue(Unite unite) {
         TypeUnite uniteVue = null;
         if (unite instanceof Archer)
             uniteVue = TypeUnite.ARCHER;
