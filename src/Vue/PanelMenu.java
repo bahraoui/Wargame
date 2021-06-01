@@ -4,13 +4,10 @@ package Vue;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,10 +39,10 @@ public class PanelMenu extends JPanel{
         btnRegles = new JButton();
         btnChargerPartie = new JButton();
         btnQuitter = new JButton();
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
         btnNvllePartie.setActionCommand("nouvellePartie");
         btnChargerPartie.setActionCommand("chargerPartie");
         btnRegles.setActionCommand("afficherRegles");
@@ -76,21 +73,6 @@ public class PanelMenu extends JPanel{
         btnChargerPartie.addActionListener(controleur);
         btnQuitter.addActionListener(controleur);
         btnRegles.addActionListener(controleur);
-    }
-
-    /**
-     * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-    private void set_image_bouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

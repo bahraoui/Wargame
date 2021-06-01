@@ -1,24 +1,21 @@
 package Vue;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.Graphics;
 
 import controleur.Jeu;
 
@@ -78,7 +75,7 @@ public class PanelVictoire extends JPanel{
          * Bouton retour Menu
          * */ 
         boutonQuitter = new JButton();
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");
         contrainte.gridy++;
 
@@ -98,21 +95,6 @@ public class PanelVictoire extends JPanel{
         super.paintComponent(g);
         try {
             g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"fondMedieval.jpg")), 0, 0, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * set_image_bouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-    private void set_image_bouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
         } catch (IOException e) {
             e.printStackTrace();
         }

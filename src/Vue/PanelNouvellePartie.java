@@ -1,7 +1,15 @@
 package Vue;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -9,17 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controleur.Jeu;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Font;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * PanelNouvellePartie contient tous les elements visuels permettant la creation d'une nouvelle partie.
@@ -58,8 +55,8 @@ public class PanelNouvellePartie extends JPanel{
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
         btnQuitter = new JButton();
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
-        set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
         nbJoueursIA.setActionCommand("nbJoueursIA");
@@ -144,22 +141,6 @@ public class PanelNouvellePartie extends JPanel{
             if (listeNomCartes[i].isFile()) {
                 nomMap.add(listeNomCartes[i].getName().replace(".txt", ""));
             }
-        }
-    }
-
-
-    /**
-     * set_image_bouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-	private void set_image_bouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
