@@ -15,7 +15,7 @@ public class Archer extends Unite{
      * Attribue pour un archer ses points de vie, son attaque, sa defense,sa vision, son cout, ses deplacement
      */
     public Archer() {
-        super(20,20,5,2);
+        super(20,25,5,2);
         setPointDeVieMax(super.getPointDeVieActuel());
         setDeplacementMax(5);
         setDeplacementActuel(5);
