@@ -50,7 +50,8 @@ public class PanelChargerScenario extends JPanel{
         /*
          * Initialise tous les panels inclus dans la classe 
          */
-        panelMap = new PanelMap(parHexs); // le panel de la carte
+        panelMap = new PanelMap(parHexs);// le panel de la carte
+        panelMap.setOpaque(false);
         panelGauche = new JPanel();
         nbMonumentsRestants = 6; // le nombre de monuments restants
         nbMonumentLabel = new JLabel(nbMonumentsRestants+" monuments restants"); // indique le nombre de monuments restants
@@ -59,6 +60,9 @@ public class PanelChargerScenario extends JPanel{
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
         JPanel panelActions = new JPanel();
+        panelActions.setOpaque(false);
+        panelMonuments.setOpaque(false);
+        panelTerrains.setOpaque(false);
 
         /*
          *  Boutons du panel
@@ -113,6 +117,7 @@ public class PanelChargerScenario extends JPanel{
         panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
         panelGauche.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0,0,0)));
         panelGauche.setPreferredSize(new Dimension(150,100));
+        panelGauche.setOpaque(false);
         border = panelGauche.getBorder();
         margin = new EmptyBorder(3,3,3,1);
         panelGauche.setBorder(new CompoundBorder(margin, border));

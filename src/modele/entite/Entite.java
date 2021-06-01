@@ -62,7 +62,6 @@ public class Entite {
     public int getIdentifiant() {
         return identifiant;
     }
-
     public void setAttaque(int attaque) {
         this.attaque = attaque;
     }
@@ -78,11 +77,9 @@ public class Entite {
     public void setIndentifiant(int identifiant) {
         this.identifiant = identifiant;
     }
-
     public static int getCompteur(){
         return Entite.compteur ;
     }
-
     public static void setCompteur(int compt){
         Entite.compteur = compt;
     }

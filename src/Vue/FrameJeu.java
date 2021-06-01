@@ -59,9 +59,10 @@ public class FrameJeu extends JFrame{
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
 		this.setPreferredSize(new Dimension(1500,800));
-		this.setVisible(true);	this.setSize(1500,800);
-		this.setLocation(20, 15);	this.setResizable(true);
-
+		this.setVisible(true);	
+		this.setSize(1500,800);
+		this.setLocation(20, 15);	
+		this.setResizable(false);
 	}
 
 	/**

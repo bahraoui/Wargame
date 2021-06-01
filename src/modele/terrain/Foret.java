@@ -18,7 +18,7 @@ public class Foret extends Terrain{
     }
 
     /**
-     * Affichage d'une case foret pour terminal
+     * Affichage d'une case Foret pour terminal
      */
     public String toString(){
         return "Foret : " +super.toString();
