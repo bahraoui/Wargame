@@ -19,12 +19,14 @@ public class Node {
     return "(" + y + ", " + x + ')';
   }
 
-  public static void nodeToArray(ArrayList<Node> array,Node node) {
+  public static void nodeToArray(ArrayList<ArrayList<Integer>> array,Node node) {
     if (node == null) {
       return;
     }
+    ArrayList<Integer> coordCase = new ArrayList<>();
+    coordCase.add(node.getY());coordCase.add(node.getX());
     nodeToArray(array,node.parent);
-    array.add(node);
+    array.add(coordCase);
     return ;
   }
 

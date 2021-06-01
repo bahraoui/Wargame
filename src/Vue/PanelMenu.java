@@ -65,7 +65,7 @@ public class PanelMenu extends JPanel{
     }
 
     /**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
     public void enregistre_ecouteur(Jeu controleur) {

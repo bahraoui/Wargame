@@ -69,7 +69,7 @@ public class FrameJeu extends JFrame{
 	 * Enleve le panel donné en paramètre de la fenêtre.
 	 * @param panelVoulu Le panel à enlever.
 	 */
-	private void enleverPanel(PanelActuel panelVoulu) {		
+	private void enlever_panel(PanelActuel panelVoulu) {		
 		switch (panelVoulu) {
 			case MENU:
 				this.remove(panelMenu);
@@ -102,8 +102,8 @@ public class FrameJeu extends JFrame{
 	 * Ajoute le panel donnée en paramètre à la fenêtre.
 	 * @param panelVoulu Le panel à ajouter.
 	 */
-	public void changePanel(PanelActuel panelVoulu) {
-		enleverPanel(panelActuel);
+	public void changer_panel(PanelActuel panelVoulu) {
+		enlever_panel(panelActuel);
 		switch (panelVoulu) {
 			case MENU:
 				this.add(panelMenu);
@@ -137,10 +137,10 @@ public class FrameJeu extends JFrame{
 	}
 
 	/**
-	 * enregistreEcouteur met à l'écoute tous les panels de la fenêtre.
+	 * enregistre_ecouteur met à l'écoute tous les panels de la fenêtre.
 	 * @param controleur Jeu
 	 */
-	public void enregistreEcouteur(Jeu controleur) {
+	public void enregistre_ecouteur(Jeu controleur) {
 		panelMenu.enregistre_ecouteur(controleur);
 		panelNouvellePartie.enregistre_ecouteur(controleur);
 		panelChargerPartie.enregistre_ecouteur(controleur);
@@ -151,11 +151,11 @@ public class FrameJeu extends JFrame{
 	// Getters and setters :
 
 	public void setChoixTerrainTxt(String txt) {
-        panelChargerScenario.setChoixTerrainTxt(txt);
+        panelChargerScenario.set_choix_terrain_texte(txt);
     }
 
 	public void setChoixMonumentTxt(String txt) {
-        panelChargerScenario.setChoixMonumentTxt(txt);
+        panelChargerScenario.set_choix_monument_texte(txt);
     }
 	
 	public JPanel getPanelChargerPartie(){

@@ -123,7 +123,7 @@ public class PanelJeu extends JPanel {
 				minute = 2;
 				labelChrono.setText(str);
 				try {
-					Jeu.nouveauTour();
+					Jeu.init_nouveau_tour();
 				} catch (Exception e) {
 					//TODO: handle exception
 				}
@@ -334,10 +334,10 @@ public class PanelJeu extends JPanel {
 	}
 
 	/**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-	public void enregistreEcouteur(Jeu controleur) {
+	public void enregistre_ecouteur(Jeu controleur) {
         boutonFinDeTour.addActionListener(controleur);
 		boutonAbandonner.addActionListener(controleur);
 		boutonSauvegarder.addActionListener(controleur);
@@ -353,7 +353,7 @@ public class PanelJeu extends JPanel {
 	 * updateGoldJoueurAffichage permet de mettre a jour le nombre de golds du joueur sur le labelGolds
 	 * @param nbGold
 	 */
-	public void updateGoldJoueurAffichage(int nbGold) {
+	public void update_gold_joueur_affichage(int nbGold) {
         labelGolds.setText(nbGold+" Golds");
     }
 

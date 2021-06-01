@@ -142,11 +142,11 @@ public class PanelChargerScenario extends JPanel{
         this.add(panelGauche,BorderLayout.WEST);
 	}
     /**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistreEcouteur(Jeu controleur) {
-        panelMap.enregistreEcouteur(controleur);
+    public void enregistre_ecouteur(Jeu controleur) {
+        panelMap.enregistre_ecouteur(controleur);
         listeTerrains.addActionListener(controleur);
         btnChoixMonument.addActionListener(controleur);
         btnLancerPartie.addActionListener(controleur);
@@ -160,7 +160,7 @@ public class PanelChargerScenario extends JPanel{
      * Ce texte est formaté sous html afin de le rendre plus ergonomique et agréable.
      * @param txt le nouveau texte à inscrire
      */
-    public void setChoixTerrainTxt(String txt) {
+    public void set_choix_terrain_texte(String txt) {
         this.terrainChoisi.setText("<html><br/>"+txt+" <br/>selectionné</html>");
         terrainChoisi.setIcon(new ImageIcon(new ImageIcon("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+txt+".jpg").getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT)));        
         this.monumentChoisi.setText("");
@@ -172,7 +172,7 @@ public class PanelChargerScenario extends JPanel{
      * Ce texte est formaté sous html afin de le rendre plus ergonomique et agréable.
      * @param txt le nouveau texte à inscrire
      */
-    public void setChoixMonumentTxt(String txt) {
+    public void set_choix_monument_texte(String txt) {
         this.monumentChoisi.setText(txt);
         this.terrainChoisi.setText("");
     }
@@ -181,7 +181,7 @@ public class PanelChargerScenario extends JPanel{
      * Incremente ou decremente le nombre de monuments placables en fonction du paramètre.
      * @param diminuer Decrementer le nombre ?
      */
-    public void setMonumentNb(boolean diminuer) {
+    public void set_monument_nombre(boolean diminuer) {
         if (diminuer)          
             this.nbMonumentsRestants--;
         else 
@@ -189,7 +189,7 @@ public class PanelChargerScenario extends JPanel{
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
 
-    public void setMonumentNb(int nbMonuments) {
+    public void set_monument_nombre(int nbMonuments) {
         this.nbMonumentsRestants = nbMonuments;
         this.nbMonumentLabel.setText(nbMonumentsRestants+" monuments restants");
     }
