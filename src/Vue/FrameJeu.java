@@ -42,7 +42,7 @@ public class FrameJeu extends JFrame{
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public FrameJeu() throws IOException, InterruptedException {
+	public FrameJeu() throws InterruptedException {
 		super("Wargame");
 		panelActuel = PanelActuel.MENU;
 
@@ -148,7 +148,7 @@ public class FrameJeu extends JFrame{
 		panelVictoire.enregistrerEcouteur(controleur);
 	}
 
-	// Getters and setters :
+	// Getters et setters :
 
 	public void setChoixTerrainTxt(String txt) {
         panelChargerScenario.setChoixTerrain_texte(txt);
