@@ -86,10 +86,10 @@ public class PanelVictoire extends JPanel{
     }
 
     /**
-     * enregistreEcouteur permet de mettre a l'ecoute le boutonQuitter
+     * enregistre_ecouteur permet de mettre a l'ecoute le boutonQuitter
      * @param controleur Jeu
      * */
-    public void enregistreEcouteur(Jeu controleur) {
+    public void enregistre_ecouteur(Jeu controleur) {
         boutonQuitter.addActionListener(controleur);
     }
     

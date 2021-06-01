@@ -106,7 +106,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
 
         FenetreJeu = new FrameJeu();
-        FenetreJeu.enregistreEcouteur(controleur);
+        FenetreJeu.enregistre_ecouteur(controleur);
     }
     //
     //FONCTION
@@ -415,7 +415,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurGagnant = joueurActuel;
             }
-            FenetreJeu.changePanel(PanelActuel.VICTOIRE);
+            FenetreJeu.change_panel(PanelActuel.VICTOIRE);
             FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
             effacerDonnes();
             return true;
@@ -1535,7 +1535,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Nouvelle Partie"
                  */
                 case "nouvellePartie":
-                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                    FenetreJeu.change_panel(PanelActuel.NOUVELLEPARTIE);
                     ArrayList<String> listNomMap = new ArrayList<String>();
                     FenetreJeu.getPanelNouvellePartie().initListeCartes(listNomMap);
                     FenetreJeu.getPanelNouvellePartie().setChoixMap(listNomMap);
@@ -1544,13 +1544,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Charger Partie"
                  */
                 case "chargerPartie":
-                    FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
+                    FenetreJeu.change_panel(PanelActuel.CHARGERPARTIE);
                     break;
                 /*
                  * Bouton "Règles"
                  */
                 case "afficherRegles":
-                    FenetreJeu.changePanel(PanelActuel.REGLES);
+                    FenetreJeu.change_panel(PanelActuel.REGLES);
                     break;
                 /*
                 * Bouton "Quitter"
@@ -1595,10 +1595,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
                             panelChargerScenario.setMonumentNb(6-nbMonumentPlateau());
                             FenetreJeu.setPanelChangerScenario(panelChargerScenario);
-                            panelChargerScenario.enregistreEcouteur(this);
+                            panelChargerScenario.enregistre_ecouteur(this);
                             //REGROUPER
                             terrainChoisi = TypeTerrain.NEIGE; tour = 0; joueurActuel = listeJoueur.get(0);
-                            FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);
+                            FenetreJeu.change_panel(PanelActuel.CHANGERSCENARIO);
                             JOptionPane.showMessageDialog(FenetreJeu, "Vous pouvez à présent modifier la carte comme bon vous semble, faîtes preuve de créativité !");
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -1641,9 +1641,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             setCellulesMap();
                             pj = new PanelJeu(cellulesToHexagones());
                             FenetreJeu.setPanelJeu(pj);
-                            pj.enregistreEcouteur(this);
-                            FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistreEcouteur(this);
-                            FenetreJeu.changePanel(PanelActuel.JEU);
+                            pj.enregistre_ecouteur(this);
+                            FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistre_ecouteur(this);
+                            FenetreJeu.change_panel(PanelActuel.JEU);
                             initPanelJeu = true;
                             nouveauTour();
                             pj.repaint();
@@ -1679,8 +1679,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     try {
                         pj = new PanelJeu(cellulesToHexagones());
                         FenetreJeu.setPanelJeu(pj);
-                        pj.enregistreEcouteur(this);
-                        FenetreJeu.changePanel(PanelActuel.JEU);
+                        pj.enregistre_ecouteur(this);
+                        FenetreJeu.change_panel(PanelActuel.JEU);
                         initPanelJeu = true;
                         //pj.repaint();
                         nouveauTour();
@@ -1784,7 +1784,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "retourMenu":
                     effacerDonnes();
-                    FenetreJeu.changePanel(PanelActuel.MENU);
+                    FenetreJeu.change_panel(PanelActuel.MENU);
                     if (initPanelJeu){
                         FenetreJeu.getPanelJeu().getTimerHorloge().stop();
                         FenetreJeu.getPanelJeu().getTimerTour().stop();

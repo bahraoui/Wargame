@@ -144,11 +144,11 @@ public class PanelChargerScenario extends JPanel{
         this.add(panelGauche,BorderLayout.WEST);
 	}
     /**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-    public void enregistreEcouteur(Jeu controleur) {
-        panelMap.enregistreEcouteur(controleur);
+    public void enregistre_ecouteur(Jeu controleur) {
+        panelMap.enregistre_ecouteur(controleur);
         listeTerrains.addActionListener(controleur);
         btnChoixMonument.addActionListener(controleur);
         btnLancerPartie.addActionListener(controleur);
