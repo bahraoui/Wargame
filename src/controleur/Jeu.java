@@ -456,8 +456,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         //Regarde si tous les autres joueurs sont hors-jeu
         for (int i = 0; i < listeJoueur.size(); i++) {
-            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur()
-                    && listeJoueur.get(i).getEnJeu() == true) {
+            if (listeJoueur.get(i).getNumeroJoueur() != joueurActuel.getNumeroJoueur() && listeJoueur.get(i).getEnJeu() == true) {
                 return false;
             }
         }
@@ -515,6 +514,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             FenetreJeu.changerPanel(PanelActuel.VICTOIRE);
             FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
+            FenetreJeu.getPanelVictoire().getLabelVictoire().setText("Victoire du joueur "+joueurGagnant.getNumeroJoueur()+1);
             effacerDonnees();
             return true;
         }
@@ -697,16 +697,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * 
      */
     public static void initNouveauTour(){
-        if (!estFinPartie()) { // condition de victoire
+        do {
+            joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur() + 1) % (nbJoueursH + nbJoueursIA));
+        } while (joueurActuel.getEnJeu() == false);
+        if (!calculVitoire()) { // condition de victoire
             reinitialiserChrono();
             if (tour == 0 && nbJoueursH == 0) {
                 JOptionPane.showMessageDialog(FenetreJeu,
                         "Les IA vont s'affronter, vous ne pourrez pas prendre la main tant que les deux ia sont en partie");
             }
             if (tour != 0) {
-                do {
-                    joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur() + 1) % (nbJoueursH + nbJoueursIA));
-                } while (joueurActuel.getEnJeu() == false);
                 joueurActuel.regenererUniteArmee();
                 joueurActuel.genererGainTour(tour);
             }
@@ -726,6 +726,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 genererEvenementExterieur();
                 initNouveauTour();
             }
+            JOptionPane.showMessageDialog(FenetreJeu,
+                            "Tour n° " + tour + " Joueur : " + joueurActuel.getPseudo());
+            genererEvenementExterieur();
         } else {
             effacerDonnees();
             FenetreJeu.getPanelJeu().getTimerHorloge().stop();
@@ -783,6 +786,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     public static void supprimerEntiteCellule(int [] coordEntite){
         Cellule cell = cellulesCarte[coordEntite[0]][coordEntite[1]];
+        cell.clear();
+    }
+
+    public static void supprimerBase(Joueur joueur){
+        joueur.setBase(null);
+        Cellule cell = cellulesCarte[postionBaseJoueur.get(joueur.getNumeroJoueur()).get(0)][postionBaseJoueur.get(joueur.getNumeroJoueur()).get(1)];
         cell.clear();
     }
 
@@ -1232,8 +1241,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             strValues1[i] = strValues1[i].replace("[", "");
             strValues1[i] = strValues1[i].replace("]", "");
             strValues2 = strValues1[i].split(",");
-            System.out.println("Y "+strValues2[0]);
-            System.out.println("X "+strValues2[1]);
             placerBase(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
 
         }
@@ -1524,10 +1531,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 int distanceCase = -1;
                                 if (chemin != null) {
                                     distanceCase = chemin.getDist();
-                                }
-                                System.out.println("DISTANCE : "+distanceCase);
-                                if (combattre(hexCaseClic, hexClic, distanceCase)) {
-                                    JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
                                 }
                             }
                             caseClic1 = null;
@@ -1822,10 +1825,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Fin de tour" -- Fenetre en jeu
                  */
                 case "finTour":
-                    genererEvenementExterieur();
                     initNouveauTour();
-                    JOptionPane.showMessageDialog(FenetreJeu,
-                            "Tour n° " + tour + " Joueur : " + joueurActuel.getPseudo());
                     break;
                 case "sauvegarderPartie":
                     JOptionPane.showMessageDialog(FenetreJeu, "SAUVEGARDE PARTIE");
@@ -1836,6 +1836,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "abandonner":
                     joueurActuel.setEnJeu(false);
+                    supprimerArmee(joueurActuel);
+                    supprimerBase(joueurActuel);
                     initNouveauTour();
                     break;
                 //

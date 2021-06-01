@@ -50,7 +50,7 @@ public class PanelVictoire extends JPanel{
 		GridBagConstraints contrainte2= new GridBagConstraints();
 		contrainte2.gridx=0; contrainte2.gridy=0;
         
-        labelVictoire = new JLabel("Victoire du joueur 1",SwingConstants.CENTER);
+        labelVictoire = new JLabel("",SwingConstants.CENTER);
         labelVictoire.setFont(new Font("Tempus Sans ITC", Font.BOLD, 25));
 		labelVictoire.setForeground(new Color(109,7,26));
         panelInfosVictoire.add(labelVictoire,contrainte2);
