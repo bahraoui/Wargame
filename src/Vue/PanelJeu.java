@@ -113,7 +113,7 @@ public class PanelJeu extends JPanel {
 				minute = 2;
 				labelChrono.setText(str);
 				try {
-					Jeu.nouveauTour();
+					Jeu.init_nouveau_tour();
 				} catch (Exception e) {
 					//TODO: handle exception
 				}
