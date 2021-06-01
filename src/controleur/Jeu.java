@@ -4,9 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Cursor;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -16,9 +17,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.awt.Cursor;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -37,6 +35,7 @@ import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
 import Vue.TypeUnite;
+
 import modele.Node;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
