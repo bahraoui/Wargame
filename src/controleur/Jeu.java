@@ -1562,6 +1562,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 }
                                 if (distanceCase.getDist() > 2)
                                     JOptionPane.showMessageDialog(FenetreJeu, "Vous êtes trop loin pour attaquer...");
+                                FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                                 
                             }
                             caseClic1 = null; caseClic2 = null;
