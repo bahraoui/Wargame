@@ -295,7 +295,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         // Si il n'y a aucune entité sur la case et que le placement est assez proche de
         // la base
         if (caseUnite.estOccupe() == null && Math.abs(calculDistanceY) <= joueur.getBase().getVision()
-                && Math.abs(calculDistanceX) <= joueur.getBase().getVision() && joueur.achaterUnitArmee(unite)) {
+                && Math.abs(calculDistanceX) <= joueur.getBase().getVision() && joueur.achaterUnite(unite)) {
             // On ajoute l'unité à l'armée et ob l'ajoute sur le plateau
             joueur.getArmee().add(unite);
             plateau.get(coordY).get(coordX).setUnite(unite);
@@ -796,7 +796,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             troupeAchete = new Archer();
         }
         if (placementUnite(troupeAchete))
-            joueurActuel.achaterUnitArmee(troupeAchete);
+            joueurActuel.achaterUnite(troupeAchete);
         return troupeAchete;
     }
 
