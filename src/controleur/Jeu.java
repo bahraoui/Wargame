@@ -223,7 +223,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         ArrayList<Integer> coordBase = postionBaseJoueur.get(joueur.getNumeroJoueur());
                         plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
                         supprimerArmee(joueur);
-                        JOptionPane.showMessageDialog(FenetreJeu,joueur.getPseudo()+" est mort !");
+                        JOptionPane.showMessageDialog(FenetreJeu,joueur.getPseudo()+" est hors d'état de nuire !");
                         return;
                     }
                 }
@@ -450,8 +450,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @return un booléen qui indique si la partie est fini ou non
      */
     public static boolean estFinPartie() {
-        //Si la partie a atteint 90 tour sans gagnant
-        if (tour == 90) {
+        //Si la partie a atteint 30 tour sans gagnant
+        if (tour == 30) {
             return true;
         }
         //Regarde si tous les autres joueurs sont hors-jeu
@@ -485,7 +485,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         //si une condition de fin de partie est respecté
         if (estFinPartie()) {
             //Si la condition de fin de partie est le nombre de tour
-            if (tour == 90) {
+            if (tour == 30) {
 
                 //On va enregistrer la valeur de chaque joueur en fonction de son nombre de pièces et de la valeur de son armée
                 value = new int[listeJoueur.size()];
@@ -515,7 +515,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             FenetreJeu.changerPanel(PanelActuel.VICTOIRE);
             FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
             FenetreJeu.getPanelVictoire().getLabelVictoire().setText("Victoire du joueur "+joueurGagnant.getNumeroJoueur()+1);
-            effacerDonnees();
             return true;
         }
         return false;
@@ -697,9 +696,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * 
      */
     public static void initNouveauTour(){
-        do {
-            joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur() + 1) % (nbJoueursH + nbJoueursIA));
-        } while (joueurActuel.getEnJeu() == false);
+        if (listeJoueur.size() > 0) {
+            do {
+                joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur() + 1) % (nbJoueursH + nbJoueursIA));
+            } while (joueurActuel.getEnJeu() == false);
+        }
         if (!calculVitoire()) { // condition de victoire
             reinitialiserChrono();
             if (tour == 0 && nbJoueursH == 0) {
@@ -726,9 +727,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 genererEvenementExterieur();
                 initNouveauTour();
             }
-            JOptionPane.showMessageDialog(FenetreJeu,
-                            "Tour n° " + tour + " Joueur : " + joueurActuel.getPseudo());
-            genererEvenementExterieur();
+            else 
+                genererEvenementExterieur();
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu,"Tour n° " + tour + " Joueur : " + joueurActuel.getPseudo());
         } else {
             effacerDonnees();
             FenetreJeu.getPanelJeu().getTimerHorloge().stop();
@@ -1764,7 +1766,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     initNouveauTour();
                     pj.repaint();
                     reinitialiserChrono();
-                    JOptionPane.showMessageDialog(FenetreJeu,
+                    if (!joueurActuel.getEstIa())
+                        JOptionPane.showMessageDialog(FenetreJeu,
                             "Votre partie vient d'être lancée, GAGNER CETTE GUERRE ! Mais amusez-vous quand même...");
     
                     break;
