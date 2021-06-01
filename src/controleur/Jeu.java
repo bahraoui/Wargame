@@ -1571,7 +1571,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         else if (caseClic1 != null && caseClic2 == null) {
                             caseClic2 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                             if (caseClic2.estOccupe() == null && caseClic1.estOccupe() instanceof Unite) {
-                                if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() > 0) {
+                                if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() >= caseClic1.getTerrain().getBonusDefense()) {
                                     JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé");
                                     int[][] matricePlateau = new int[cote][cote];
                                     plateauToMatice(matricePlateau);
@@ -1584,7 +1584,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                     JOptionPane.showMessageDialog(FenetreJeu, "Deplacement fini");
                                 } else
                                     JOptionPane.showMessageDialog(FenetreJeu,
-                                            "Unité n'a plus de point déplacement");
+                                            "Unité n'a plus assez de point déplacement");
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {

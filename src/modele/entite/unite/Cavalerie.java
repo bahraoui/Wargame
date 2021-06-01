@@ -17,8 +17,8 @@ public class Cavalerie extends Unite{
     public Cavalerie() {
         super(40,15,7,1);
         setPointDeVieMax(40);
-        setDeplacementMax(6);
-        setDeplacementActuel(6);
+        setDeplacementMax(7);
+        setDeplacementActuel(7);
         setCout(12);
     }
     

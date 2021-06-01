@@ -17,8 +17,8 @@ public class InfanterieLourde extends Unite{
     public InfanterieLourde() {
         super(50,45,10,1);
         setPointDeVieMax(super.getPointDeVieActuel());
-        setDeplacementMax(2);
-        setDeplacementActuel(2);
+        setDeplacementMax(4);
+        setDeplacementActuel(4);
         setCout(30);
     }
     

@@ -14,7 +14,7 @@ public class Mer extends Terrain{
     public Mer() {
         super();
         setBonusDefense(1);
-        setPtsDeplacement(4);
+        setPtsDeplacement(3);
     }
     
     /**

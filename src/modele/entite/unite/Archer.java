@@ -17,8 +17,8 @@ public class Archer extends Unite{
     public Archer() {
         super(20,20,5,2);
         setPointDeVieMax(super.getPointDeVieActuel());
-        setDeplacementMax(4);
-        setDeplacementActuel(4);
+        setDeplacementMax(5);
+        setDeplacementActuel(5);
         setCout(5);
     }
 
