@@ -59,9 +59,10 @@ public class FrameJeu extends JFrame{
 		this.getContentPane().setBackground(Color.cyan);
 		this.add(panelMenu);
 		this.setPreferredSize(new Dimension(1500,800));
-		this.setVisible(true);	this.setSize(1500,800);
-		this.setLocation(20, 15);	this.setResizable(true);
-
+		this.setVisible(true);	
+		this.setSize(1500,800);
+		this.setLocation(20, 15);	
+		this.setResizable(false);
 	}
 
 	/**
@@ -140,11 +141,11 @@ public class FrameJeu extends JFrame{
 	 * @param controleur Jeu
 	 */
 	public void enregistreEcouteur(Jeu controleur) {
-		panelMenu.enregistreEcouteur(controleur);
-		panelNouvellePartie.enregistreEcouteur(controleur);
-		panelChargerPartie.enregistreEcouteur(controleur);
-		panelRegles.enregistreEcouteur(controleur);
-		panelVictoire.enregistreEcouteur(controleur);
+		panelMenu.enregistre_ecouteur(controleur);
+		panelNouvellePartie.enregistre_ecouteur(controleur);
+		panelChargerPartie.enregistre_ecouteur(controleur);
+		panelRegles.enregistre_ecouteur(controleur);
+		panelVictoire.enregistre_ecouteur(controleur);
 	}
 
 	// Getters and setters :

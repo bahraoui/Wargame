@@ -18,7 +18,7 @@ public class ToundraNeige extends Terrain{
     }
     
     /**
-     * Affichage d'un batiment pour terminal
+     * Affichage d'une case ToundraNeige pour terminal
      */
     public String toString(){
         return "ToundraNeige : " +super.toString();

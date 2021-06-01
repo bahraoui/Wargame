@@ -18,7 +18,7 @@ public class Montagne extends Terrain{
     }
     
     /**
-     * Affichage d'une case montagne pour terminal
+     * Affichage d'une case Montagne pour terminal
      */
     public String toString(){
         return "Montagne : " +super.toString();

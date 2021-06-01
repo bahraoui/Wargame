@@ -37,7 +37,7 @@ public class Hexagone extends JLabel {
      */
     public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord){
         super();
-        hexagonalShape = getHexPolygon();
+        hexagonalShape = get_hex_polygon();
         this.sol = sol;
         this.unite = unite;
         this.batiment = batiment;
@@ -48,7 +48,7 @@ public class Hexagone extends JLabel {
     * Genere un bouton de forme hexagonale
     * @return Polygon avec les formes d'un bouton hexagonale
     */
-    private Polygon getHexPolygon() {
+    private Polygon get_hex_polygon() {
         Polygon hex = new Polygon();
         int w = getWidth() - 1;
         int h = getHeight() - 1;
@@ -80,7 +80,7 @@ public class Hexagone extends JLabel {
      * getAll est une methode de debugage qui renvoie une chaine de caractere qui donne les informations sur la case
      * @return String
      */
-    public String getAll(){
+    public String get_all(){
         if (unite != null)
             return "Hexagone : \n\tUnite : "+unite.toString();
         if (batiment != null)
@@ -92,11 +92,11 @@ public class Hexagone extends JLabel {
 
     
     /**
-     * placerSol permet de dessiner le sol en fonction du type de terrain
+     * placer_sol permet de dessiner le sol en fonction du type de terrain
      * @param sol TypeTerrain
      * @param g Graphics
      */
-    private void placerSol(TypeTerrain parSol, Graphics g){
+    private void placer_sol(TypeTerrain parSol, Graphics g){
         try {
             switch (parSol) {
                 case MER:
@@ -127,11 +127,11 @@ public class Hexagone extends JLabel {
     }
 
     /**
-     * placerBatiment permet de dessiner le batiment en fonction du type de batiment si la case posede un batiment
-     * @param bat TypeBatimentVue
+     * placer_batiment permet de dessiner le batiment en fonction du type de batiment si la case posede un batiment
+     * @param typeBatimentVue TypeBatimentVue
      * @param g Graphics
      */
-    private void placerBatiment(TypeBatimentVue typeBatimentVue, Graphics g){
+    private void placer_batiment(TypeBatimentVue typeBatimentVue, Graphics g){
         try {
             switch (typeBatimentVue) {
                 case BASE:
@@ -150,11 +150,11 @@ public class Hexagone extends JLabel {
     }
 
     /**
-     * placerUnite permet de dessiner une unite en fonction du type d'unite si la case posede une unite
-     * @param unite TypeUnite
+     * placer_unite permet de dessiner une unite en fonction du type d'unite si la case posede une unite
+     * @param parUnite TypeUnite
      * @param g Graphics
      */
-    private void placerUnite(TypeUnite parUnite, Graphics g){
+    private void placer_unite(TypeUnite parUnite, Graphics g){
         try {
             switch (parUnite) {
                 case ARCHER:
@@ -184,14 +184,14 @@ public class Hexagone extends JLabel {
 
 
     /**
-     * setUnite permet d'afficher un unite sur la case si le parametre n'est pas vide
+     * set_unite permet d'afficher un unite sur la case si le parametre n'est pas vide
      * @param parUnite TypeUnite
      */
-    public void setUnite(TypeUnite parUnite) {
+    public void set_unite(TypeUnite parUnite) {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         if (parUnite != null) {
-                placerUnite(parUnite, g);
+                placer_unite(parUnite, g);
         }
         this.unite = parUnite;
         this.paintChildren(g);
@@ -203,38 +203,38 @@ public class Hexagone extends JLabel {
      * @param sol TypeTerrain
      * @throws IOException
      */
-    public void setTerrain(TypeTerrain sol){
+    public void set_terrain(TypeTerrain parSol){
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
-        placerSol(sol,g);
+        placer_sol(parSol,g);
         if (batiment != null) {
-            placerBatiment(batiment,g);      
+            placer_batiment(batiment,g);      
         }
         else {
             this.batiment=null;
         }
 
         if (unite != null) {
-            placerUnite(unite,g);
+            placer_unite(unite,g);
         }
         else {
             this.unite=null;
         }
-        this.sol = sol;
+        this.sol = parSol;
         this.paintChildren(g);
         
     }
 
     /**
-     * setBatiment permet d'afficher un baiment sur la case
-     * @param typeBatimentVue
+     * set_batiment permet d'afficher un baiment sur la case
+     * @param typeBatimentVue TypeBatimentVue
      * @throws IOException
      */
-    public void setBatiment(TypeBatimentVue typeBatimentVue) {
+    public void set_batiment(TypeBatimentVue typeBatimentVue) {
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
         if (typeBatimentVue != null) {
-            placerBatiment(typeBatimentVue, g);
+            placer_batiment(typeBatimentVue, g);
         }
         this.batiment = typeBatimentVue;
         this.paintChildren(g);
@@ -266,7 +266,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setSize(Dimension d) {
         super.setSize(d);
-        hexagonalShape = getHexPolygon();
+        hexagonalShape = get_hex_polygon();
     }
     
     /*
@@ -276,7 +276,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setSize(int w, int h) {
         super.setSize(w, h);
-        hexagonalShape = getHexPolygon();
+        hexagonalShape = get_hex_polygon();
     }
     
     /*
@@ -286,7 +286,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setBounds(int x, int y, int width, int height) {
         super.setBounds(x, y, width, height);
-        hexagonalShape = getHexPolygon();
+        hexagonalShape = get_hex_polygon();
     }
     
     /*
@@ -296,7 +296,7 @@ public class Hexagone extends JLabel {
     @Override
     public void setBounds(Rectangle r) {
         super.setBounds(r);
-        hexagonalShape = getHexPolygon();
+        hexagonalShape = get_hex_polygon();
     }
     
     /*
@@ -318,13 +318,13 @@ public class Hexagone extends JLabel {
     protected void paintComponent(Graphics g) {
         g.setClip(hexagonalShape);
         if (sol != null)
-            placerSol(sol, g);
+            placer_sol(sol, g);
 
         if (batiment != null)
-            placerBatiment(batiment, g);
+            placer_batiment(batiment, g);
 
         if (unite != null)
-            placerUnite(unite, g);
+            placer_unite(unite, g);
     }
     
 

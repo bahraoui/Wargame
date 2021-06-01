@@ -36,7 +36,6 @@ public class Terrain {
         return "Point de déplacement " + this.ptsDeplacement;
     }
 
-
     public String afficherTypeTerrain(){
         if (this instanceof Desert) {
             return "Desert";

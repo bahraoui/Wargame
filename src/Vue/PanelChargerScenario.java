@@ -50,7 +50,8 @@ public class PanelChargerScenario extends JPanel{
         /*
          * Initialise tous les panels inclus dans la classe 
          */
-        panelMap = new PanelMap(parHexs); // le panel de la carte
+        panelMap = new PanelMap(parHexs);// le panel de la carte
+        panelMap.setOpaque(false);
         panelGauche = new JPanel();
         nbMonumentsRestants = 6; // le nombre de monuments restants
         nbMonumentLabel = new JLabel(nbMonumentsRestants+" monuments restants"); // indique le nombre de monuments restants
@@ -59,19 +60,22 @@ public class PanelChargerScenario extends JPanel{
         JPanel panelTerrains = new JPanel();
         JPanel panelMonuments = new JPanel();
         JPanel panelActions = new JPanel();
+        panelActions.setOpaque(false);
+        panelMonuments.setOpaque(false);
+        panelTerrains.setOpaque(false);
 
         /*
          *  Boutons du panel
          */
         btnChoixMonument = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
         btnLancerPartie = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
         nomSauvergardeCarte = new JTextField(10);
         btnSauvegarderPartie = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
         btnQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
 
         /*
          * Liste des terrains disponibles a selectionner 
@@ -113,6 +117,7 @@ public class PanelChargerScenario extends JPanel{
         panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
         panelGauche.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0,0,0)));
         panelGauche.setPreferredSize(new Dimension(150,100));
+        panelGauche.setOpaque(false);
         border = panelGauche.getBorder();
         margin = new EmptyBorder(3,3,3,1);
         panelGauche.setBorder(new CompoundBorder(margin, border));
@@ -138,22 +143,6 @@ public class PanelChargerScenario extends JPanel{
         this.add(panelMap,BorderLayout.CENTER);
         this.add(panelGauche,BorderLayout.WEST);
 	}
-
-    /**
-     * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
 	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute

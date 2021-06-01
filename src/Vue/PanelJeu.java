@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import controleur.Jeu;
 
@@ -53,18 +57,28 @@ public class PanelJeu extends JPanel {
 		
 		/* PANEL GAUCHE : toutes les inforamtions sur la partie */
 		this.panelGaucheInfos = new JPanel();
-		panelGaucheInfos.setPreferredSize(new Dimension(200,500));
+		panelGaucheInfos.setPreferredSize(new Dimension(250,500));
+		panelGaucheInfos.setOpaque(false);
+		//panelGaucheInfos.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+		
+        Border border = panelGaucheInfos.getBorder();
+        Border margin = new EmptyBorder(3,3,3,1);
+        panelGaucheInfos.setBorder(new CompoundBorder(margin, border));
+
 
 		/////////////////////
 		// PANEL INFO TOUR //
 		/////////////////////
 		panelInfoTour = new JPanel();
-		panelInfoTour.setPreferredSize(new Dimension(200,60));
+		panelInfoTour.setOpaque(false);
+		panelInfoTour.setPreferredSize(new Dimension(250,70));
 		panelInfoTour.setBounds(panelInfoTour.getBounds().x, panelInfoTour.getBounds().y, 400, 300);
 		panelInfoTour.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		border = panelInfoTour.getBorder();
+        margin = new EmptyBorder(3,3,3,3);
+        panelInfoTour.setBorder(new CompoundBorder(margin, border));
 		panelInfoTour.setLayout(new BoxLayout(panelInfoTour, BoxLayout.Y_AXIS));
 		
-
 		// Tours
 		labelNbTours = new JLabel("Nombre de tour(s) : ");
 		labelNbTours.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
@@ -77,7 +91,6 @@ public class PanelJeu extends JPanel {
         labelNomJoueur.setForeground(new Color(109,7,26));
 		panelInfoTour.add(labelNomJoueur);
 
-				
 		// Chrono
 		JLabel labelChrono = new JLabel("02:00");
 		labelChrono.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
@@ -131,8 +144,12 @@ public class PanelJeu extends JPanel {
 		///////////////////////
 
 		this.panelInfoPartie = new JPanel();
-		panelInfoPartie.setPreferredSize(new Dimension(200,160));
+		panelInfoPartie.setOpaque(false);
+		panelInfoPartie.setPreferredSize(new Dimension(250,160));
 		panelInfoPartie.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
+		border = panelInfoPartie.getBorder();
+        margin = new EmptyBorder(3,3,3,3);
+        panelInfoPartie.setBorder(new CompoundBorder(margin, border));
 		panelInfoPartie.setLayout(new BoxLayout(panelInfoPartie, BoxLayout.Y_AXIS));
 		
 		// type de terrain
@@ -190,9 +207,12 @@ public class PanelJeu extends JPanel {
 		// PANEL BOUTIQUE //
 		////////////////////
 		this.panelBoutique = new JPanel();
-		panelBoutique.setPreferredSize(new Dimension(200,270));
+		panelBoutique.setOpaque(false);
+		panelBoutique.setPreferredSize(new Dimension(250,270));
 		panelBoutique.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-		//panelBoutique.setLayout(new BoxLayout(panelBoutique, BoxLayout.Y_AXIS));
+		border = panelBoutique.getBorder();
+        margin = new EmptyBorder(3,3,3,3);
+        panelBoutique.setBorder(new CompoundBorder(margin, border));
 
 		// titre
 		JLabel labelTitreBoutique = new JLabel("Boutique d'achats :");
@@ -208,66 +228,67 @@ public class PanelJeu extends JPanel {
 
 		// liste d'achat
 		JPanel panelListeAchat = new JPanel();
+		panelListeAchat.setOpaque(false);
 		panelListeAchat.setLayout(new GridBagLayout());
 		GridBagConstraints contrainte= new GridBagConstraints();
 		contrainte.gridx=0; contrainte.gridy=0;
 
 			// Archer
 		labelArcher = new JLabel("Archer");
-		labelArcher.setFont(new Font("", Font.BOLD, 16));
+		labelArcher.setFont(new Font("", Font.BOLD, 13));
 		labelArcher.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
 		boutonArcher = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
 		boutonArcher.setActionCommand("achatArcher");
 		panelListeAchat.add(boutonArcher,contrainte);
 
 			// Cavalerie
 		contrainte.gridx=0; contrainte.gridy=1;
 		labelCavalerie = new JLabel("Cavalerie");
-		labelCavalerie.setFont(new Font("", Font.BOLD, 16));
+		labelCavalerie.setFont(new Font("", Font.BOLD, 13));
 		labelCavalerie.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
 		boutonCavalerie = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
 		boutonCavalerie.setActionCommand("achatCavalerie");
 		panelListeAchat.add(boutonCavalerie,contrainte);
 
 			// Infanterie
 		contrainte.gridx=0; contrainte.gridy=2;
 		labelInfanterie = new JLabel("Infanterie");
-		labelInfanterie.setFont(new Font("", Font.BOLD, 16));
+		labelInfanterie.setFont(new Font("", Font.BOLD, 13));
 		labelInfanterie.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterie = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
 		boutonInfanterie.setActionCommand("achatInfanterie");
 		panelListeAchat.add(boutonInfanterie,contrainte);
 
 			// Infanterie Lourde
 		contrainte.gridx=0; contrainte.gridy=3;
 		labelInfanterieLourde = new JLabel("Infanterie Lourde");
-		labelInfanterieLourde.setFont(new Font("", Font.BOLD, 16));
+		labelInfanterieLourde.setFont(new Font("", Font.BOLD, 13));
 		labelInfanterieLourde.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterieLourde = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
 		boutonInfanterieLourde.setActionCommand("achatInfanterieLourde");
 		panelListeAchat.add(boutonInfanterieLourde,contrainte);
 
 			// Mage
 		contrainte.gridx=0; contrainte.gridy=4;
 		labelMage = new JLabel("Mage");
-		labelMage.setFont(new Font("", Font.BOLD, 16));
+		labelMage.setFont(new Font("", Font.BOLD, 13));
 		labelMage.setForeground(new Color(109,7,26));
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
 		boutonMage = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
 		boutonMage.setActionCommand("achatMage");
 		panelListeAchat.add(boutonMage,contrainte);
 
@@ -279,28 +300,29 @@ public class PanelJeu extends JPanel {
 		// PANEL BOUTIQUE //
 		////////////////////
 		panelBoutons = new JPanel();
-		panelBoutons.setPreferredSize(new Dimension(200,300));		
+		panelBoutons.setOpaque(false);
+		panelBoutons.setPreferredSize(new Dimension(250,300));		
 			// fin de tour
 		boutonFinDeTour = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
 		boutonFinDeTour.setActionCommand("finTour");
 		panelBoutons.add(boutonFinDeTour);
 
 			// abandonner
 		boutonAbandonner = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
 		boutonAbandonner.setActionCommand("abandonner");
 		panelBoutons.add(boutonAbandonner);
 
 			// sauvegarder
 		boutonSauvegarder = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
 		boutonSauvegarder.setActionCommand("sauvegarderPartie");
 		panelBoutons.add(boutonSauvegarder);
 		
 			// quitter
 		boutonQuitter = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
 		boutonQuitter.setActionCommand("retourMenu");
 		panelBoutons.add(boutonQuitter);
 
@@ -310,6 +332,7 @@ public class PanelJeu extends JPanel {
 
 		/* PANEL CENTRE : plateau de jeu */
 		this.PanelCentrePlateau = new PanelMap(parHexs);
+		PanelCentrePlateau.setOpaque(false);
 		this.add(PanelCentrePlateau,BorderLayout.CENTER);
 	}
 
@@ -328,22 +351,6 @@ public class PanelJeu extends JPanel {
 		boutonMage.addActionListener(controleur);
 		boutonQuitter.addActionListener(controleur);
 	}
-
-
-	/**
-     * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 	/**
 	 * updateGoldJoueurAffichage permet de mettre a jour le nombre de golds du joueur sur le labelGolds
@@ -655,7 +662,16 @@ public class PanelJeu extends JPanel {
 		this.labelPointDeplacementTerrain = labelPointDeplacementTerrain;
 	}
 
-
 	// FIN Getters et setters
+
+	@Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        try {
+            g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Fonds"+File.separator+"fond.jpg")), 0, 0, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
