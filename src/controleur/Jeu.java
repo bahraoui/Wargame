@@ -80,6 +80,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     private static Hexagone hexCaseClic;
     private static Joueur joueurGagnant;
     private static boolean initPanelJeu;
+    private static boolean chercheAttaque;
 
     private static final int cote = 16;
 
@@ -99,6 +100,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         caseClic2 = null;
         initPanelJeu = false;
         joueurGagnant = null;
+        chercheAttaque = false;
 
         terrainChoisi = TypeTerrain.NEIGE;
 
@@ -343,8 +345,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @return Booleen indique si l' emplacement est bien vide
      */
     public static boolean estEmplacementVide(int ligneTest, int colonneTest) {
-        return (ligneTest >= 0) && (ligneTest < cote - 1) && (colonneTest >= 0) && (colonneTest < cote - 1)
-                && (plateau.get(ligneTest).get(colonneTest).estOccupe() == null);
+        if (ligneTest >= 0 && ligneTest < cote && colonneTest >= 0 && colonneTest < cote){
+            if (!chercheAttaque && (plateau.get(ligneTest).get(colonneTest).estOccupe() == null))
+                return true;
+            else if (chercheAttaque )
+                return true;
+        }
+        return false;
     }
     
 
@@ -403,52 +410,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         return null;
-    }
-
-    public static int calculDistance(int mat[][], int srcX, int srcY, int destX, int destY) {
-        int coordRowColGL [][] = {{-1,0}, {0,-1} , {1,0}, {1,1}, {0,1}, {-1,1}};
-        int coordRowColPL [][] = {{-1,-1}, {0,-1} , {1,-1}, {1,0}, {0,1}, {-1,0}};
-
-        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
-            return -1;
-
-        boolean[][] visited = new boolean[cote][cote];
-
-        visited[srcY][srcX] = true;
-
-        Queue<Node> q = new LinkedList<>();
-
-        Node s = new Node(srcY, srcX, 0, null);
-        q.add(s);
-
-        while (!q.isEmpty()) {
-            Node curr = q.peek();
-            int ptX = curr.getX();
-            int ptY = curr.getY();
-
-            if (ptX == destX && ptY == destY) 
-                return curr.getDist();
-            
-            q.remove();
-            for (int i = 0; i < 6; i++) {
-                int row = 0;
-                int col = 0;
-                if (ptX%2 == 0) {
-                    row = ptX + coordRowColPL[i][0];
-                    col = ptY + coordRowColPL[i][1];
-                }
-                else {
-                    row = ptX + coordRowColGL[i][0];
-                    col = ptY + coordRowColGL[i][1];
-                }
-                if (row >= 0 && row < cote && col >= 0 && col < cote && mat[row][col] != 0 && !visited[row][col]) {
-                    visited[row][col] = true;
-                    Node Adjcell = new Node(col, row, curr.getDist() + 1, curr);
-                    q.add(Adjcell);
-                }
-            }
-        }
-        return -2;
     }
 
     /**
@@ -1590,13 +1551,16 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
-                                int distanceCase = calculDistance(matricePlateau, hexCaseClic.getCoord().getX(),
+                                chercheAttaque = true;
+                                Node distanceCase = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
                                         hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY());
-                                System.out.println("DISTANCE : "+distanceCase);
-                                if (combattre(hexCaseClic, hexClic, distanceCase))
-                                    if (joueurGagnant != null)
+                                chercheAttaque = false;
+                                System.out.println("DISTANCE : "+distanceCase.getDist());
+                                if (combattre(hexCaseClic, hexClic, distanceCase.getDist())) {
+                                    if (joueurGagnant == null)
                                         JOptionPane.showMessageDialog(FenetreJeu, "Attaque ! ");
+                                }
                             }
                             caseClic1 = null; caseClic2 = null;
                         }
