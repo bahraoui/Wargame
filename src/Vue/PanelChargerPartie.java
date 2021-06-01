@@ -40,18 +40,18 @@ public class PanelChargerPartie extends JPanel{
 
         // bouton sauvegarde
         btnChargerSauvegarde = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
         lblCarteChosie = new JLabel("Sauvegarde choisie : ");
         lblCarteChosie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
         lblCarteChosie.setForeground(new Color(109,7,26));
 
         // bouton Lancer la partie
         btnContinuerScenario = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
 
         // bouton Quitter
         btnQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         btnChargerSauvegarde.setActionCommand("chercherSauvegarde");
         btnContinuerScenario.setActionCommand("lancerPartieChargee");
         btnQuitter.setActionCommand("retourMenu");
@@ -77,20 +77,6 @@ public class PanelChargerPartie extends JPanel{
     }
 
 
-    /**
-     * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
      /**
 	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur

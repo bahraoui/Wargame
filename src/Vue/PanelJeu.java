@@ -219,7 +219,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
 		boutonArcher = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
 		boutonArcher.setActionCommand("achatArcher");
 		panelListeAchat.add(boutonArcher,contrainte);
 
@@ -231,7 +231,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
 		boutonCavalerie = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
 		boutonCavalerie.setActionCommand("achatCavalerie");
 		panelListeAchat.add(boutonCavalerie,contrainte);
 
@@ -243,7 +243,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterie = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
 		boutonInfanterie.setActionCommand("achatInfanterie");
 		panelListeAchat.add(boutonInfanterie,contrainte);
 
@@ -255,7 +255,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterieLourde = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
 		boutonInfanterieLourde.setActionCommand("achatInfanterieLourde");
 		panelListeAchat.add(boutonInfanterieLourde,contrainte);
 
@@ -267,7 +267,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
 		boutonMage = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
 		boutonMage.setActionCommand("achatMage");
 		panelListeAchat.add(boutonMage,contrainte);
 
@@ -282,25 +282,25 @@ public class PanelJeu extends JPanel {
 		panelBoutons.setPreferredSize(new Dimension(200,300));		
 			// fin de tour
 		boutonFinDeTour = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
 		boutonFinDeTour.setActionCommand("finTour");
 		panelBoutons.add(boutonFinDeTour);
 
 			// abandonner
 		boutonAbandonner = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
 		boutonAbandonner.setActionCommand("abandonner");
 		panelBoutons.add(boutonAbandonner);
 
 			// sauvegarder
 		boutonSauvegarder = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
 		boutonSauvegarder.setActionCommand("sauvegarderPartie");
 		panelBoutons.add(boutonSauvegarder);
 		
 			// quitter
 		boutonQuitter = new JButton();
-		setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
+		Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
 		boutonQuitter.setActionCommand("retourMenu");
 		panelBoutons.add(boutonQuitter);
 
@@ -328,22 +328,6 @@ public class PanelJeu extends JPanel {
 		boutonMage.addActionListener(controleur);
 		boutonQuitter.addActionListener(controleur);
 	}
-
-
-	/**
-     * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 	/**
 	 * updateGoldJoueurAffichage permet de mettre a jour le nombre de golds du joueur sur le labelGolds

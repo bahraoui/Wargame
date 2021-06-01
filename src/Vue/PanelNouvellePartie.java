@@ -58,8 +58,8 @@ public class PanelNouvellePartie extends JPanel{
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
         btnQuitter = new JButton();
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
-        setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
+        Outils.set_image_bouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
         nbJoueursIA.setActionCommand("nbJoueursIA");
@@ -144,22 +144,6 @@ public class PanelNouvellePartie extends JPanel{
             if (listeNomCartes[i].isFile()) {
                 nomMap.add(listeNomCartes[i].getName().replace(".txt", ""));
             }
-        }
-    }
-
-
-    /**
-     * setImageBouton permet d'afficher une image dans le bouton
-     * @param filePathName le chemin de l'image à utiliser
-     * @param btnAModifier le bouton à modifier
-     */
-	private void setImageBouton(String filePathName,JButton btnAModifier){
-        btnAModifier.setMargin(new Insets(0, 0, 0, 0));
-        btnAModifier.setBorder(null);
-        try {
-            btnAModifier.setIcon(new ImageIcon(ImageIO.read(new File(filePathName))));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
