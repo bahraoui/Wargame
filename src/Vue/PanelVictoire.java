@@ -75,7 +75,7 @@ public class PanelVictoire extends JPanel{
          * Bouton retour Menu
          * */ 
         boutonQuitter = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", boutonQuitter);
         boutonQuitter.setActionCommand("retourMenu");
         contrainte.gridy++;
 

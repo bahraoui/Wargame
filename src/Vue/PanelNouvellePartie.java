@@ -55,8 +55,8 @@ public class PanelNouvellePartie extends JPanel{
         txtNomJoueur = new JTextField[4];
         btnContinuer = new JButton();
         btnQuitter = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Continuer.png", btnContinuer);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         choixMap.setActionCommand("choixMap");
         nbJoueursHumain.setActionCommand("nbJoueursH");
         nbJoueursIA.setActionCommand("nbJoueursIA");
