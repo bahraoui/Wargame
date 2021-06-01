@@ -15,7 +15,7 @@ public class Infanterie extends Unite{
      * Attribue pour un archer ses points de vie, son attaque, sa defense,sa vision, son cout, ses deplacement
      */
     public Infanterie() {
-        super(35,10,7,1);
+        super(35,30,7,1);
         setPointDeVieMax(super.getPointDeVieActuel());
         setDeplacementMax(4);
         setDeplacementActuel(4);
