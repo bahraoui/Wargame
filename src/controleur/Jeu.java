@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -1763,25 +1764,19 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         // Generer un action pane si fichier pas bon
                         try {
                             chargePartie(new FileInputStream(sauvegardeChoisis));
-                            setCellulesMap();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        setCellulesMap();
+                        try {
                             pj = new PanelJeu(cellulesToHexagones());
-                            FenetreJeu.setPanelJeu(pj);
-                            pj.enregistrerEcouteur(this);
-                            FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistrerEcouteur(this);
-                            FenetreJeu.changerPanel(PanelActuel.JEU);
-                            initPanelJeu = true;
-                            initNouveauTour();
-                            pj.repaint();
-                            reinitialiserChrono();
                         } catch (IOException e) {
-                            // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                         FenetreJeu.setPanelJeu(pj);
                         pj.enregistrerEcouteur(this);
-                        FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistrerEcouteur(this);
                         FenetreJeu.changerPanel(PanelActuel.JEU);
-                        initPanelJeu = true;
+                        JOptionPane.showMessageDialog(FenetreJeu, "Votre partie est correctement chargée !");
                         initNouveauTour();
                         pj.repaint();
                         reinitialiserChrono();

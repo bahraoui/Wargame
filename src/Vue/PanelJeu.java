@@ -33,7 +33,7 @@ import controleur.Jeu;
  */
 public class PanelJeu extends JPanel {
 	private BorderLayout bdl;
-	private PanelMap PanelCentrePlateau;
+	private PanelMap panelCentrePlateau;
 	private JPanel panelGaucheInfos,panelBoutons, panelInfoTour, panelInfoPartie,panelBoutique;
 	private JLabel labelNbTours,labelNomJoueur,labelTypeTerrain,labelBatimentUnite,labelGolds, labelArcher, labelCavalerie, labelInfanterie, labelInfanterieLourde, labelMage, labelBonusTerrain, labelNomEntite, labelPointVie, labelAttaque, labelDefense, labelPointDeplacement, labelPointDeplacementTerrain;
 	private int minute=2,seconde=0;
@@ -327,9 +327,9 @@ public class PanelJeu extends JPanel {
 		this.add(panelGaucheInfos,BorderLayout.WEST);
 
 		/* PANEL CENTRE : plateau de jeu */
-		this.PanelCentrePlateau = new PanelMap(parHexs);
-		PanelCentrePlateau.setOpaque(false);
-		this.add(PanelCentrePlateau,BorderLayout.CENTER);
+		this.panelCentrePlateau = new PanelMap(parHexs);
+		panelCentrePlateau.setOpaque(false);
+		this.add(panelCentrePlateau,BorderLayout.CENTER);
 	}
 
 	/**
@@ -346,6 +346,7 @@ public class PanelJeu extends JPanel {
 		boutonInfanterieLourde.addActionListener(controleur);
 		boutonMage.addActionListener(controleur);
 		boutonQuitter.addActionListener(controleur);
+		panelCentrePlateau.enregistrerEcouteur(controleur);
 	}
 
 	/**
@@ -360,11 +361,11 @@ public class PanelJeu extends JPanel {
 	// Getters et setters
 
 	public PanelMap getPanelCentrePlateau() {
-		return this.PanelCentrePlateau;
+		return this.panelCentrePlateau;
 	}
 
 	public void setPanelCentrePlateau(PanelMap PanelCentrePlateau) {
-		this.PanelCentrePlateau = PanelCentrePlateau;
+		this.panelCentrePlateau = PanelCentrePlateau;
 	}
 
 	public JLabel getLabelNbTours() {
