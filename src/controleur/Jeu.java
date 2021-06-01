@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Cursor;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -360,8 +359,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @return Renvoie un noeud avec le chemin complet a effectué
      */
     public static Node trouverChemin(int mat[][], int srcX, int srcY, int destX, int destY) {
-        int rowNum[] = { -1, 0, 0, 1 };
-        int colNum[] = { 0, -1, 1, 0 };
+        int coordRowColGL [][] = {{-1,0}, {0,-1} , {1,0}, {1,1}, {0,1}, {-1,1}};
+        int coordRowColPL [][] = {{-1,-1}, {0,-1} , {1,-1}, {1,0}, {0,1}, {-1,0}};
 
         if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
             return null;
@@ -384,9 +383,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 return curr;
             
             q.remove();
-            for (int i = 0; i < 4; i++) {
-                int row = ptX + rowNum[i];
-                int col = ptY + colNum[i];
+            for (int i = 0; i < 6; i++) {
+                int row = 0;
+                int col = 0;
+                if (ptX%2 == 0) {
+                    row = ptX + coordRowColPL[i][0];
+                    col = ptY + coordRowColPL[i][1];
+                }
+                else {
+                    row = ptX + coordRowColGL[i][0];
+                    col = ptY + coordRowColGL[i][1];
+                }
                 if (estEmplacementVide(row, col) && mat[row][col] != 0 && !visited[row][col]) {
                     visited[row][col] = true;
                     Node Adjcell = new Node(col, row, curr.getDist() + 1, curr);
@@ -395,6 +402,52 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
         return null;
+    }
+
+    public static int calculDistance(int mat[][], int srcX, int srcY, int destX, int destY) {
+        int coordRowColGL [][] = {{-1,0}, {0,-1} , {1,0}, {1,1}, {0,1}, {-1,1}};
+        int coordRowColPL [][] = {{-1,-1}, {0,-1} , {1,-1}, {1,0}, {0,1}, {-1,0}};
+
+        if (mat[srcY][srcX] == 0 || mat[destY][destX] == 0)
+            return -1;
+
+        boolean[][] visited = new boolean[cote][cote];
+
+        visited[srcY][srcX] = true;
+
+        Queue<Node> q = new LinkedList<>();
+
+        Node s = new Node(srcY, srcX, 0, null);
+        q.add(s);
+
+        while (!q.isEmpty()) {
+            Node curr = q.peek();
+            int ptX = curr.getX();
+            int ptY = curr.getY();
+
+            if (ptX == destX && ptY == destY) 
+                return curr.getDist();
+            
+            q.remove();
+            for (int i = 0; i < 6; i++) {
+                int row = 0;
+                int col = 0;
+                if (ptX%2 == 0) {
+                    row = ptX + coordRowColPL[i][0];
+                    col = ptY + coordRowColPL[i][1];
+                }
+                else {
+                    row = ptX + coordRowColGL[i][0];
+                    col = ptY + coordRowColGL[i][1];
+                }
+                if (row >= 0 && row < cote && col >= 0 && col < cote && mat[row][col] != 0 && !visited[row][col]) {
+                    visited[row][col] = true;
+                    Node Adjcell = new Node(col, row, curr.getDist() + 1, curr);
+                    q.add(Adjcell);
+                }
+            }
+        }
+        return -2;
     }
 
     /**
@@ -450,8 +503,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @return un booléen qui indique si la partie est fini ou non
      */
     public static boolean estFinPartie() {
-        //Si la partie a atteint 30 tour sans gagnant
-        if (tour == 30) {
+        //Si la partie a atteint 90 tour sans gagnant
+        if (tour == 90) {
             return true;
         }
         //Regarde si tous les autres joueurs sont hors-jeu
@@ -485,7 +538,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         //si une condition de fin de partie est respecté
         if (estFinPartie()) {
             //Si la condition de fin de partie est le nombre de tour
-            if (tour == 30) {
+            if (tour == 90) {
 
                 //On va enregistrer la valeur de chaque joueur en fonction de son nombre de pièces et de la valeur de son armée
                 value = new int[listeJoueur.size()];
@@ -696,7 +749,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * 
      */
     public static void initNouveauTour(){
-        if (listeJoueur.size() > 0) {
+        if (listeJoueur.size() > 0 && tour!=0) {
             do {
                 joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur() + 1) % (nbJoueursH + nbJoueursIA));
             } while (joueurActuel.getEnJeu() == false);
@@ -716,6 +769,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : " + tour);
             ;
             FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
+            if (!joueurActuel.getEstIa())
+                JOptionPane.showMessageDialog(FenetreJeu,"Tour n° " + tour + " Joueur : " + joueurActuel.getPseudo());
             if (joueurActuel.getEstIa()) {
                 tourIA();
                 try {
@@ -729,8 +784,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             else 
                 genererEvenementExterieur();
-            if (!joueurActuel.getEstIa())
-                JOptionPane.showMessageDialog(FenetreJeu,"Tour n° " + tour + " Joueur : " + joueurActuel.getPseudo());
+            
         } else {
             effacerDonnees();
             FenetreJeu.getPanelJeu().getTimerHorloge().stop();
@@ -1527,13 +1581,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             } else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
-                                Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
+                                int distanceCase = calculDistance(matricePlateau, hexCaseClic.getCoord().getX(),
                                         hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY());
-                                int distanceCase = -1;
-                                if (chemin != null) {
-                                    distanceCase = chemin.getDist();
-                                }
+                                System.out.println("DISTANCE : "+distanceCase);
+                                if (combattre(hexCaseClic, hexClic, distanceCase))
+                                    if (joueurGagnant != null)
+                                        JOptionPane.showMessageDialog(FenetreJeu, "Attaque ! ");
                             }
                             caseClic1 = null;
                             caseClic2 = null;
@@ -1762,13 +1816,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     FenetreJeu.setPanelJeu(pj);
                     pj.enregistrerEcouteur(this);
                     FenetreJeu.changerPanel(PanelActuel.JEU);
+                    if (!joueurActuel.getEstIa())
+                    JOptionPane.showMessageDialog(FenetreJeu,
+                        "Votre partie vient d'être lancée, GAGNER CETTE GUERRE ! Mais amusez-vous quand même...");
                     initPanelJeu = true;
                     initNouveauTour();
                     pj.repaint();
                     reinitialiserChrono();
-                    if (!joueurActuel.getEstIa())
-                        JOptionPane.showMessageDialog(FenetreJeu,
-                            "Votre partie vient d'être lancée, GAGNER CETTE GUERRE ! Mais amusez-vous quand même...");
+                   
     
                     break;
                 /**
