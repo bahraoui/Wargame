@@ -68,6 +68,8 @@ public class PanelMap extends JPanel {
 		}
 	}
 
+	// Getters et setters
+
 	/**
 	 * Le getter getCells permet de recuperer toute les cases du plateau
 	 * @return
@@ -76,4 +78,6 @@ public class PanelMap extends JPanel {
 		return hexs;
 	}
 
+	// FIN getters et setters
+	
 }

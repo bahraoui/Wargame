@@ -1,24 +1,21 @@
 package Vue;
 
 
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Font;
-import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -356,7 +353,7 @@ public class PanelJeu extends JPanel {
 	 * updateGoldJoueurAffichage permet de mettre a jour le nombre de golds du joueur sur le labelGolds
 	 * @param nbGold
 	 */
-	public void updateGoldJoueurAffichage(int nbGold) {
+	public void update_gold_joueur_affichage(int nbGold) {
         labelGolds.setText(nbGold+" Golds");
     }
 

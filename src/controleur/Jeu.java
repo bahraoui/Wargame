@@ -221,7 +221,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 //on supprime le monument du plateau et on ajoute le trésor à la banque du joueur
                 joueurActuel.setPieces(joueurActuel.getPieces() + caseEntiteMorte.getBatiment().getTresor());
                 caseEntiteMorte.setBatiment(null); 
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
             }   
         }
     }
@@ -500,7 +500,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "L'Etat a décidé de vous aider dans cette guerre elle vous ajoute "+gainGold+" a votre banque !");
             joueurActuel.setPieces(joueurActuel.getPieces()+gainGold);
-            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
         }
         else if (evenement >85 && evenement <90){
             for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
@@ -517,7 +517,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (!joueurActuel.getEstIa())
                 JOptionPane.showMessageDialog(FenetreJeu, "Les impots touchent tout le monde, vous n'y échapperez pas ! L'Etat récupère 10% de votre banque..."); 
             joueurActuel.setPieces(joueurActuel.getPieces()-inmpots);
-            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
         }
         else if (evenement >75 && evenement <80){
             boolean presenceMonument = false;
@@ -635,7 +635,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             tour++;
             FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : "+joueurActuel.getPseudo());
             FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : "+tour);;
-            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
             if (joueurActuel.getEstIa()){
                 tourIA();
                 Thread.sleep(100);
@@ -837,7 +837,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Unite uniteachete = achatTroupesIA(depense);
                 if (uniteachete != null){
                     depense -= uniteachete.getCout();
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                     Thread.sleep(100);
                 }
             } catch (InterruptedException e) {
@@ -1357,7 +1357,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 case MONUMENT:
                                     hexClic.setBatiment(null);
                                     hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
-                                    panelChargerScenario.setMonumentNb(false);
+                                    panelChargerScenario.set_monument_nombre(false);
                                     cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(null);                              
                                     break;
                                 
@@ -1371,7 +1371,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         else if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getUnite() != null)
                             JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
                         else {
-                            panelChargerScenario.setMonumentNb(true);
+                            panelChargerScenario.set_monument_nombre(true);
                             hexClic.setBatiment(TypeBatimentVue.MONUMENT);
                             cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
                         }
@@ -1383,7 +1383,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             case ARCHER:
                                 Archer archer = new Archer();
                                 if (placerUniteJoueur(joueurActuel, archer, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
                                 else 
@@ -1392,7 +1392,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             case CAVALERIE:
                                 Cavalerie cavalerie = new Cavalerie(); 
                                 if (placerUniteJoueur(joueurActuel, cavalerie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
                                 else 
@@ -1401,7 +1401,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             case INFANTERIE:
                                 Infanterie infanterie = new Infanterie(); 
                                 if (placerUniteJoueur(joueurActuel, infanterie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
                                 else 
@@ -1410,7 +1410,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             case INFANTERIELOURDE:
                                 InfanterieLourde infanterieLourde = new InfanterieLourde(); 
                                 if (placerUniteJoueur(joueurActuel, infanterieLourde, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
                                 else 
@@ -1419,7 +1419,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             case MAGE:
                                 Mage mage = new Mage(); 
                                 if (placerUniteJoueur(joueurActuel, mage, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
                                 else 
@@ -1593,7 +1593,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             //REGROUPER ?
                             setCellulesMap();
                             panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
-                            panelChargerScenario.setMonumentNb(6-nbMonumentPlateau());
+                            panelChargerScenario.set_monument_nombre(6-nbMonumentPlateau());
                             FenetreJeu.setPanelChangerScenario(panelChargerScenario);
                             panelChargerScenario.enregistre_ecouteur(this);
                             //REGROUPER

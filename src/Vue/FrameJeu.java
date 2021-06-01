@@ -151,11 +151,11 @@ public class FrameJeu extends JFrame{
 	// Getters and setters :
 
 	public void setChoixTerrainTxt(String txt) {
-        panelChargerScenario.setChoixTerrainTxt(txt);
+        panelChargerScenario.set_choix_terrain_texte(txt);
     }
 
 	public void setChoixMonumentTxt(String txt) {
-        panelChargerScenario.setChoixMonumentTxt(txt);
+        panelChargerScenario.set_choix_monument_texte(txt);
     }
 	
 	public JPanel getPanelChargerPartie(){
