@@ -1,7 +1,15 @@
 package Vue;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -9,17 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controleur.Jeu;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Font;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * PanelNouvellePartie contient tous les elements visuels permettant la creation d'une nouvelle partie.
@@ -119,7 +116,7 @@ public class PanelNouvellePartie extends JPanel{
      * @param max le nombre maximum de pseudos à vérifier.
      * @return Si saisie des pseudos bien faite.
      */
-    public boolean setAllNames(int max){
+    public boolean set_all_names(int max){
         if (max > 4) {
             max = 4;
         }
@@ -135,7 +132,7 @@ public class PanelNouvellePartie extends JPanel{
      * Initialise la liste des cartes à afficher.
      * @param nomMap la variable à initialiser.
      */
-    public void initListeCartes(ArrayList<String> nomMap){
+    public void init_liste_cartes(ArrayList<String> nomMap){
         nomMap.add("");
         File dossierCartes = new File("src"+File.separator+"data"+File.separator+"cartes"+File.separator);
         File[] listeNomCartes = dossierCartes.listFiles();

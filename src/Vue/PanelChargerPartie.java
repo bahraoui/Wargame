@@ -5,13 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -90,7 +87,7 @@ public class PanelChargerPartie extends JPanel{
 
     
     /**
-     * getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
+     * Le getter getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
      * @return JLabel
      */
     public JLabel getLabelCarteChosie(){
