@@ -37,6 +37,7 @@ import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
 import Vue.TypeUnite;
+import modele.Node;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
