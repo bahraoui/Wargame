@@ -55,10 +55,10 @@ public class PanelMap extends JPanel {
     }
 
 	/**
-	 * La methode enregistreEcouteur met a l'ecoute toutes les cases du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute toutes les cases du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-	public void enregistreEcouteur(Jeu controleur) {
+	public void enregistre_ecouteur(Jeu controleur) {
 		for (Hexagone[] hexagones : hexs) {
 			for (Hexagone hexagone : hexagones) {
 				if (hexagone != null) {
@@ -68,6 +68,8 @@ public class PanelMap extends JPanel {
 		}
 	}
 
+	// Getters et setters
+
 	/**
 	 * Le getter getCells permet de recuperer toute les cases du plateau
 	 * @return
@@ -76,4 +78,6 @@ public class PanelMap extends JPanel {
 		return hexs;
 	}
 
+	// FIN getters et setters
+	
 }

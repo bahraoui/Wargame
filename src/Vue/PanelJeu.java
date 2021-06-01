@@ -1,24 +1,21 @@
 package Vue;
 
 
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Font;
-import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -337,10 +334,10 @@ public class PanelJeu extends JPanel {
 	}
 
 	/**
-	 * La methode enregistreEcouteur met a l'ecoute tous les elements du panel pour le controleur
+	 * La methode enregistre_ecouteur met a l'ecoute tous les elements du panel pour le controleur
 	 * @param controleur controleur que l'on souhaite mettre a l'ecoute
 	 */
-	public void enregistreEcouteur(Jeu controleur) {
+	public void enregistre_ecouteur(Jeu controleur) {
         boutonFinDeTour.addActionListener(controleur);
 		boutonAbandonner.addActionListener(controleur);
 		boutonSauvegarder.addActionListener(controleur);
@@ -356,7 +353,7 @@ public class PanelJeu extends JPanel {
 	 * updateGoldJoueurAffichage permet de mettre a jour le nombre de golds du joueur sur le labelGolds
 	 * @param nbGold
 	 */
-	public void updateGoldJoueurAffichage(int nbGold) {
+	public void update_gold_joueur_affichage(int nbGold) {
         labelGolds.setText(nbGold+" Golds");
     }
 

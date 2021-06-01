@@ -110,7 +110,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         setCellulesMap();
 
         FenetreJeu = new FrameJeu();
-        FenetreJeu.enregistreEcouteur(controleur);
+        FenetreJeu.enregistre_ecouteur(controleur);
     }
     //
     // FONCTION
@@ -230,9 +230,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 // on supprime le monument du plateau et on ajoute le trésor à la banque du
                 // joueur
                 joueurActuel.setPieces(joueurActuel.getPieces() + caseEntiteMorte.getBatiment().getTresor());
-                caseEntiteMorte.setBatiment(null);
-                FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
-            }
+                caseEntiteMorte.setBatiment(null); 
+                FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
+            }   
         }
     }
 
@@ -508,8 +508,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             else {
                 joueurGagnant = joueurActuel;
             }
-            //On change de panel pour afficher le panel victoire avec le nom du vainqueur
-            FenetreJeu.changePanel(PanelActuel.VICTOIRE);
+            FenetreJeu.changer_panel(PanelActuel.VICTOIRE);
             FenetreJeu.getPanelVictoire().getLabelNomVainqueur().setText(joueurGagnant.getPseudo());
             effacer_donnees();
             return true;
@@ -595,7 +594,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             //On modifie le montant de la banque du joueur 
             joueurActuel.setPieces(joueurActuel.getPieces() + gainPerteGold);
-            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
             //On affiche pour les joueurs humains l'action effectué  
         }
         //Regeneration des unités
@@ -705,7 +704,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : " + joueurActuel.getPseudo());
             FenetreJeu.getPanelJeu().getLabelNbTours().setText("Nombre de tours : " + tour);
             ;
-            FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+            FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
             if (joueurActuel.getEstIa()) {
                 tourIA();
                 try {
@@ -916,7 +915,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 Unite uniteachete = achatTroupesIA(depense);
                 if (uniteachete != null) {
                     depense -= uniteachete.getCout();
-                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                     Thread.sleep(100);
                 }
             } catch (InterruptedException e) {
@@ -1433,7 +1432,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 case MONUMENT:
                                     hexClic.set_batiment(null);
                                     hexClic.set_terrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
-                                    panelChargerScenario.setMonumentNb(false);
+                                    panelChargerScenario.set_monument_nombre(false);
                                     cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
                                             .setBatiment(null);
                                     break;
@@ -1448,7 +1447,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 .getUnite() != null)
                             JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
                         else {
-                            panelChargerScenario.setMonumentNb(true);
+                            panelChargerScenario.set_monument_nombre(true);
                             hexClic.set_batiment(TypeBatimentVue.MONUMENT);
                             cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
                         }
@@ -1461,7 +1460,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 Archer archer = new Archer();
                                 if (placer_unite_joueur(joueurActuel, archer, hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.set_unite(uniteAchete);
                                 }
                                 else 
@@ -1471,7 +1470,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 Cavalerie cavalerie = new Cavalerie();
                                 if (placer_unite_joueur(joueurActuel, cavalerie, hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.set_unite(uniteAchete);
                                 }
                                 else 
@@ -1481,7 +1480,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 Infanterie infanterie = new Infanterie();
                                 if (placer_unite_joueur(joueurActuel, infanterie, hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.set_unite(uniteAchete);
                                 }
                                 else 
@@ -1491,7 +1490,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 InfanterieLourde infanterieLourde = new InfanterieLourde();
                                 if (placer_unite_joueur(joueurActuel, infanterieLourde, hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.set_unite(uniteAchete);
                                 }
                                 else 
@@ -1501,7 +1500,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 Mage mage = new Mage();
                                 if (placer_unite_joueur(joueurActuel, mage, hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY())) {
-                                    FenetreJeu.getPanelJeu().updateGoldJoueurAffichage(joueurActuel.getPieces());
+                                    FenetreJeu.getPanelJeu().update_gold_joueur_affichage(joueurActuel.getPieces());
                                     hexClic.set_unite(uniteAchete);
                                 }
                                 else 
@@ -1619,7 +1618,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Nouvelle Partie"
                  */
                 case "nouvellePartie":
-                    FenetreJeu.changePanel(PanelActuel.NOUVELLEPARTIE);
+                    FenetreJeu.changer_panel(PanelActuel.NOUVELLEPARTIE);
                     ArrayList<String> listNomMap = new ArrayList<String>();
                     FenetreJeu.getPanelNouvellePartie().init_liste_cartes(listNomMap);
                     FenetreJeu.getPanelNouvellePartie().setChoixMap(listNomMap);
@@ -1628,13 +1627,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  * Bouton "Charger Partie"
                  */
                 case "chargerPartie":
-                    FenetreJeu.changePanel(PanelActuel.CHARGERPARTIE);
+                    FenetreJeu.changer_panel(PanelActuel.CHARGERPARTIE);
                     break;
                 /*
                  * Bouton "Règles"
                  */
                 case "afficherRegles":
-                    FenetreJeu.changePanel(PanelActuel.REGLES);
+                    FenetreJeu.changer_panel(PanelActuel.REGLES);
                     break;
                 /*
                  * Bouton "Quitter"
@@ -1680,16 +1679,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             // REGROUPER ?
                             setCellulesMap();
                             panelChargerScenario = new PanelChargerScenario(cellulesToHexagones());
-                            panelChargerScenario.setMonumentNb(6 - calculer_nombre_monument());
+                            panelChargerScenario.set_monument_nombre(6-calculer_nombre_monument());
                             FenetreJeu.setPanelChangerScenario(panelChargerScenario);
-                            panelChargerScenario.enregistreEcouteur(this);
-                            // REGROUPER
-                            terrainChoisi = TypeTerrain.NEIGE;
-                            tour = 0;
-                            joueurActuel = listeJoueur.get(0);
-                            FenetreJeu.changePanel(PanelActuel.CHANGERSCENARIO);
-                            JOptionPane.showMessageDialog(FenetreJeu,
-                                    "Vous pouvez à présent modifier la carte comme bon vous semble, faîtes preuve de créativité !");
+                            panelChargerScenario.enregistre_ecouteur(this);
+                            //REGROUPER
+                            terrainChoisi = TypeTerrain.NEIGE; tour = 0; joueurActuel = listeJoueur.get(0);
+                            FenetreJeu.changer_panel(PanelActuel.CHANGERSCENARIO);
+                            JOptionPane.showMessageDialog(FenetreJeu, "Vous pouvez à présent modifier la carte comme bon vous semble, faîtes preuve de créativité !");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -1727,14 +1723,22 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             chargePartie(new FileInputStream(sauvegardeChoisis));
                             setCellulesMap();
                             pj = new PanelJeu(cellulesToHexagones());
+                            FenetreJeu.setPanelJeu(pj);
+                            pj.enregistre_ecouteur(this);
+                            FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistre_ecouteur(this);
+                            FenetreJeu.changer_panel(PanelActuel.JEU);
+                            initPanelJeu = true;
+                            init_nouveau_tour();
+                            pj.repaint();
+                            reinitialiser_chrono();
                         } catch (IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                         FenetreJeu.setPanelJeu(pj);
-                        pj.enregistreEcouteur(this);
-                        FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistreEcouteur(this);
-                        FenetreJeu.changePanel(PanelActuel.JEU);
+                        pj.enregistre_ecouteur(this);
+                        FenetreJeu.getPanelJeu().getPanelCentrePlateau().enregistre_ecouteur(this);
+                        FenetreJeu.changer_panel(PanelActuel.JEU);
                         initPanelJeu = true;
                         init_nouveau_tour();
                         pj.repaint();
@@ -1768,8 +1772,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         e1.printStackTrace();
                     }
                     FenetreJeu.setPanelJeu(pj);
-                    pj.enregistreEcouteur(this);
-                    FenetreJeu.changePanel(PanelActuel.JEU);
+                    pj.enregistre_ecouteur(this);
+                    FenetreJeu.changer_panel(PanelActuel.JEU);
                     initPanelJeu = true;
                     init_nouveau_tour();
                     pj.repaint();
@@ -1862,7 +1866,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                  */
                 case "retourMenu":
                     effacer_donnees();
-                    FenetreJeu.changePanel(PanelActuel.MENU);
+                    FenetreJeu.changer_panel(PanelActuel.MENU);
                     if (initPanelJeu) {
                         FenetreJeu.getPanelJeu().getTimerHorloge().stop();
                         FenetreJeu.getPanelJeu().getTimerTour().stop();
