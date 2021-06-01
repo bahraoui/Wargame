@@ -54,7 +54,7 @@ public class Joueur {
      * @param unite L'unité à acheter
      * @return retourne si l'action d'achat a eu lieu ou non 
      */
-    public boolean achaterUnitArmee(Unite unite){
+    public boolean acheterUnite(Unite unite){
         if (this.getPieces() >= unite.getCout()){
             this.setPieces(this.getPieces()-unite.getCout());
             return true;

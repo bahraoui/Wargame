@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Cursor;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -34,6 +36,8 @@ import Vue.Point;
 import Vue.TypeBatimentVue;
 import Vue.TypeTerrain;
 import Vue.TypeUnite;
+
+import modele.Node;
 import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.batiment.TypeBatiment;
@@ -154,7 +158,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         defenseurHex.setBatiment(null);
                     else
                         defenseurHex.setUnite(null);
-                    defenseurHex.setTerrain(terrainModeleToVue(defenseCase.getTerrain()));
+                    defenseurHex.setTerrain(Outils.terrainModeleToVue(defenseCase.getTerrain()));
 
                     // on lance la fonction qui enleve l'entité du plateau
                     mortEntite(defenseCase);
@@ -292,7 +296,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         // Si il n'y a aucune entité sur la case et que le placement est assez proche de
         // la base
         if (caseUnite.estOccupe() == null && Math.abs(calculDistanceY) <= joueur.getBase().getVision()
-                && Math.abs(calculDistanceX) <= joueur.getBase().getVision() && joueur.achaterUnitArmee(unite)) {
+                && Math.abs(calculDistanceX) <= joueur.getBase().getVision() && joueur.acheterUnite(unite)) {
             // On ajoute l'unité à l'armée et ob l'ajoute sur le plateau
             joueur.getArmee().add(unite);
             plateau.get(coordY).get(coordX).setUnite(unite);
@@ -344,6 +348,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
     /**
      * Cette fonction recherche le chemin le plus court en terme de case plateau
      * Elle renvoie un noeud racine qui est l'arbre de déplacement a effectuer entre la source et la destination
+     * C'est un parcours en profondeur
      * @param mat Matrice d'entiers qui contient les déplacements de chaque terrain du plateau
      * @param srcX Coordonnées en X de la case source
      * @param srcY Coordonnées en Y de la case source
@@ -417,9 +422,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 plateau.get(coordXDestination).get(coordYDestination).setUnite(unite);
 
                 //On enlève l'unité de la source pour la placer à la destination à l'affichage
-                cellulesCarte[coordXDestination][coordYDestination].getHex().setUnite(uniteModeleToVue(unite));
+                cellulesCarte[coordXDestination][coordYDestination].getHex().setUnite(Outils.uniteModelToVue(unite));
                 cellulesCarte[coordXSource][coordYSource].getHex().setUnite(null);
-                cellulesCarte[coordXSource][coordYSource].getHex().setTerrain(terrainModeleToVue(caseSource.getTerrain()));
+                cellulesCarte[coordXSource][coordYSource].getHex().setTerrain(Outils.terrainModeleToVue(caseSource.getTerrain()));
 
                 //On enlève les points de déplacement de l'unité
                 unite.setDeplacementActuel(unite.getDeplacementActuel() - pointDeplacementConsomme);
@@ -558,13 +563,18 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (joueurActuel.getArmee().size() > 1) {
                 //on récupère les coordonées d'une unité du joueur actuel
                 uniteMalade = new Random().nextInt(joueurActuel.getArmee().size());
-                coordUniteMalade = rechercheMonUniteDansPlateau(joueurActuel.getArmee().get(uniteMalade));
+                uniteTest = joueurActuel.getArmee().get(uniteMalade);
+                coordUniteMalade = rechercheMonUniteDansPlateau(uniteTest);
+                
                 //On récupère la case du plateau et l'hexagone pour l'affichage
                 caseTest = plateau.get(coordUniteMalade[0]).get(coordUniteMalade[1]);
                 hexagoneTest = cellulesCarte[coordUniteMalade[0]][coordUniteMalade[1]].getHex();       
-                //On supprime l'unité
+                //On supprime l'unité du plateau
                 caseTest.setUnite(null);
-                hexagoneTest.setUnite(null); hexagoneTest.setTerrain(terrainModeleToVue(caseTest.getTerrain()));
+                //On retire l'unité de l'armée
+                joueurActuel.getArmee().remove(uniteMalade);
+                //On retire l'unité de l'affichage
+                hexagoneTest.setUnite(null); hexagoneTest.setTerrain(Outils.terrainModeleToVue(caseTest.getTerrain()));
                 //On affiche pour les joueurs humains l'action effectuée
                 if (!joueurActuel.getEstIa())
                     JOptionPane.showMessageDialog(FenetreJeu,"Une de vos unités est tombé malade, cette dernière est morte de maladie...");
@@ -670,7 +680,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         if (new Random().nextInt(4) == 2) {
                             plateau.get(i).get(j).setTerrain(terrainTempete);
                             hexagoneTest = cellulesCarte[i][j].getHex();
-                            hexagoneTest.setTerrain(terrainModeleToVue(terrainTempete));
+                            hexagoneTest.setTerrain(Outils.terrainModeleToVue(terrainTempete));
                         }
                     }
                 }
@@ -762,24 +772,14 @@ public class Jeu extends MouseAdapter implements ActionListener {
     // PARTIE IA
     //
 
-    // Par rapport à la base placé vers le centre de la map en prio
-    public static boolean placementUnite(Unite unite) {
-        int[][][] coordPossible = { { { 0, 1 }, { 0, 2 }, { 1, 0 }, { 2, 0 }, { 2, 1 } },
-                { { 13, 14 }, { 14, 14 }, { 14, 15 }, { 15, 12 }, { 15, 13 } },
-                { { 0, 14 }, { 1, 14 }, { 2, 15 }, { 0, 13 }, { 1, 13 } },
-                { { 12, 0 }, { 13, 0 }, { 14, 0 }, { 14, 1 }, { 15, 1 } } };
-        for (int i = 0; i < 4; i++) {
-            if (placerUniteJoueur(joueurActuel, unite, coordPossible[joueurActuel.getNumeroJoueur()][i][0],
-                    coordPossible[joueurActuel.getNumeroJoueur()][i][1])) {
-                cellulesCarte[coordPossible[joueurActuel.getNumeroJoueur()][i][0]][coordPossible[joueurActuel
-                        .getNumeroJoueur()][i][1]].getHex().setUnite(uniteModeleToVue(unite));
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static Unite achatTroupesIA(int depense) throws InterruptedException {
+    /**
+     * Cette fonction permet à l'IA d'acheter des troupes.
+     * Elle prend en parametre un budget de dépense et achete des troupes en fonction de ce budget
+     * La fonction renvoie l'unité acheté
+     * @param depense un entier qui stocke le budget depense du tour
+     * @return l'unité qui a été acheté et placé sur le champ de bataille
+     */
+    public static Unite achaterTroupesIA(int depense){
         Unite troupeAchete = null;
         if (depense >= new InfanterieLourde().getCout()) {
             troupeAchete = new InfanterieLourde();
@@ -792,11 +792,43 @@ public class Jeu extends MouseAdapter implements ActionListener {
         } else if (depense >= new Archer().getCout()) {
             troupeAchete = new Archer();
         }
-        if (placementUnite(troupeAchete))
-            joueurActuel.achaterUnitArmee(troupeAchete);
+        if (placerUnite(troupeAchete))
+            joueurActuel.acheterUnite(troupeAchete);
         return troupeAchete;
     }
+ 
+    /**
+     * Essaye de placer une unité donnée en parametre sur le champ de bataille
+     * La fonction regarde si il y a une place de libre autour de la base
+     * @param unite unité qui veut etre placé sur le champ de bataille
+     * @return booleen Renvoie True si le placement de l'unité a bien été effectué, False sinon
+     */
+    public static boolean placerUnite(Unite unite) {
+        //On regarde toutes les coordonnées possibles autour des bases des joueurs
+        int[][][] coordPossible = { { { 0, 1 }, { 0, 2 }, { 1, 0 }, { 2, 0 }, { 2, 1 } },
+                { { 13, 14 }, { 14, 14 }, { 14, 15 }, { 15, 12 }, { 15, 13 } },
+                { { 0, 14 }, { 1, 14 }, { 2, 15 }, { 0, 13 }, { 1, 13 } },
+                { { 12, 0 }, { 13, 0 }, { 14, 0 }, { 14, 1 }, { 15, 1 } } };
+        
+        int[] coordTest;
+        Hexagone hexagoneTest;
+        for (int i = 0; i < 4; i++) {
+            coordTest = coordPossible[joueurActuel.getNumeroJoueur()][i];
+            hexagoneTest = cellulesCarte[coordTest[0]][coordTest[1]].getHex();
+            //Si il y a de la place et que l'unité a bien été posé sur le champs de bataille alors je l'affiche
+            if (placerUniteJoueur(joueurActuel, unite, coordTest[0], coordTest[1])) {
+                hexagoneTest.setUnite(Outils.uniteModelToVue(unite));
+                return true;
+            }
+        }
+        return false;
+    }
 
+    /**
+     * Cette fonction renvoie les des coordonnées autour de celles qui est donné en parametre pour le deplacement de l'ia
+     * @param coord 
+     * @return
+     */
     public static int[] estDeplacementPossible(int[] coord) {
         int[][] coordTest = { { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, 1 }, { 0, -1 }, { -1, 1 }, { -1, 0 }, { -1, -1 } };
         int row, col;
@@ -811,14 +843,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return coord;
     }
 
-    public static void actionUniteIA(Unite unite) {
+    /**
+     * Cette fonction prend en paramètre une unité et 
+     * @param unite
+     */
+    public static void faireActionUniteIA(Unite unite) {
         // recherche Entite plus proche et deplacement vers elle/attaquer
         int[] coordUnite = rechercheMonUniteDansPlateau(unite);
         Entite cible = rechercheEntiteProche(coordUnite); // doute bizzare
         try {
             Thread.sleep(100);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         int[] coordDeplacement = new int[2];
@@ -838,7 +873,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         coordUnite = rechercheMonUniteDansPlateau(unite);
         if (coordUnite[0] == coordDeplacement[0] && coordUnite[1] == coordDeplacement[1]) {
-            cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(uniteModeleToVue(unite));
+            cellulesCarte[coordUnite[0]][coordUnite[1]].getHex().setUnite(Outils.uniteModelToVue(unite));
             combattre(cellulesCarte[coordUnite[0]][coordUnite[1]].getHex(),
                     cellulesCarte[coordCible[0]][coordCible[1]].getHex(), 0);
         }
@@ -905,11 +940,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
     }
 
     public static void tourIA() {
-        // joueurAAttaquerIA();
         int depense = 4 + (int) (Math.random() * joueurActuel.getPieces());
         while (depense >= 5) {
             try {
-                Unite uniteachete = achatTroupesIA(depense);
+                Unite uniteachete = achaterTroupesIA(depense);
                 if (uniteachete != null) {
                     depense -= uniteachete.getCout();
                     FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
@@ -921,7 +955,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
             if (!calculVitoire())
-                actionUniteIA(joueurActuel.getArmee().get(i));
+                faireActionUniteIA(joueurActuel.getArmee().get(i));
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -938,42 +972,23 @@ public class Jeu extends MouseAdapter implements ActionListener {
     // AFFICHAGE
     //
 
-    public static void setCellulesMap() throws IOException {
+    /**
+     * Ceffe fonction crée une matrice de cellules en fonction du plateau
+     */
+    public static void setCellulesMap() {
+        TypeTerrain sol;
+        TypeUnite unite;
+        TypeBatimentVue batiment;
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
-                TypeTerrain sol = null;
-                TypeUnite unite = null;
-                TypeBatimentVue batiment = null;
-                if (plateau.get(i).get(j).getTerrain() instanceof Plaine)
-                    sol = TypeTerrain.PLAINE;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Desert)
-                    sol = TypeTerrain.DESERT;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Foret)
-                    sol = TypeTerrain.FORET;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Mer)
-                    sol = TypeTerrain.MER;
-                else if (plateau.get(i).get(j).getTerrain() instanceof Montagne)
-                    sol = TypeTerrain.MONTAGNE;
-                else if (plateau.get(i).get(j).getTerrain() instanceof ToundraNeige)
-                    sol = TypeTerrain.NEIGE;
+                sol = null;
+                unite = null;
+                batiment = null;
 
-                if (plateau.get(i).get(j).getUnite() instanceof Archer)
-                    unite = TypeUnite.ARCHER;
-                else if (plateau.get(i).get(j).getUnite() instanceof Cavalerie)
-                    unite = TypeUnite.CAVALERIE;
-                else if (plateau.get(i).get(j).getUnite() instanceof Infanterie)
-                    unite = TypeUnite.INFANTERIE;
-                else if (plateau.get(i).get(j).getUnite() instanceof InfanterieLourde)
-                    unite = TypeUnite.INFANTERIELOURDE;
-                else if (plateau.get(i).get(j).getUnite() instanceof Mage)
-                    unite = TypeUnite.MAGE;
-
-                if (plateau.get(i).get(j).getBatiment() != null
-                        && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.BASE) {
-                    batiment = TypeBatimentVue.BASE;
-                } else if (plateau.get(i).get(j).getBatiment() != null
-                        && plateau.get(i).get(j).getBatiment().getEstBase() == TypeBatiment.MONUMENT)
-                    batiment = TypeBatimentVue.MONUMENT;
+                sol = Outils.terrainModeleToVue(plateau.get(i).get(j).getTerrain());
+                unite = Outils.uniteModelToVue(plateau.get(i).get(j).getUnite());
+                if (plateau.get(i).get(j).getBatiment() != null)
+                    batiment = Outils.batimentModeleToVue(plateau.get(i).get(j).getBatiment().getEstBase());
 
                 Cellule cell = new Cellule(new Hexagone(sol, unite, batiment, new Point(i, j)), plateau.get(i).get(j));
                 cellulesCarte[i][j] = cell;
@@ -981,7 +996,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
-    public static Hexagone[][] cellulesToHexagones() throws IOException {
+    /**
+     * Renvoie la matrice de cellules en matrice d'hexagone
+     * @return
+     */
+    public static Hexagone[][] cellulesToHexagones(){
         Hexagone[][] hexs = new Hexagone[16][16];
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
@@ -991,147 +1010,23 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return hexs;
     }
 
+    /**
+     * Renvoie une case en fonction de coordonnées données en paramètres
+     * @param coordY
+     * @param coordX
+     * @return
+     */
     public static Case coordToCase(int coordY, int coordX) {
         return plateau.get(coordY).get(coordX);
     }
 
-    private static TypeTerrain terrainModeleToVue(Terrain terrain) {
-        TypeTerrain typeTerrain = null;
-        if (terrain instanceof Plaine)
-            typeTerrain = TypeTerrain.PLAINE;
-        else if (terrain instanceof Desert)
-            typeTerrain = TypeTerrain.DESERT;
-        else if (terrain instanceof Foret)
-            typeTerrain = TypeTerrain.FORET;
-        else if (terrain instanceof Mer)
-            typeTerrain = TypeTerrain.MER;
-        else if (terrain instanceof Montagne)
-            typeTerrain = TypeTerrain.MONTAGNE;
-        else if (terrain instanceof ToundraNeige)
-            typeTerrain = TypeTerrain.NEIGE;
-        return typeTerrain;
-    }
-
-    public static Terrain terrainVueToModele(TypeTerrain ter) {
-        Terrain terrain = null;
-        switch (ter) {
-            case MER:
-                terrain = new Mer();
-                break;
-            case DESERT:
-                terrain = new Desert();
-                break;
-            case FORET:
-                terrain = new Foret();
-                break;
-            case MONTAGNE:
-                terrain = new Montagne();
-                break;
-            case PLAINE:
-                terrain = new Plaine();
-                break;
-            case NEIGE:
-                terrain = new ToundraNeige();
-                break;
-            default:
-                System.err.println("Erreur : la conversion de terrains s'est mal passe, " + ter + " indefini.");
-                break;
-        }
-        return terrain;
-    }
-
-    public static TypeBatimentVue batimentModeleToVue(TypeBatiment batiment) {
-        TypeBatimentVue typeBatimentVue = null;
-        switch (batiment) {
-            case MONUMENT:
-                typeBatimentVue = TypeBatimentVue.MONUMENT;
-                break;
-            case BASE:
-                typeBatimentVue = TypeBatimentVue.BASE;
-                break;
-
-            default:
-                break;
-        }
-        return typeBatimentVue;
-    }
-
-    public static TypeUnite uniteModeleToVue(Unite unite) {
-        TypeUnite uniteVue = null;
-        if (unite instanceof Archer)
-            uniteVue = TypeUnite.ARCHER;
-        else if (unite instanceof Cavalerie)
-            uniteVue = TypeUnite.CAVALERIE;
-        else if (unite instanceof Infanterie)
-            uniteVue = TypeUnite.INFANTERIE;
-        else if (unite instanceof InfanterieLourde)
-            uniteVue = TypeUnite.INFANTERIELOURDE;
-        else if (unite instanceof Mage)
-            uniteVue = TypeUnite.MAGE;
-        return uniteVue;
-    }
-
-    public static Batiment analyseSplBatiment(String spl) {
-        String[] spl1 = new String[25];
-        spl1 = spl.split(",");
-        if (spl1.length == 3) {
-            Batiment bat = new Batiment(TypeBatiment.MONUMENT);
-            bat.setIndentifiant(Integer.parseInt(spl1[1]));
-            bat.setPointDeVieActuel(Integer.parseInt(spl1[2]));
-            return bat;
-        }
-        return null;
-    }
-
-    public static Unite analyseSplUnite(String spl, int[][] listeUnite) {
-        String[] spl1 = new String[25];
-        if (spl.length() > 2) {
-            spl1 = spl.split(",");
-            Unite unite = new Unite(0, 0, 0, 0);
-            switch (spl1[0]) {
-                case "Archer":
-                    unite = new Archer();
-                    break;
-
-                case "Cavalerie":
-                    unite = new Cavalerie();
-                    break;
-
-                case "Infanterie":
-                    unite = new Infanterie();
-                    break;
-
-                case "InfanterirLourde":
-                    unite = new InfanterieLourde();
-                    break;
-
-                case "Mage":
-                    unite = new Mage();
-                    break;
-
-                default:
-                    break;
-            }
-            unite.setIndentifiant(Integer.parseInt(spl1[1]));
-            unite.setPointDeVieActuel(Integer.parseInt(spl1[2]));
-            unite.setDeplacementActuel(Integer.parseInt(spl1[3]));
-            unite.setAAttaque(Boolean.parseBoolean(spl1[4]));
-            unite.setEnRepos(Boolean.parseBoolean(spl1[5]));
-            for (int i = 0; i < listeUnite.length; i++) {
-                for (int j = 0; j < listeUnite[i].length; j++) {
-                    if (unite.getIdentifiant() == listeUnite[i][j]) {
-                        listeJoueur.get(i).getArmee().add(unite);
-                    }
-                }
-            }
-            return unite;
-        }
-        return null;
-    }
-
     //
     // GESTION SAUVEGARDE CHARGER
-    //
+    //    
+
+    /**
+     * 
+     */
     public static void sauvegardePartie() {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -1189,6 +1084,63 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
     }
 
+    /**
+     * 
+     * @param chaine
+     * @return
+     */
+    public static String sauvegardeStringMap(String chaine) {
+
+        for (int i = 0; i < cote; i++) {
+            for (int j = 0; j < cote; j++) {
+                /// Ajout du premier [ pour chaque case
+                chaine += "[";
+
+                /// Déclaration des variables utiles
+                Terrain terrain = plateau.get(i).get(j).getTerrain();
+                Unite unite = plateau.get(i).get(j).getUnite();
+                Batiment batiment = plateau.get(i).get(j).getBatiment();
+                String[] splStrings;
+                String chaineTerrain = new String();
+                String chaineUnite = new String();
+                String chaineBatiment = new String();
+
+                /// Recuperation du type de Terrain
+                chaineTerrain = terrain.toString();
+                splStrings = chaineTerrain.split(":");
+                chaineTerrain = splStrings[0];
+                splStrings = chaineTerrain.split(" ");
+                chaine += splStrings[0] + ":";
+
+                /// Unite
+                if (unite != null) {
+                    chaineUnite = unite.toString() + "," + unite.getIdentifiant() + "," + unite.getPointDeVieActuel()
+                            + "," + unite.getDeplacementActuel() + "," + unite.getAAttaque() + "," + unite.getEnRepos();
+                }
+                chaine += chaineUnite + ":";
+
+                /// Batiment
+                if (batiment != null && (batiment.getEstBase() != TypeBatiment.BASE)) {
+                    chaineBatiment = batiment.toString() + "," + batiment.getIdentifiant() + ","
+                            + batiment.getPointDeVieActuel();
+                }
+                chaine += chaineBatiment;
+
+                /// Ajout de fin
+                chaine += "]";
+                if (j < cote - 1) {
+                    chaine += ";";
+                }
+            }
+            chaine += "\n";
+        }
+        return chaine;
+    }
+
+    /**
+     * 
+     * @param file
+     */
     public void chargerCarte(FileInputStream file) {
         String line = new String();
         Scanner scanner = new Scanner(file);
@@ -1200,6 +1152,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
         scanner.close();
     }
 
+    /**
+     * 
+     * @param file
+     */
     public static void chargePartie(FileInputStream file) {
         String line = new String();
         String[] strValues1;
@@ -1266,6 +1222,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
         scanner.close();
     }
 
+    /**
+     * 
+     * @param fichier
+     */
     public static void sauvegardeMap(String fichier) {
         try {
             File file = new File(
@@ -1284,54 +1244,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
-    public static String sauvegardeStringMap(String chaine) {
-
-        for (int i = 0; i < cote; i++) {
-            for (int j = 0; j < cote; j++) {
-                /// Ajout du premier [ pour chaque case
-                chaine += "[";
-
-                /// Déclaration des variables utiles
-                Terrain terrain = plateau.get(i).get(j).getTerrain();
-                Unite unite = plateau.get(i).get(j).getUnite();
-                Batiment batiment = plateau.get(i).get(j).getBatiment();
-                String[] splStrings;
-                String chaineTerrain = new String();
-                String chaineUnite = new String();
-                String chaineBatiment = new String();
-
-                /// Recuperation du type de Terrain
-                chaineTerrain = terrain.toString();
-                splStrings = chaineTerrain.split(":");
-                chaineTerrain = splStrings[0];
-                splStrings = chaineTerrain.split(" ");
-                chaine += splStrings[0] + ":";
-
-                /// Unite
-                if (unite != null) {
-                    chaineUnite = unite.toString() + "," + unite.getIdentifiant() + "," + unite.getPointDeVieActuel()
-                            + "," + unite.getDeplacementActuel() + "," + unite.getAAttaque() + "," + unite.getEnRepos();
-                }
-                chaine += chaineUnite + ":";
-
-                /// Batiment
-                if (batiment != null && (batiment.getEstBase() != TypeBatiment.BASE)) {
-                    chaineBatiment = batiment.toString() + "," + batiment.getIdentifiant() + ","
-                            + batiment.getPointDeVieActuel();
-                }
-                chaine += chaineBatiment;
-
-                /// Ajout de fin
-                chaine += "]";
-                if (j < cote - 1) {
-                    chaine += ";";
-                }
-            }
-            chaine += "\n";
-        }
-        return chaine;
-    }
-
+    /**
+     * 
+     * @param line
+     * @param iline
+     * @param listeUnite
+     */
     public static void chargeLineMap(String line, int iline, int[][] listeUnite) {
 
         String[] spl1;
@@ -1375,6 +1293,75 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
     }
 
+    /**
+     * 
+     * @param spl
+     * @return
+     */
+    public static Batiment analyseSplBatiment(String spl) {
+        String[] spl1 = new String[25];
+        spl1 = spl.split(",");
+        if (spl1.length == 3) {
+            Batiment bat = new Batiment(TypeBatiment.MONUMENT);
+            bat.setIndentifiant(Integer.parseInt(spl1[1]));
+            bat.setPointDeVieActuel(Integer.parseInt(spl1[2]));
+            return bat;
+        }
+        return null;
+    }
+
+    /**
+     * 
+     * @param spl
+     * @param listeUnite
+     * @return
+     */
+    public static Unite analyseSplUnite(String spl, int[][] listeUnite) {
+        String[] spl1 = new String[25];
+        if (spl.length() > 2) {
+            spl1 = spl.split(",");
+            Unite unite = new Unite(0, 0, 0, 0);
+            switch (spl1[0]) {
+                case "Archer":
+                    unite = new Archer();
+                    break;
+
+                case "Cavalerie":
+                    unite = new Cavalerie();
+                    break;
+
+                case "Infanterie":
+                    unite = new Infanterie();
+                    break;
+
+                case "InfanterirLourde":
+                    unite = new InfanterieLourde();
+                    break;
+
+                case "Mage":
+                    unite = new Mage();
+                    break;
+
+                default:
+                    break;
+            }
+            unite.setIndentifiant(Integer.parseInt(spl1[1]));
+            unite.setPointDeVieActuel(Integer.parseInt(spl1[2]));
+            unite.setDeplacementActuel(Integer.parseInt(spl1[3]));
+            unite.setAAttaque(Boolean.parseBoolean(spl1[4]));
+            unite.setEnRepos(Boolean.parseBoolean(spl1[5]));
+            for (int i = 0; i < listeUnite.length; i++) {
+                for (int j = 0; j < listeUnite[i].length; j++) {
+                    if (unite.getIdentifiant() == listeUnite[i][j]) {
+                        listeJoueur.get(i).getArmee().add(unite);
+                    }
+                }
+            }
+            return unite;
+        }
+        return null;
+    }
+
     //
     // FIN SAUVEGARDE CHARGER PARTIE
     //
@@ -1391,19 +1378,19 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 case CHANGERSCENARIO:
                     if (terrainChoisi != null && selectionMonument == false) {
                         hexClic.setTerrain(terrainChoisi);
-                        cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setTerrain(terrainVueToModele(terrainChoisi));
+                        cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setTerrain(Outils.terrainVueToModele(terrainChoisi));
                         if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
-                            hexClic.setBatiment(batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
+                            hexClic.setBatiment(Outils.batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
                         }
                     } else if (selectionMonument == true) {
                         if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
                                 .getBatiment() != null) {
-                            switch (batimentModeleToVue(
+                            switch (Outils.batimentModeleToVue(
                                     cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
                                             .getBatiment().getEstBase())) {
                                 case MONUMENT:
                                     hexClic.setBatiment(null);
-                                    hexClic.setTerrain(terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
+                                    hexClic.setTerrain(Outils.terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
                                     panelChangerScenario.estAjouterMonument(false);
                                     cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
                                             .setBatiment(null);
