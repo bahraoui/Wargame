@@ -96,6 +96,13 @@ public class Joueur {
         this.setPieces(this.getPieces()+pieceGain);
     }
 
+    public void supprimerArmee(){
+        int tailleArmee = this.getArmee().size();
+        for (int i = tailleArmee-1; i >= 0; i--) {
+            this.getArmee().remove(i);
+        }
+    }
+
     /**
      * La fonction retourne vraie si l'unité passer en parametre appartient au joueur qui clic dessus
      * @param caseClic1 La case choisis par le joueur

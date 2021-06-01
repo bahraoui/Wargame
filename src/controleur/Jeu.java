@@ -221,6 +221,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         // on recupère les coordonnées de la base du joueur et on l'enlève du plateau
                         ArrayList<Integer> coordBase = postionBaseJoueur.get(joueur.getNumeroJoueur());
                         plateau.get(coordBase.get(0)).get(coordBase.get(1)).setBatiment(null);
+                        supprimerArmee(joueur);
+                        JOptionPane.showMessageDialog(FenetreJeu,joueur.getPseudo()+" est mort !");
                         return;
                     }
                 }
@@ -343,6 +345,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         return (ligneTest >= 0) && (ligneTest < cote - 1) && (colonneTest >= 0) && (colonneTest < cote - 1)
                 && (plateau.get(ligneTest).get(colonneTest).estOccupe() == null);
     }
+    
 
     /**
      * Cette fonction recherche le chemin le plus court en terme de case plateau
@@ -755,12 +758,31 @@ public class Jeu extends MouseAdapter implements ActionListener {
         for (int i = nbJoueurs - 1; i > 0; i--)
             listeJoueur.remove(i);
         listeJoueur = new ArrayList<Joueur>();
+        for (int i = nbJoueurs - 1; i > 0; i--)
+            postionBaseJoueur.remove(i);
+        postionBaseJoueur = new ArrayList<>();
         nbJoueursH = 0;
         nbJoueursIA = 0;
         plateau.removeAll(plateau);
         plateau = new Plateau();
         FenetreJeu.getPanelNouvellePartie().getNbJoueursHumain().setSelectedIndex(0);
         FenetreJeu.getPanelNouvellePartie().getNbJoueursIA().setSelectedIndex(0);
+    }
+
+    public static void supprimerArmee(Joueur joueur){
+        Unite uniteJoueur = null;
+        int [] coordUniteJoueur = null;
+        for (int i = 0; i < joueur.getArmee().size(); i++) {
+            uniteJoueur = joueur.getArmee().get(i);
+            coordUniteJoueur = rechercheMonUniteDansPlateau(uniteJoueur);
+            supprimerEntiteCellule(coordUniteJoueur);
+        }
+        joueur.supprimerArmee();
+    }
+
+    public static void supprimerEntiteCellule(int [] coordEntite){
+        Cellule cell = cellulesCarte[coordEntite[0]][coordEntite[1]];
+        cell.clear();
     }
 
     //
@@ -1209,6 +1231,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             strValues1[i] = strValues1[i].replace("[", "");
             strValues1[i] = strValues1[i].replace("]", "");
             strValues2 = strValues1[i].split(",");
+            System.out.println("Y "+strValues2[0]);
+            System.out.println("X "+strValues2[1]);
             placerBase(listeJoueur.get(i), Integer.parseInt(strValues2[0]), Integer.parseInt(strValues2[1]));
 
         }
@@ -1500,10 +1524,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 if (chemin != null) {
                                     distanceCase = chemin.getDist();
                                 }
+                                System.out.println("DISTANCE : "+distanceCase);
                                 if (combattre(hexCaseClic, hexClic, distanceCase)) {
                                     JOptionPane.showMessageDialog(FenetreJeu, "Attaque");
-                                } else
-                                    JOptionPane.showMessageDialog(FenetreJeu, "Echoué");
+                                }
                             }
                             caseClic1 = null;
                             caseClic2 = null;
@@ -1535,7 +1559,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                     + ((Unite) caseSelectionne.estOccupe()).getDeplacementActuel());
                         } else {
                             FenetreJeu.getPanelJeu().getLabelNomEntite()
-                                    .setText(caseSelectionne.getBatiment().afficherNomBatiment());
+                                    .setText(caseSelectionne.getBatiment().toString());
                         }
                         FenetreJeu.getPanelJeu().getLabelPointVie().setText(
                                 "Point de vie : " + ((Entite) caseSelectionne.estOccupe()).getPointDeVieActuel());

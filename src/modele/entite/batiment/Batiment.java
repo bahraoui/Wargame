@@ -24,12 +24,12 @@ public class Batiment extends Entite{
      * @param parEstBase booleen qui définit si le batiment est une base ou non
      */
     public Batiment(TypeBatiment parEstBase) {
-        super(150,0,5,4);
+        super(1,0,5,4);
         this.estBase = parEstBase;
         if (parEstBase == TypeBatiment.MONUMENT)
             this.tresor = 50; //aleatoire
         else {
-            setPointDeVieActuel(150);
+            setPointDeVieActuel(1);
             //setAttaque(0);
             //setDefense(0);
             setVision(4);
@@ -63,11 +63,6 @@ public class Batiment extends Entite{
     
     public void setTresor(int tresor) {
         this.tresor = tresor;
-    }
-
-    public String afficherNomBatiment() {
-        return null;
-    }
-    
+    }    
 
 }
