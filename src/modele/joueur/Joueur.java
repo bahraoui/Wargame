@@ -54,7 +54,7 @@ public class Joueur {
      * @param unite L'unité à acheter
      * @return retourne si l'action d'achat a eu lieu ou non 
      */
-    public boolean achatUniteArmee(Unite unite){
+    public boolean achater_unite_armee(Unite unite){
         if (this.getPieces() >= unite.getCout()){
             this.setPieces(this.getPieces()-unite.getCout());
             return true;
@@ -68,7 +68,7 @@ public class Joueur {
      * La fonction calcule le gain de pv des unités au debut du tour du joueur
      * Elle met a jour les pv des unités
      */
-    public void regenerationUniteArmee() {
+    public void regenerer_unite_armee() {
         for(int i = 0; i<this.getArmee().size();i++) {
             if (this.getArmee().get(i).getEnRepos() == true) {
                 int pointDeVieGagne = this.getArmee().get(i).getPointDeVieActuel() + (int)(this.getArmee().get(i).getPointDeVieMax() * 0.1);
@@ -91,7 +91,7 @@ public class Joueur {
      * Calcule le gain en piece des joueurs et met a jour sa besace
      * @param tour Le nombre de tour de la partie
      */
-    public void gainTourJoueur(int tour) {
+    public void generer_gain_tour_joueur(int tour) {
         int pieceGain = (int) (tour * 0.2 + 4);
         this.setPieces(this.getPieces()+pieceGain);
     }
@@ -101,7 +101,7 @@ public class Joueur {
      * @param caseClic1 La case choisis par le joueur
      * @return Vrai ou Faux
      */
-    public boolean estMonEntite(Case caseClic1) {
+    public boolean est_mon_entite(Case caseClic1) {
         Entite entite = (Entite) caseClic1.estOccupe();
         if (entite instanceof Unite){
             for (int i = 0; i < this.armee.size(); i++) {

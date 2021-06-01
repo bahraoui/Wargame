@@ -295,7 +295,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         // Si il n'y a aucune entité sur la case et que le placement est assez proche de
         // la base
         if (caseUnite.estOccupe() == null && Math.abs(calculDistanceY) <= joueur.getBase().getVision()
-                && Math.abs(calculDistanceX) <= joueur.getBase().getVision() && joueur.achatUniteArmee(unite)) {
+                && Math.abs(calculDistanceX) <= joueur.getBase().getVision() && joueur.achater_unite_armee(unite)) {
             // On ajoute l'unité à l'armée et ob l'ajoute sur le plateau
             joueur.getArmee().add(unite);
             plateau.get(coordY).get(coordX).setUnite(unite);
@@ -697,8 +697,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 do {
                     joueurActuel = listeJoueur.get((joueurActuel.getNumeroJoueur() + 1) % (nbJoueursH + nbJoueursIA));
                 } while (joueurActuel.getEnJeu() == false);
-                joueurActuel.regenerationUniteArmee();
-                joueurActuel.gainTourJoueur(tour);
+                joueurActuel.regenerer_unite_armee();
+                joueurActuel.generer_gain_tour_joueur(tour);
             }
             tour++;
             FenetreJeu.getPanelJeu().getLabelNomJoueur().setText("Tour de : " + joueurActuel.getPseudo());
@@ -796,7 +796,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             troupeAchete = new Archer();
         }
         if (placementUnite(troupeAchete))
-            joueurActuel.achatUniteArmee(troupeAchete);
+            joueurActuel.achater_unite_armee(troupeAchete);
         return troupeAchete;
     }
 
@@ -876,7 +876,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 matriceEmplacement[i][j] = 99;
                 if (plateau.get(i).get(j).estOccupe() != null) {
                     int[] coordRechercheEntiteProche = { i, j };
-                    if (!joueurActuel.estMonEntite(caseTest)
+                    if (!joueurActuel.est_mon_entite(caseTest)
                             && coordRechercheEntiteProche != estDeplacementPossible(coordRechercheEntiteProche)) {
                         coordRechercheEntiteProche = estDeplacementPossible(coordRechercheEntiteProche);
                         Node chemin = trouver_chemin(matricePlateau, coordUnite[0], coordUnite[1],
@@ -1532,7 +1532,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                                 "Unité n'a plus de point déplacement");
                                 }
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                            } else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
+                            } else if (caseClic2.estOccupe() != null && !joueurActuel.est_mon_entite(caseClic2)) {
                                 int[][] matricePlateau = new int[cote][cote];
                                 plateau_to_matice(matricePlateau);
                                 Node chemin = trouver_chemin(matricePlateau, hexCaseClic.getCoord().getX(),
@@ -1553,7 +1553,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         } else if (caseClic1 == null && caseClic2 == null) {
                             caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                             hexCaseClic = hexClic;
-                            if (caseClic1.estOccupe() == null || !joueurActuel.estMonEntite(caseClic1)) {
+                            if (caseClic1.estOccupe() == null || !joueurActuel.est_mon_entite(caseClic1)) {
                                 caseClic1 = null;
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             } else
