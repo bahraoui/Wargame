@@ -85,6 +85,7 @@ public class PanelChargerPartie extends JPanel{
         btnQuitter.addActionListener(controleur);
     }
 
+    // Getter et setters
     
     /**
      * Le getter getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
@@ -93,6 +94,8 @@ public class PanelChargerPartie extends JPanel{
     public JLabel getLabelCarteChosie(){
         return lblCarteChosie;
     }
+
+    // FIN Getter et setters
 
     @Override
     protected void paintComponent(Graphics g) {
