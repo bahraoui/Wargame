@@ -39,10 +39,10 @@ public class PanelMenu extends JPanel{
         btnRegles = new JButton();
         btnChargerPartie = new JButton();
         btnQuitter = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonStart.png", btnNvllePartie);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Regles.png", btnRegles);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"ChargerPartie.png", btnChargerPartie);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter.png", btnQuitter);
         btnNvllePartie.setActionCommand("nouvellePartie");
         btnChargerPartie.setActionCommand("chargerPartie");
         btnRegles.setActionCommand("afficherRegles");

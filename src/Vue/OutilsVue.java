@@ -11,7 +11,7 @@ import javax.swing.JButton;
 /**
  * Outils contient les fonctions utilises par plusieurs classes dans la vue.
  */
-public class Outils {
+public class OutilsVue {
     /**
      * setImageBouton permet d'afficher une image dans le bouton
      * @param filePathName le chemin de l'image à utiliser

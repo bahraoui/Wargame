@@ -1,6 +1,5 @@
 package Vue;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -237,7 +236,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelArcher,contrainte);
 		contrainte.gridx=1;
 		boutonArcher = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonArcher.png", boutonArcher);
 		boutonArcher.setActionCommand("achatArcher");
 		panelListeAchat.add(boutonArcher,contrainte);
 
@@ -249,7 +248,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelCavalerie,contrainte);
 		contrainte.gridx=1;
 		boutonCavalerie = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonCavalerie.png", boutonCavalerie);
 		boutonCavalerie.setActionCommand("achatCavalerie");
 		panelListeAchat.add(boutonCavalerie,contrainte);
 
@@ -261,7 +260,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelInfanterie,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterie = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterie.png", boutonInfanterie);
 		boutonInfanterie.setActionCommand("achatInfanterie");
 		panelListeAchat.add(boutonInfanterie,contrainte);
 
@@ -273,7 +272,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelInfanterieLourde,contrainte);
 		contrainte.gridx=1;
 		boutonInfanterieLourde = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonInfanterieLourde.png", boutonInfanterieLourde);
 		boutonInfanterieLourde.setActionCommand("achatInfanterieLourde");
 		panelListeAchat.add(boutonInfanterieLourde,contrainte);
 
@@ -285,7 +284,7 @@ public class PanelJeu extends JPanel {
 		panelListeAchat.add(labelMage,contrainte);
 		contrainte.gridx=1;
 		boutonMage = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"buttonMage.png", boutonMage);
 		boutonMage.setActionCommand("achatMage");
 		panelListeAchat.add(boutonMage,contrainte);
 
@@ -301,25 +300,25 @@ public class PanelJeu extends JPanel {
 		panelBoutons.setPreferredSize(new Dimension(250,300));		
 			// fin de tour
 		boutonFinDeTour = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"FinDeTour.png", boutonFinDeTour);
 		boutonFinDeTour.setActionCommand("finTour");
 		panelBoutons.add(boutonFinDeTour);
 
 			// abandonner
 		boutonAbandonner = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Abandonner.png", boutonAbandonner);
 		boutonAbandonner.setActionCommand("abandonner");
 		panelBoutons.add(boutonAbandonner);
 
 			// sauvegarder
 		boutonSauvegarder = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Sauvegarder.png", boutonSauvegarder);
 		boutonSauvegarder.setActionCommand("sauvegarderPartie");
 		panelBoutons.add(boutonSauvegarder);
 		
 			// quitter
 		boutonQuitter = new JButton();
-		Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
+		OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", boutonQuitter);
 		boutonQuitter.setActionCommand("retourMenu");
 		panelBoutons.add(boutonQuitter);
 

@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 public class Hexagone extends JLabel {
     private static final long serialVersionUID = -7142502695252118612L;
     private Polygon hexagonalShape;
-    private TypeTerrain sol;
+    private TypeTerrain terrain;
     private TypeUnite unite;
     private TypeBatimentVue batiment;
     private Point coord;
@@ -30,15 +30,15 @@ public class Hexagone extends JLabel {
      * - une unite si la case en contient
      * - un batiment si la case en contient
      * - des coordonnees sur le plateau de jeu
-     * @param sol TypeTerrain
+     * @param parTerrain TypeTerrain
      * @param unite TypeUnite
      * @param batiment TypeBatimentVue
      * @param coord Point
      */
-    public Hexagone(TypeTerrain sol, TypeUnite unite, TypeBatimentVue batiment, Point coord){
+    public Hexagone(TypeTerrain parTerrain, TypeUnite unite, TypeBatimentVue batiment, Point coord){
         super();
         hexagonalShape = getHexPolygon();
-        this.sol = sol;
+        this.terrain = parTerrain;
         this.unite = unite;
         this.batiment = batiment;
         this.coord = coord;
@@ -85,20 +85,20 @@ public class Hexagone extends JLabel {
             return "Hexagone : \n\tUnite : "+unite.toString();
         if (batiment != null)
             return "Hexagone :Batiment: "+batiment.toString();
-        if (sol != null)
-            return "Hexagone :Sol: "+sol.toString();
+        if (terrain != null)
+            return "Hexagone :terrain: "+terrain.toString();
         return "Rien";
     }
 
     
     /**
-     * placer_sol permet de dessiner le sol en fonction du type de terrain
-     * @param sol TypeTerrain
+     * placerTerrain permet de dessiner le sol en fonction du type de terrain
+     * @param terrain TypeTerrain
      * @param g Graphics
      */
-    private void placerSol(TypeTerrain parSol, Graphics g){
+    private void placerTerrain(TypeTerrain parTerrain, Graphics g){
         try {
-            switch (parSol) {
+            switch (parTerrain) {
                 case MER:
                     g.drawImage(ImageIO.read(new File("assets"+File.separator+"images"+File.separator+"Terrain"+File.separator+"MER.jpg")), 0, 0, null);
                     break;
@@ -200,13 +200,13 @@ public class Hexagone extends JLabel {
 
     /**
      * setTerrain permet d'afficher un sol sur la case
-     * @param sol TypeTerrain
+     * @param terrain TypeTerrain
      * @throws IOException
      */
-    public void setTerrain(TypeTerrain parSol){
+    public void setTerrain(TypeTerrain parTerrain){
         Graphics g = getGraphics();
         g.setClip(hexagonalShape);
-        placerSol(parSol,g);
+        placerTerrain(parTerrain,g);
         if (batiment != null) {
             placerBatiment(batiment,g);      
         }
@@ -220,7 +220,7 @@ public class Hexagone extends JLabel {
         else {
             this.unite=null;
         }
-        this.sol = parSol;
+        this.terrain = parTerrain;
         this.paintChildren(g);
         
     }
@@ -317,8 +317,8 @@ public class Hexagone extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
         g.setClip(hexagonalShape);
-        if (sol != null)
-            placerSol(sol, g);
+        if (terrain != null)
+            placerTerrain(terrain, g);
 
         if (batiment != null)
             placerBatiment(batiment, g);

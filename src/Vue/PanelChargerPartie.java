@@ -37,18 +37,18 @@ public class PanelChargerPartie extends JPanel{
 
         // bouton sauvegarde
         btnChargerSauvegarde = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Parcourir.png", btnChargerSauvegarde);
         lblCarteChosie = new JLabel("Sauvegarde choisie : ");
         lblCarteChosie.setFont(new Font("Tempus Sans ITC", Font.BOLD, 20));
         lblCarteChosie.setForeground(new Color(109,7,26));
 
         // bouton Lancer la partie
         btnContinuerScenario = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnContinuerScenario);
 
         // bouton Quitter
         btnQuitter = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
         btnChargerSauvegarde.setActionCommand("chercherSauvegarde");
         btnContinuerScenario.setActionCommand("lancerPartieChargee");
         btnQuitter.setActionCommand("retourMenu");
@@ -85,6 +85,7 @@ public class PanelChargerPartie extends JPanel{
         btnQuitter.addActionListener(controleur);
     }
 
+    // Getter et setters
     
     /**
      * Le getter getLblCarteChosie permet de recuperer le JLabel getLblCarteChosie
@@ -93,6 +94,8 @@ public class PanelChargerPartie extends JPanel{
     public JLabel getLabelCarteChosie(){
         return lblCarteChosie;
     }
+
+    // FIN Getter et setters
 
     @Override
     protected void paintComponent(Graphics g) {

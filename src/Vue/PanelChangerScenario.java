@@ -66,14 +66,14 @@ public class PanelChangerScenario extends JPanel{
          *  Boutons du panel
          */
         btnChoixMonument = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Monument.png", btnChoixMonument);
         btnLancerPartie = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"LancerPartie.png", btnLancerPartie);
         nomSauvergardeCarte = new JTextField(10);
         btnSauvegarderPartie = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"SauvegarderCarte.png", btnSauvegarderPartie);
         btnQuitter = new JButton();
-        Outils.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
+        OutilsVue.setImageBouton("assets"+File.separator+"images"+File.separator+"boutons"+File.separator+"Quitter2.png", btnQuitter);
 
         /*
          * Liste des terrains disponibles a selectionner 
