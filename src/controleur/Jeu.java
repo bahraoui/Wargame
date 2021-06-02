@@ -450,7 +450,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 //On enlève les points de déplacement de l'unité
                 unite.setDeplacementActuel(unite.getDeplacementActuel() - pointDeplacementConsomme);
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -762,11 +762,10 @@ public class Jeu extends MouseAdapter implements ActionListener {
             if (joueurActuel.getEstIa()) {
                 faireTourIA();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(667);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                
                 initNouveauTour();
             }
             
@@ -920,11 +919,19 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @return
      */
     public static int[] estDeplacementPossible(int[] coord) {
-        int[][] coordTest = { { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, 1 }, { 0, -1 }, { -1, 1 }, { -1, 0 }, { -1, -1 } };
+        int coordRowColGL [][] = {{-1,0}, {0,-1} , {1,0}, {1,1}, {0,1}, {-1,1}};
+        int coordRowColPL [][] = {{-1,-1}, {0,-1} , {1,-1}, {1,0}, {0,1}, {-1,0}};
+
         int row, col;
-        for (int i = 0; i < coordTest.length; i++) {
-            row = coord[0] + coordTest[i][0];
-            col = coord[1] + coordTest[i][1];
+        for (int i = 0; i < 6; i++) {
+            if (coord[0]%2 == 0) {
+                row = coord[0] + coordRowColPL[i][0];
+                col = coord[1]+ coordRowColPL[i][1];
+            }
+            else {
+                row = coord[0] + coordRowColGL[i][0];
+                col = coord[1] + coordRowColGL[i][1];
+            }
             if (estEmplacementVide(row, col)) {
                 int[] coordFinal = { row, col };
                 return coordFinal;
@@ -932,6 +939,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         }
         return coord;
     }
+
 
     /**
      * Cette fonction prend en paramètre une unité et effectute un deplacement vers l'unité la plus proche
@@ -949,12 +957,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         Node chemin;
 
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
-        
         //Si l'unité de l'IA a trouvé une cible a attaqué
         if (cible != null) {
             //Elle recupere les coordonées de la cible et se déplace vers elle
@@ -967,6 +969,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             faireDeplacement(unite, cheminComplet);
 
         }
+
+        
 
         
         coordUnite = rechercherCoordonneUnite(unite);
@@ -1019,7 +1023,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
         for (int i = 0; i < cote; i++) {
             for (int j = 0; j < cote; j++) {
-
                 caseTest = plateau.get(i).get(j);
                 matriceEmplacement[i][j] = 99;
                 if (plateau.get(i).get(j).estOccupe() != null) {
@@ -1029,6 +1032,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         Node chemin = trouverChemin(matricePlateau, coordUnite[0], coordUnite[1], coordRechercheEntiteProche[0], coordRechercheEntiteProche[1]);
                         if (chemin != null)
                             matriceEmplacement[i][j] = chemin.getDist();
+                        
                     }
                 }
                 if (matriceEmplacement[i][j] < minValue) {
@@ -1069,14 +1073,13 @@ public class Jeu extends MouseAdapter implements ActionListener {
                     e.printStackTrace();
                 }
             }
-        }
-        
+        }        
         //ACTION UNITE
         for (int i = 0; i < joueurActuel.getArmee().size(); i++) {
             if (!calculVitoire())
                 faireActionUniteIA(joueurActuel.getArmee().get(i));
             try {
-                Thread.sleep(100);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
