@@ -42,7 +42,7 @@ public class FrameJeu extends JFrame{
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public FrameJeu() throws InterruptedException {
+	public FrameJeu(){
 		super("Wargame");
 		panelActuel = PanelActuel.MENU;
 

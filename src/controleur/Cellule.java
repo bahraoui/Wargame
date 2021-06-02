@@ -5,6 +5,7 @@ import modele.entite.Entite;
 import modele.entite.batiment.Batiment;
 import modele.entite.unite.Unite;
 import modele.plateau.Case;
+import modele.terrain.Terrain;
 
 public class Cellule {
     private Hexagone hex;
@@ -29,6 +30,17 @@ public class Cellule {
         }
         hexagoneEntiteSupprime.setTerrain(Outils.terrainModeleToVue(caseEntiteSupprime.getTerrain()));
     }
+
+    public void setUnite(Unite unite){
+        this.getHex().setUnite(Outils.uniteModelToVue(unite));
+        this.getCase().setUnite(unite);
+    }
+
+    public void setTerrain(Terrain terrain){
+        this.getHex().setTerrain(Outils.terrainModeleToVue(terrain));
+        this.getCase().setTerrain(terrain);
+    }
+    
     
     // Getters et setters 
     public Hexagone getHex() {
