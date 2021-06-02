@@ -40,6 +40,14 @@ public class Cellule {
         this.getHex().setTerrain(Outils.terrainModeleToVue(terrain));
         this.getCase().setTerrain(terrain);
     }
+
+    public void setBatiment(Batiment batiment){
+        if (batiment != null)
+            this.getHex().setBatiment(Outils.batimentModeleToVue(batiment.getEstBase()));
+        else 
+            this.getHex().setBatiment(null);
+        this.getCase().setBatiment(batiment);
+    }
     
     
     // Getters et setters 

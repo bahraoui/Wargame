@@ -76,7 +76,7 @@ public class PanelNouvellePartie extends JPanel{
         this.add(choixMap,contrainte);
         contrainte.gridx=0;
         contrainte.gridy++;
-        JLabel labelHumains = new JLabel("Joueur(s) Huamin(s) : ");
+        JLabel labelHumains = new JLabel("Joueur(s) Humain(s) : ");
         labelHumains.setFont(new Font("Tempus Sans ITC", Font.BOLD, 15));
         labelHumains.setForeground(new Color(109,7,26));
         this.add(labelHumains,contrainte);

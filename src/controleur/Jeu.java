@@ -1521,33 +1521,39 @@ public class Jeu extends MouseAdapter implements ActionListener {
     //
 
     //
-    // ACTION PERFORMED
+    // MOUSE CLICKED + ACTION PERFORMED
     //
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        Hexagone hexClic;
+        Case caseClic;
+        Cellule cellClic;
+        int[][] matricePlateau = new int[cote][cote];
+        Node chemin;
+        Entite entiteInfo;
+        Terrain terrainInfo;
+
         if (e.getSource() instanceof Hexagone) {
-            Hexagone hexClic = (Hexagone) e.getSource();
+            hexClic = (Hexagone) e.getSource();
+            caseClic = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+            cellClic = new Cellule(hexClic,caseClic);
+
             switch (FenetreJeu.getPanelActuel()) {
+                //Si nous somme dans le panel de changer scenario
                 case CHANGERSCENARIO:
-                    if (terrainChoisi != null && selectionMonument == false) {
-                        hexClic.setTerrain(terrainChoisi);
-                        cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setTerrain(Outils.terrainVueToModele(terrainChoisi));
-                        if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment() != null) {
-                            hexClic.setBatiment(Outils.batimentModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getBatiment().getEstBase()));
-                        }
-                    } else if (selectionMonument == true) {
-                        if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
-                                .getBatiment() != null) {
-                            switch (Outils.batimentModeleToVue(
-                                    cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
-                                            .getBatiment().getEstBase())) {
-                                case MONUMENT:
-                                    hexClic.setBatiment(null);
-                                    hexClic.setTerrain(Outils.terrainModeleToVue(cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().getTerrain()));
+                    //On selectione un Terrain pour le placer
+                    if (terrainChoisi != null && !selectionMonument)
+                        cellClic.setTerrain(Outils.terrainVueToModele(terrainChoisi));
+                    
+                    //On selectionne le bouton pour placer un monument
+                    else if (selectionMonument) {
+                        if (caseClic.getBatiment() != null) {
+                            switch (Outils.batimentModeleToVue(caseClic.getBatiment().getEstBase())) {
+                                case MONUMENT:                                    
                                     panelChangerScenario.estAjouterMonument(false);
-                                    cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
-                                            .setBatiment(null);
+                                    cellClic.setBatiment(null);
+                                    hexClic.setTerrain(Outils.terrainModeleToVue(caseClic.getTerrain()));
                                     break;
 
                                 default:
@@ -1556,23 +1562,24 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             }
                         } else if (panelChangerScenario.getNbMonumentsRestants() == 0)
                             JOptionPane.showMessageDialog(FenetreJeu, "Vous ne pouvez plus placer de monuments.");
-                        else if (cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase()
-                                .getUnite() != null)
+                        else if (caseClic.getUnite() != null)
                             JOptionPane.showMessageDialog(FenetreJeu, "Il y a déjà une unité placé ici.");
                         else {
                             panelChangerScenario.estAjouterMonument(true);
-                            hexClic.setBatiment(TypeBatimentVue.MONUMENT);
-                            cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase().setBatiment(new Batiment(TypeBatiment.MONUMENT));
+                            cellClic.setBatiment(new Batiment(TypeBatiment.MONUMENT));
                         }
                     }
                     break;
+
+                //Si nous sommes dans le Panel Jeu
                 case JEU:
+
+                    //ACHAT DE TROUPES
                     if (uniteAchete != null) {
                         switch (uniteAchete) {
                             case ARCHER:
                                 Archer archer = new Archer();
-                                if (placerUniteJoueur(joueurActuel, archer, hexClic.getCoord().getX(),
-                                        hexClic.getCoord().getY())) {
+                                if (placerUniteJoueur(joueurActuel, archer, hexClic.getCoord().getX(),hexClic.getCoord().getY())) {
                                     FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
@@ -1581,8 +1588,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 break;
                             case CAVALERIE:
                                 Cavalerie cavalerie = new Cavalerie();
-                                if (placerUniteJoueur(joueurActuel, cavalerie, hexClic.getCoord().getX(),
-                                        hexClic.getCoord().getY())) {
+                                if (placerUniteJoueur(joueurActuel, cavalerie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
                                     FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
@@ -1591,8 +1597,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 break;
                             case INFANTERIE:
                                 Infanterie infanterie = new Infanterie();
-                                if (placerUniteJoueur(joueurActuel, infanterie, hexClic.getCoord().getX(),
-                                        hexClic.getCoord().getY())) {
+                                if (placerUniteJoueur(joueurActuel, infanterie, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
                                     FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
@@ -1601,8 +1606,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 break;
                             case INFANTERIELOURDE:
                                 InfanterieLourde infanterieLourde = new InfanterieLourde();
-                                if (placerUniteJoueur(joueurActuel, infanterieLourde, hexClic.getCoord().getX(),
-                                        hexClic.getCoord().getY())) {
+                                if (placerUniteJoueur(joueurActuel, infanterieLourde, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
                                     FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
@@ -1611,8 +1615,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 break;
                             case MAGE:
                                 Mage mage = new Mage();
-                                if (placerUniteJoueur(joueurActuel, mage, hexClic.getCoord().getX(),
-                                        hexClic.getCoord().getY())) {
+                                if (placerUniteJoueur(joueurActuel, mage, hexClic.getCoord().getX(), hexClic.getCoord().getY())) {
                                     FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
                                     hexClic.setUnite(uniteAchete);
                                 }
@@ -1625,7 +1628,9 @@ public class Jeu extends MouseAdapter implements ActionListener {
                         uniteAchete = null;
                         caseClic1 = null;
                         FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                    } else {
+                    } 
+                    //DEPLACEMENT DES TROUPES ET ATTAQUE
+                    else {
                         if (caseClic1 == null && caseClic2 == null){
                             caseClic1 = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
                             hexCaseClic = hexClic;
@@ -1640,9 +1645,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             if (caseClic2.estOccupe() == null && caseClic1.estOccupe() instanceof Unite) {
                                 if (((Unite) caseClic1.estOccupe()).getDeplacementActuel() >= caseClic1.getTerrain().getBonusDefense()) {
                                     JOptionPane.showMessageDialog(FenetreJeu, "Deplacement lancé.");
-                                    int[][] matricePlateau = new int[cote][cote];
                                     plateauToMatice(matricePlateau);
-                                    Node chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
+                                    chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
                                             hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
                                             hexClic.getCoord().getY());
                                     ArrayList<ArrayList<Integer>> cheminComplet = new ArrayList<>();
@@ -1655,18 +1659,17 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                             }
                             else if (caseClic2.estOccupe() != null && !joueurActuel.estMonEntite(caseClic2)) {
-                                int[][] matricePlateau = new int[cote][cote];
                                 plateauToMatice(matricePlateau);
                                 chercheAttaque = true;
-                                Node distanceCase = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
+                                chemin = trouverChemin(matricePlateau, hexCaseClic.getCoord().getX(),
                                         hexCaseClic.getCoord().getY(), hexClic.getCoord().getX(),
                                         hexClic.getCoord().getY());
                                 chercheAttaque = false;
-                                if (combattre(hexCaseClic, hexClic, distanceCase.getDist())) {
+                                if (combattre(hexCaseClic, hexClic, chemin.getDist())) {
                                     if (joueurGagnant == null)
                                         JOptionPane.showMessageDialog(FenetreJeu, "Attaque ! ");
                                 }
-                                if (distanceCase.getDist() > 2)
+                                if (chemin.getDist() > 2)
                                     JOptionPane.showMessageDialog(FenetreJeu, "Vous êtes trop loin pour attaquer...");
                                 FenetreJeu.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                                 
@@ -1674,31 +1677,30 @@ public class Jeu extends MouseAdapter implements ActionListener {
                             caseClic1 = null; caseClic2 = null;
                         }
                     }
-                    Case caseSelectionne = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()]
-                            .getCase();
-                    FenetreJeu.getPanelJeu().getLabelTypeTerrain()
-                            .setText(caseSelectionne.getTerrain().afficherTypeTerrain());
-                    FenetreJeu.getPanelJeu().getLabelPointDeplacementTerrain()
-                            .setText(caseSelectionne.getTerrain().afficherPointDeplacement());
-                    FenetreJeu.getPanelJeu().getLabelBonusTerrain()
-                            .setText(caseSelectionne.getTerrain().afficherBonus());
+                    caseClic = cellulesCarte[hexClic.getCoord().getX()][hexClic.getCoord().getY()].getCase();
+                    terrainInfo = caseClic.getTerrain();
 
-                    if (caseSelectionne.estOccupe() != null) {
-                        if (caseSelectionne.estOccupe() instanceof Unite) {
-                            FenetreJeu.getPanelJeu().getLabelNomEntite()
-                                    .setText(caseSelectionne.getUnite().afficherNomUnite());
-                            FenetreJeu.getPanelJeu().getLabelPointDeplacement().setText("Points de deplacement : "
-                                    + ((Unite) caseSelectionne.estOccupe()).getDeplacementActuel());
-                        } else {
-                            FenetreJeu.getPanelJeu().getLabelNomEntite()
-                                    .setText(caseSelectionne.getBatiment().toString());
+                    FenetreJeu.getPanelJeu().getLabelTypeTerrain()
+                            .setText(terrainInfo.afficherTypeTerrain());
+                    FenetreJeu.getPanelJeu().getLabelPointDeplacementTerrain()
+                            .setText(terrainInfo.afficherPointDeplacement());
+                    FenetreJeu.getPanelJeu().getLabelBonusTerrain()
+                            .setText(terrainInfo.afficherBonus());
+
+                    entiteInfo = (Entite) caseClic.estOccupe();
+                    
+                    if (entiteInfo!= null) {
+                        if (entiteInfo instanceof Unite) {
+                            FenetreJeu.getPanelJeu().getLabelNomEntite().setText(((Unite) entiteInfo).afficherNomUnite());
+                            FenetreJeu.getPanelJeu().getLabelPointDeplacement().setText("Points de deplacement : " + ((Unite) entiteInfo).getDeplacementActuel());
+                            FenetreJeu.getPanelJeu().getLabelAttaque().setText("Attaque : " + ((Entite) entiteInfo).getAttaque());
+                        } 
+                        else {
+                            FenetreJeu.getPanelJeu().getLabelNomEntite().setText(entiteInfo.toString());
                         }
-                        FenetreJeu.getPanelJeu().getLabelPointVie().setText(
-                                "Point de vie : " + ((Entite) caseSelectionne.estOccupe()).getPointDeVieActuel());
-                        FenetreJeu.getPanelJeu().getLabelAttaque()
-                                .setText("Attaque : " + ((Entite) caseSelectionne.estOccupe()).getAttaque());
-                        FenetreJeu.getPanelJeu().getLabelDefense()
-                                .setText("Defense : " + ((Entite) caseSelectionne.estOccupe()).getDefense());
+                        FenetreJeu.getPanelJeu().getLabelPointVie().setText("Point de vie : " + entiteInfo.getPointDeVieActuel());
+                        
+                        FenetreJeu.getPanelJeu().getLabelDefense().setText("Defense : " + entiteInfo.getDefense());
 
                     } else {
                         FenetreJeu.getPanelJeu().getLabelNomEntite().setText("");
@@ -1790,13 +1792,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
                                             FenetreJeu.getPanelNouvellePartie().getTxtNomJoueur()[i].getText(), true));
                             }
                             placerBasesJoueurs();
-                            // REGROUPER ?
                             setCellulesMap();
                             panelChangerScenario = new PanelChangerScenario(cellulesToHexagones());
                             panelChangerScenario.setMonumentNombre(6-calculerNombreMonument());
                             FenetreJeu.setPanelChangerScenario(panelChangerScenario);
                             panelChangerScenario.enregistrerEcouteur(this);
-                            //REGROUPER
                             terrainChoisi = TypeTerrain.NEIGE; tour = 0; joueurActuel = listeJoueur.get(0);
                             FenetreJeu.changerPanel(PanelActuel.CHANGERSCENARIO);
                             JOptionPane.showMessageDialog(FenetreJeu, "Vous pouvez à présent modifier la carte comme bon vous semble, faîtes preuve de créativité !");
