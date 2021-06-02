@@ -760,9 +760,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
 
             //Si c'est une IA qui doit jouer on passe automatique au tour suivant a la fin de son tour
             if (joueurActuel.getEstIa()) {
-                System.out.println(plateau.afficher());
                 faireTourIA();
-                System.out.println(plateau.afficher());
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
