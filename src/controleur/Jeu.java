@@ -158,11 +158,12 @@ public class Jeu extends MouseAdapter implements ActionListener {
                 // si l'entité est tué
                 if (defenseCase.estOccupe() != null && ((Entite) defenseCase.estOccupe()).getPointDeVieActuel() <= 0) {
                     // on supprime l'entité
-                    cellTest = new Cellule(defenseurHex, defenseCase);
-                    cellTest.clear();
 
                     // on lance la fonction qui enleve l'entité du plateau
                     mortEntite(defenseCase);
+                    cellTest = new Cellule(defenseurHex, defenseCase);
+                    cellTest.clear();
+
                     // on verifie si la partie est terminé
                     calculVitoire();
 
@@ -182,7 +183,6 @@ public class Jeu extends MouseAdapter implements ActionListener {
     /**
      * Cette fonction est utilisé lors de la mort d'une entité La fonction enlève
      * l'entité du plateau dans la structure de données non à l'affichage
-     * 
      * @param caseEntiteMorte case sur laquelle l'entité est morte
      */
     public static void mortEntite(Case caseEntiteMorte) {
@@ -230,10 +230,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
             // si l'entité est un monument
             else {
-                // on supprime le monument du plateau et on ajoute le trésor à la banque du
-                // joueur
+                // on supprime le monument du plateau et on ajoute le trésor à la banque du joueur
                 joueurActuel.setPieces(joueurActuel.getPieces() + caseEntiteMorte.getBatiment().getTresor());
-                caseEntiteMorte.setBatiment(null); 
                 FenetreJeu.getPanelJeu().updateGoldAffichage(joueurActuel.getPieces());
             }   
         }
