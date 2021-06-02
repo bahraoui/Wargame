@@ -1170,6 +1170,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             System.out.println("Erreur fichier");
         }
 
+        // Sauvegarde les joueurs
         for (int i = 0; i < listeJoueur.size(); i++) {
             chaine += "[";
             chaine += listeJoueur.get(i).getPseudo() + "," + listeJoueur.get(i).getEstIa() + ","
@@ -1190,6 +1191,8 @@ public class Jeu extends MouseAdapter implements ActionListener {
         chaine = sauvegarderStringMap(chaine);
         chaine += tour + "\n";
         chaine += joueurActuel.getNumeroJoueur() + "\n";
+
+        // Sauvegarde les bases
         for (int i = 0; i < postionBaseJoueur.size(); i++) {
             chaine += "[";
             chaine += postionBaseJoueur.get(i).get(0) + "," + postionBaseJoueur.get(i).get(1) + ","
@@ -1314,9 +1317,11 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @param file
      */
     public void chargerCarte(FileInputStream file) {
+        // Creation des variables utiles
         String line = new String();
         Scanner scanner = new Scanner(file);
         int[][] listeUnite = new int[50][50];
+        // Pour chaque ligne de la map on charge les données enregistrer
         for (int i = 0; i < cote; i++) {
             line = scanner.nextLine();
             chargerLineMap(line, i, listeUnite);
@@ -1329,6 +1334,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
      * @param file
      */
     public static void chargerPartie(FileInputStream file) {
+        // Creation des variables utiles
         String line = new String();
         String[] strValues1;
         String[] strValues2;
@@ -1340,6 +1346,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         line = scanner.nextLine();
         strValues1 = line.split(";");
 
+        // Charge les joueurs de la partie
         for (int i = 0; i < strValues1.length; i++) {
             strValues1[i] = strValues1[i].replace("[", "");
             strValues1[i] = strValues1[i].replace("]", "");
@@ -1364,6 +1371,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
             }
         }
 
+        // Charge la map
         for (int i = 0; i < cote; i++) {
             line = scanner.nextLine();
             strValues1 = line.split(",");
@@ -1378,6 +1386,7 @@ public class Jeu extends MouseAdapter implements ActionListener {
         line = scanner.nextLine();
         strValues1 = line.split(";");
 
+        // Charge les bases
         for (int i = 0; i < strValues1.length; i++) {
             strValues1[i] = strValues1[i].replace("[", "");
             strValues1[i] = strValues1[i].replace("]", "");
